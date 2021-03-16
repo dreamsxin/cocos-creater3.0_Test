@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, SkeletalAnimationComponent, Vec3, systemEvent, SystemEvent, EventKeyboard, Quat, math, sp, tween } from 'cc';
+import { _decorator, Component, Node, SkeletalAnimationComponent, Vec3, systemEvent, SystemEvent, EventKeyboard, Quat, math, sp, tween, Vec2 } from 'cc';
 import pitem from './astar/pitem';
 import Ppath from './astar/ppath';
 const { ccclass, property, type } = _decorator;
@@ -175,8 +175,8 @@ export class Role extends Component {
     }
 
     update(deltaTime: number) {
-        if (!this.isMoving) return;
         this.resetCameraPos();
+        if (!this.isMoving) return;
         deltaTime = 0.1;
         //始终朝前方走
         if (this.isUp) {
@@ -223,38 +223,42 @@ export class Role extends Component {
     /* --------------------- */
     @type(Node)//
     endNode: Node | null = null;
-    @type(Node)//
-    obstacle: Node | null = null;
+    @type([Node])//
+    obstacle: Node[] = [];
     private paths: pitem[] = [];
     async testFind() {
+        Ppath.Init.initProperty();
+        for (let i = 0; i < this.obstacle.length; i++) {
+            Ppath.Init.obstacle.push(this.obstacle[i]);
+        }
         let paths: pitem[] = await Ppath.Init.startFind(this.node.getWorldPosition(), this.endNode.getWorldPosition());
         this.paths = paths;
 
         if (paths.length > 0) {
+            this.handleStart();
             this.tweenMove(paths[0], 0);
         }
-
-        console.log("-----scale---------");
-        console.log(this.obstacle.getScale());
-        /* obstacle size */
-        let pos: Vec3 = this.obstacle.getWorldPosition();
-        let scale = this.obstacle.getScale();
-        let startx: number = pos.x - (scale.x - 1) / 2 - 0.5;
-        let startz: number = pos.z - (scale.z - 1) / 2 - 0.5;
-
-        let out1: Vec3 = new Vec3(startx, pos.y, startz);
-        let out2: Vec3 = new Vec3(startx + scale.x, pos.y, startz + scale.z);
-        console.log(pos, out1, out2);
 
     }
 
     tweenMove(item: pitem, idx: number) {
-        tween(this.node).to(1, { position: new Vec3(item.x, this.node.getWorldPosition().y, item.z) }).call(() => {
+        tween(this.node).to(0.4, { position: new Vec3(item.x, this.node.getWorldPosition().y, item.z) }).call(() => {
             idx++;
             if (idx == this.paths.length) {
+                this.handleStop();
                 return;
             }
+            this.setRotateXZ(idx, this.paths);
             this.tweenMove(this.paths[idx], idx);
         }).start();
+    }
+
+
+    setRotateXZ(idx: number, roads: pitem[]) {
+        let p1: Vec2 = new Vec2(roads[idx].x, roads[idx].z);
+        let p2: Vec2 = new Vec2(roads[idx - 1].x, roads[idx - 1].z);
+        let radian: number = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+        let angle: number = radian * 180 / Math.PI;
+        tween(this.node).to(0, { eulerAngles: new Vec3(0, -angle - 90, 0) }).start();
     }
 }
