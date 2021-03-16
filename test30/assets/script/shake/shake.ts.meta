@@ -1,0 +1,13 @@
+{
+  "ver": "4.0.21",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "136af19a-d4b0-4713-bfc5-17e63d24ad4e",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "importAsPlugin": false,
+    "moduleId": "project:///assets/script/shake/shake.js",
+    "importerSettings": 4
+  }
+}

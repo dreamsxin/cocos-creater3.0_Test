@@ -1,0 +1,13 @@
+{
+  "ver": "4.0.21",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "470c5a21-4da7-423b-810b-f09ed2d0a994",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "importAsPlugin": false,
+    "moduleId": "project:///assets/script/test/ColliderTest.js",
+    "importerSettings": 4
+  }
+}

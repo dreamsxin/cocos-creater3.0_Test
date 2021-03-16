@@ -1,0 +1,121 @@
+{
+  "ver": "2.0.10",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6",
+  "files": [],
+  "subMetas": {
+    "e22fe": {
+      "importer": "gltf-mesh",
+      "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6@e22fe",
+      "displayName": "",
+      "id": "e22fe",
+      "name": "pPlane1.mesh",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.1.0",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "73b7f": {
+      "importer": "gltf-animation",
+      "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6@73b7f",
+      "displayName": "",
+      "id": "73b7f",
+      "name": "Take 001.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 2.4583332538604736
+        },
+        "events": []
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "438fe": {
+      "importer": "gltf-skeleton",
+      "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6@438fe",
+      "displayName": "",
+      "id": "438fe",
+      "name": "UnnamedSkeleton.skeleton",
+      "userData": {
+        "gltfIndex": 0,
+        "jointsLength": 16
+      },
+      "ver": "1.0.1",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "7dddc": {
+      "importer": "gltf-scene",
+      "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6@7dddc",
+      "displayName": "",
+      "id": "7dddc",
+      "name": "great-hammerhead_anima.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "animationImportSettings": [
+      {
+        "name": "Take 001",
+        "duration": 2.4583332538604736,
+        "fps": 30,
+        "splits": [
+          {
+            "name": "Take 001",
+            "from": 0,
+            "to": 2.4583332538604736,
+            "wrapMode": 2
+          }
+        ]
+      }
+    ],
+    "redirect": "6a271bba-797e-43ec-980f-f8549908a1b6@7dddc",
+    "assetFinder": {
+      "meshes": [
+        "6a271bba-797e-43ec-980f-f8549908a1b6@e22fe"
+      ],
+      "skeletons": [
+        "6a271bba-797e-43ec-980f-f8549908a1b6@438fe"
+      ],
+      "textures": [],
+      "materials": [
+        "f72a3a75-749a-4b29-b929-3c11a878a4e3"
+      ],
+      "scenes": [
+        "6a271bba-797e-43ec-980f-f8549908a1b6@7dddc"
+      ]
+    },
+    "legacyFbxImporter": true,
+    "dumpMaterials": true,
+    "materialDumpDir": "db://assets/model/shake/Materials_great-hammerhead_anima",
+    "depthWriteInAlphaModeBlend": false
+  }
+}

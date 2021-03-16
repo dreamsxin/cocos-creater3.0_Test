@@ -1,0 +1,13 @@
+{
+  "ver": "4.0.21",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "57d1f0c6-3730-4fc2-8cd3-b1c12d53ecf2",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "importAsPlugin": false,
+    "moduleId": "project:///assets/script/astar/ppath.js",
+    "importerSettings": 4
+  }
+}
