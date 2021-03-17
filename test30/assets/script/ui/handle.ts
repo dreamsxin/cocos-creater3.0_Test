@@ -41,20 +41,13 @@ export class Handle extends Component {
 
     touchMove(event: Touch) {
         let pos = event.getLocation();
-        // let proveP: Vec2 = event.touch._prevPoint;
-        // let startP: Vec2 = event.touch._startPoint;
-        // let out = new Vec3();
-        // Vec2.subtract(out, new Vec3(proveP.x, proveP.y, 0), new Vec3(startP.x, startP.y, 0));
         let poss: Vec3 = new Vec3(pos.x - this.node.getWorldPosition().x, pos.y - this.node.getWorldPosition().y, 0);
         this.center.setPosition(poss);
-        // this.center.setPosition(out);
         let radian = Math.atan2(this.center.getPosition().y, this.center.getPosition().x);
         let distance = Vec3.len(this.center.getPosition());
         if (distance >= this.circleR) {
             poss = new Vec3(Math.cos(radian) * this.circleR, Math.sin(radian) * this.circleR, 0);
             this.center.setPosition(poss);
-            // out = new Vec3(Math.cos(radian) * this.circleR, Math.sin(radian) * this.circleR, 0);
-            // this.center.setPosition(out);
         }
         this.radian = radian;
     }

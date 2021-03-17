@@ -10,7 +10,7 @@ export class Bullet extends Component {
         }, 3);
     }
     shoot(radian: number) {
-        let force: Vec3 = new Vec3(-Math.cos(radian) * this._speed, 100, Math.sin(radian) * this._speed);
+        let force: Vec3 = new Vec3(Math.cos(radian) * this._speed, 100, -Math.sin(radian) * this._speed);
         this.node.getComponent(RigidBody)?.applyForce(force);
     }
 }

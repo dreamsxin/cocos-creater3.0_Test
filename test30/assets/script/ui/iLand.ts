@@ -58,7 +58,7 @@ export class ILand extends Component {
         let pos = v3;
         let radian = Math.atan2(pos.x - this.role.getWorldPosition().x, pos.z - this.role.getWorldPosition().z);
 
-        radian = radian + Math.PI / 2;
+        radian = radian - Math.PI / 2;
         this._radian = radian;
         this._isMoving = true;
 

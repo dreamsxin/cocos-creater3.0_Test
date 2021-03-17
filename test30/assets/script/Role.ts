@@ -37,8 +37,8 @@ export class Role extends Component {
     onLoad() {
         this._curPos = this.node.getPosition();
         //键盘监听
-        // systemEvent.on(SystemEvent.EventType.KEY_DOWN, this._onKeyDown, this);
-        // systemEvent.on(SystemEvent.EventType.KEY_UP, this._onKeyUp, this);
+        systemEvent.on(SystemEvent.EventType.KEY_DOWN, this._onKeyDown, this);
+        systemEvent.on(SystemEvent.EventType.KEY_UP, this._onKeyUp, this);
 
         //触摸监听
         systemEvent.on(SystemEvent.EventType.TOUCH_MOVE, this._onTouchMove, this);
@@ -69,30 +69,31 @@ export class Role extends Component {
      */
     resetCameraPos() {
         let rolePos = this.node.getWorldPosition();
-        let cameraPos = new Vec3(rolePos.x, 10, rolePos.z - 14);
+        let cameraPos = new Vec3(rolePos.x, 15, rolePos.z + 20);
+        this.mainCamera.eulerAngles = new Vec3(-30, 0, 0);
         this.mainCamera.setPosition(cameraPos);
         this.setRValue();
     }
 
-    private i: number = 0;
+    private i: number = Math.PI / 2;
     /**
      * 设置摄像机绕着人物转
      * @param value 
      */
     setRotateByControl(value: number) {
         this.i += 0.05 * (value);
+
         //绕着某个点做圆周运动
         let R: number = this.R;//14
-        console.log(R);
-        let xx = Math.cos(this.i) * R + this.node.getPosition().x;
-        let zz = Math.sin(this.i) * R + this.node.getPosition().z;
-        this.mainCamera.setPosition(new Vec3(xx, this.mainCamera.getPosition().y, zz));
+        let xx = Math.cos(this.i) * R + this.node.getWorldPosition().x;
+        let zz = Math.sin(this.i) * R + this.node.getWorldPosition().z;
+        this.mainCamera.setPosition(new Vec3(xx, this.mainCamera.getWorldPosition().y, zz));
 
         let p1: Vec3 = this.node.getWorldPosition();
         let p2: Vec3 = this.mainCamera.getWorldPosition();
         let radian: number = Math.atan2(p2.x - p1.x, p2.z - p1.z);
         let angle: number = radian * 180 / Math.PI;
-        this.mainCamera.eulerAngles = new Vec3(this.mainCamera.eulerAngles.x, angle, this.mainCamera.eulerAngles.z);
+        this.mainCamera.eulerAngles = new Vec3(-10, angle, this.mainCamera.eulerAngles.z);
 
 
     }
@@ -172,11 +173,12 @@ export class Role extends Component {
             this.tempOrder = -1;
             this.CocosAnim.play("cocos_anim_idle");
         }
+        this.resetCameraPos();
     }
 
     update(deltaTime: number) {
-        this.resetCameraPos();
         if (!this.isMoving) return;
+        this.resetCameraPos();
         deltaTime = 0.1;
         //始终朝前方走
         if (this.isUp) {
@@ -205,14 +207,14 @@ export class Role extends Component {
     public handleMove(radian: number) {
         this.radian = radian;
         let ang = radian * 180 / Math.PI;
-        let v3: Vec3 = new Vec3(0, ang - 90, 0);
+        let v3: Vec3 = new Vec3(0, ang + 90, 0);
         this.node.eulerAngles = v3;
         let speed: number = 0.1;
         let xx: number = Math.cos(radian) * speed;
         let zz: number = Math.sin(radian) * speed;
 
         /* 摄像机同步移动 */
-        let nextV3 = this.node.getWorldPosition().add(new Vec3(-xx, 0, zz));
+        let nextV3 = this.node.getWorldPosition().add(new Vec3(xx, 0, -zz));
         this.node.setPosition(nextV3);
 
         // nextV3 = this.mainCamera.getWorldPosition().add(new Vec3(-xx, 0, zz));
