@@ -25,6 +25,8 @@ export default class Ppath {
 
     async startFind(start: Vec3, end: Vec3): Promise<pitem[]> {
         return new Promise(async resolve => {
+            this.openlist.splice(0);
+            this.closelist.splice(0);
             this.startPos = start;
             this.endPos = end;
             let pathArr: pitem[] = [];
@@ -51,7 +53,6 @@ export default class Ppath {
                 /* 将center从openlist中移除 */
                 this.removeCenter(center);
                 this.closelist.push(center);
-                console.log("find------------");
                 for (let i = 0; i < 8; i++) {
                     let item: pitem = this.getPitem();
                     switch (i) {
@@ -115,7 +116,7 @@ export default class Ppath {
                         if (out.length() < item.width) {
                             isFined = true;
                             this.closelist.push(item);
-                            console.log("finish");
+                            console.log("find finish");
                             let pathArr: pitem[] = [];
                             /* 最终路径 */
                             this.getPath(item, pathArr);

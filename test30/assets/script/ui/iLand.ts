@@ -7,13 +7,13 @@ const { ccclass, property } = _decorator;
 export class ILand extends Component {
 
     @property(Node)
-    role: Node = null;
+    role: Node = null as unknown as Node;
 
     @property({ type: CameraComponent })
-    readonly cameraCom: CameraComponent = null;
+    readonly cameraCom: CameraComponent = null as unknown as CameraComponent;
 
     @property({ type: ModelComponent })
-    readonly modelCom: ModelComponent = null;
+    readonly modelCom: ModelComponent = null as unknown as ModelComponent;
 
     private _ray: geometry.ray = new geometry.ray();
 
@@ -48,14 +48,14 @@ export class ILand extends Component {
             let point = temp[0];
             let name: string = point.collider.name;
             if (name.substr(0, 7) == "plane01") {
-                this._calculate(point.hitPoint);
-                // this._acrossAstar(point.hitPoint);
+                // this._calculate(point.hitPoint);
+                this._acrossAstar(point.hitPoint);
             }
         }
     }
 
     private _acrossAstar(v3: Vec3) {
-        let role: Role = this.role.getComponent(Role);
+        let role: Role = this.role.getComponent(Role) as Role;
         role.startfindWay(v3);
     }
 
@@ -68,7 +68,7 @@ export class ILand extends Component {
         this._radian = radian;
         this._isMoving = true;
 
-        let role: Role = this.role.getComponent(Role);
+        let role: Role = this.role.getComponent(Role) as Role;
         role.handleStart();
     }
 
@@ -77,7 +77,7 @@ export class ILand extends Component {
             let out: Vec3 = new Vec3();
             Vec3.subtract(out, this._clickPoint, this.role.getWorldPosition());
             let distance = out.length();
-            let role: Role = this.role.getComponent(Role);
+            let role: Role = this.role.getComponent(Role) as Role;
             role.handleMove(this._radian);
             if (distance < 0.3 || !role.getMoveState()) {
                 this._isMoving = false;

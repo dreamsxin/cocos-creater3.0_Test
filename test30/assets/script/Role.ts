@@ -229,9 +229,9 @@ export class Role extends Component {
         if (this.isAutoMoving) return;
         this.paths.splice(0);
         let pstartCon = this.node.getComponent(PstarComponent);
-        let paths: pitem[] = await pstartCon?.getPaths(this.node.getWorldPosition(), endPos);
+        let startPos = this.node.getWorldPosition();
+        let paths: pitem[] = await pstartCon?.getPaths(startPos, endPos);
         this.paths = paths;
-        console.log(paths);
 
         if (paths.length > 0) {
             this.handleStart();
