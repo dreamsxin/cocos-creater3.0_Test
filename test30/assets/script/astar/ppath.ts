@@ -35,8 +35,6 @@ export default class Ppath {
 
     async begin(): Promise<pitem[]> {
         return new Promise(resolve => {
-
-
             let origin: pitem = this.getPitem();
             origin.F = 0;
             origin.G = 0;
@@ -53,6 +51,7 @@ export default class Ppath {
                 /* 将center从openlist中移除 */
                 this.removeCenter(center);
                 this.closelist.push(center);
+                console.log("find------------");
                 for (let i = 0; i < 8; i++) {
                     let item: pitem = this.getPitem();
                     switch (i) {
@@ -122,7 +121,7 @@ export default class Ppath {
                             this.getPath(item, pathArr);
                             pathArr.reverse();
                             resolve(pathArr);
-                            break;
+                            return;
                         }
                     }
                     else {

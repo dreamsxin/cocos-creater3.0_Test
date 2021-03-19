@@ -1,6 +1,7 @@
-import { _decorator, Component, Node, SkeletalAnimationComponent, Vec3, systemEvent, SystemEvent, EventKeyboard, Quat, math, sp, tween, Vec2 } from 'cc';
+import { _decorator, Component, Node, SkeletalAnimationComponent, Vec3, systemEvent, SystemEvent, EventKeyboard, Quat, math, sp, tween, Vec2, random } from 'cc';
 import pitem from './astar/pitem';
 import Ppath from './astar/ppath';
+import PstarComponent from './astar/pstarComponent';
 const { ccclass, property, type } = _decorator;
 
 
@@ -43,7 +44,10 @@ export class Role extends Component {
         //触摸监听
         systemEvent.on(SystemEvent.EventType.TOUCH_MOVE, this._onTouchMove, this);
         this._init();
-        this.testFind();
+    }
+    start() {
+        let pstartCon = this.node.getComponent(PstarComponent);
+        pstartCon?.setObstacle();
     }
 
     private R: number = 0;
@@ -145,31 +149,20 @@ export class Role extends Component {
             default:
                 break;
         }
+        this.handleStop();
     }
 
     _onKeyUp(event: any) {
         switch (event.keyCode) {
-            case 65://a
-                this.isLeft = false;
-                break;
-            case 83://s
-                this.isDown = false;
-                break;
-            case 68://d
-                this.isRight = false;
-                break;
-            case 87://w
-                this.isUp = false;
-                break;
-            case 32:
-                return;
-
-            default:
-                console.log(event.keyCode);
-                break;
+            case 65: this.isLeft = false; break;
+            case 83: this.isDown = false; break;
+            case 68: this.isRight = false; break;
+            case 87: this.isUp = false; break;
+            case 32: return;
+            default: console.log(event.keyCode); break;
         }
         if (!this.isLeft && !this.isUp && !this.isRight && !this.isDown) {
-            this.isMoving = false;
+            this.handleStop();
             this.tempOrder = -1;
             this.CocosAnim.play("cocos_anim_idle");
         }
@@ -179,6 +172,7 @@ export class Role extends Component {
     update(deltaTime: number) {
         if (!this.isMoving) return;
         this.resetCameraPos();
+        this.constrolAstarWayMove();
         deltaTime = 0.1;
         //始终朝前方走
         if (this.isUp) {
@@ -200,11 +194,13 @@ export class Role extends Component {
     }
 
     public handleStop() {
+        if (this.isAutoMoving) return;
         this.CocosAnim.play("cocos_anim_idle");
         this.isMoving = false;
     }
 
     public handleMove(radian: number) {
+        if (this.isAutoMoving) return;
         this.radian = radian;
         let ang = radian * 180 / Math.PI;
         let v3: Vec3 = new Vec3(0, ang + 90, 0);
@@ -221,35 +217,64 @@ export class Role extends Component {
         // this.mainCamera.setPosition(nextV3);
     }
 
+    getMoveState() {
+        return this.isMoving;
+    }
 
-    /* --------------------- */
-    @type(Node)//
-    endNode: Node | null = null;
-    @type([Node])//
-    obstacle: Node[] = [];
+
+    /* ----------start find way----------- */
     private paths: pitem[] = [];
-    async testFind() {
-        Ppath.Init.initProperty();
-        for (let i = 0; i < this.obstacle.length; i++) {
-            Ppath.Init.obstacle.push(this.obstacle[i]);
-        }
-        let paths: pitem[] = await Ppath.Init.startFind(this.node.getWorldPosition(), this.endNode.getWorldPosition());
+    private isAutoMoving: boolean = false;
+    async startfindWay(endPos: Vec3) {
+        if (this.isAutoMoving) return;
+        this.paths.splice(0);
+        let pstartCon = this.node.getComponent(PstarComponent);
+        let paths: pitem[] = await pstartCon?.getPaths(this.node.getWorldPosition(), endPos);
         this.paths = paths;
+        console.log(paths);
 
         if (paths.length > 0) {
             this.handleStart();
+            this.isAutoMoving = true;
             this.tweenMove(paths[0], 0);
         }
+    }
+    private _pathIndex: number = 1;
+    constrolAstarWayMove() {
+        if (this.paths.length > 0) {
+            // this._pathIndex = this.paths.length - 1;
+            // let idx = this._pathIndex;
+            // let p2: Vec2 = new Vec2(this.paths[idx].x, this.paths[idx].z);
+            // let p1: Vec3 = new Vec3(this.paths[0].x, this.paths[0].z);//this.node.getWorldPosition();
+            // let radian: number = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+            // let xx: number = Math.cos(radian) * 0.1;
+            // let zz: number = Math.sin(radian) * 0.1;
+            // let ang = radian * 180 / Math.PI;
+            // let v3: Vec3 = new Vec3(0, ang - 90, 0);
+            // this.node.eulerAngles = v3;
+            // /* 摄像机同步移动 */
+            // let nextV3 = this.node.getWorldPosition().add(new Vec3(xx, 0, zz));
+            // this.node.setPosition(nextV3);
 
+            // let out: Vec3 = new Vec3();
+            // Vec3.subtract(out, new Vec3(this.paths[idx].x, this.node.getWorldPosition().y, this.paths[idx].z), this.node.getWorldPosition());
+            // let distance = out.length();
+            // if (distance < 0.3) {
+            //     this.handleStop();
+            //     this.paths.splice(0);
+            // }
+        }
     }
 
     tweenMove(item: pitem, idx: number) {
-        tween(this.node).to(0.4, { position: new Vec3(item.x, this.node.getWorldPosition().y, item.z) }).call(() => {
+        tween(this.node).to(0.2, { position: new Vec3(item.x, this.node.getWorldPosition().y, item.z) }).call(() => {
             idx++;
             if (idx == this.paths.length) {
+                this.isAutoMoving = false;
                 this.handleStop();
                 return;
             }
+            console.log(this.paths.length, idx);
             this.setRotateXZ(idx, this.paths);
             this.tweenMove(this.paths[idx], idx);
         }).start();

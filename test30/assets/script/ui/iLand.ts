@@ -49,8 +49,14 @@ export class ILand extends Component {
             let name: string = point.collider.name;
             if (name.substr(0, 7) == "plane01") {
                 this._calculate(point.hitPoint);
+                // this._acrossAstar(point.hitPoint);
             }
         }
+    }
+
+    private _acrossAstar(v3: Vec3) {
+        let role: Role = this.role.getComponent(Role);
+        role.startfindWay(v3);
     }
 
     _calculate(v3: Vec3) {
@@ -73,7 +79,7 @@ export class ILand extends Component {
             let distance = out.length();
             let role: Role = this.role.getComponent(Role);
             role.handleMove(this._radian);
-            if (distance < 0.3) {
+            if (distance < 0.3 || !role.getMoveState()) {
                 this._isMoving = false;
                 role.handleStop();
             }
