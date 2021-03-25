@@ -5,6 +5,30 @@
   "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6",
   "files": [],
   "subMetas": {
+    "85619": {
+      "importer": "gltf-animation",
+      "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6@85619",
+      "displayName": "",
+      "id": "85619",
+      "name": "Take 001_1.animation",
+      "userData": {
+        "gltfIndex": 0,
+        "wrapMode": 2,
+        "sample": 30,
+        "span": {
+          "from": 0,
+          "to": 1.15
+        },
+        "events": []
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
     "e22fe": {
       "importer": "gltf-mesh",
       "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6@e22fe",
@@ -34,7 +58,7 @@
         "sample": 30,
         "span": {
           "from": 0,
-          "to": 2.4583332538604736
+          "to": 2.45
         },
         "events": []
       },
@@ -91,7 +115,13 @@
           {
             "name": "Take 001",
             "from": 0,
-            "to": 2.4583332538604736,
+            "to": 2.45,
+            "wrapMode": 2
+          },
+          {
+            "name": "Take 001_1",
+            "from": 0,
+            "to": 1.15,
             "wrapMode": 2
           }
         ]
