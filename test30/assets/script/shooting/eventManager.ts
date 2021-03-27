@@ -1,7 +1,8 @@
 /* 自定义事件模块 */
 export default class EventManager {
     public static EVT_shooted: string = "shooted";
-    private static _instance: EventManager = null;
+    public static EVT_recycle: string = "recycle";
+    private static _instance: EventManager = null as unknown as EventManager;
     public static get Inst(): EventManager {
         if (!EventManager._instance) {
             EventManager._instance = new EventManager();
@@ -53,12 +54,13 @@ export default class EventManager {
     public removeEvent(event_type: string, callback?: Function, target?: any): void {
         for (var type in this.events) {
             if (event_type == type) {
-                for (var i = 0; i < this.events[event_type].length; i++) {
-                    if (target == this.events[event_type][i].target && this.events[event_type][i].callback == callback) {
-                        this.events[event_type].splice(i, 1);
-                        return;
-                    }
-                }
+                // for (var i = 0; i < this.events[event_type].length; i++) {
+                //     if (target == this.events[event_type][i].target && this.events[event_type][i].callback == callback) {
+                // this.events[event_type].splice(i, 1);
+                this.events[event_type].splice(0);
+                return;
+                // }
+                // }
             }
         }
     }

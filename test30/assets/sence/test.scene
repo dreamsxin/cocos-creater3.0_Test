@@ -40,10 +40,10 @@
         "__id__": 67
       },
       {
-        "__id__": 75
+        "__id__": 79
       },
       {
-        "__id__": 143
+        "__id__": 75
       }
     ],
     "_active": true,
@@ -761,16 +761,16 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -12.646032371892172,
-      "y": 2.16113595560865,
-      "z": 0.5137766757871008
+      "x": 10.579597924589327,
+      "y": 11.243514289644398,
+      "z": -1.3315381714436114
     },
     "_lrot": {
       "__type__": "cc.Quat",
-      "x": -0.05107442410231149,
-      "y": -0.718185180409347,
-      "z": -0.053011098602162306,
-      "w": 0.6919474497879178
+      "x": -0.20181038266964121,
+      "y": 0.7927289164279109,
+      "z": 0.35118424527432246,
+      "w": 0.4555469903060143
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -781,9 +781,9 @@
     "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
-      "x": -8.442987137093494,
-      "y": -92.13190979077446,
-      "z": 2.3854160110976376e-15
+      "x": -47.78732990449508,
+      "y": 120.23176444114578,
+      "z": 0
     },
     "_id": "9fPLu9Xx5Cs6Eniyw4xq4R"
   },
@@ -1970,8 +1970,8 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": -1.676,
-      "y": 0,
-      "z": 5
+      "y": 1,
+      "z": -3.743
     },
     "_lrot": {
       "__type__": "cc.Quat",
@@ -2157,7 +2157,101 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "center": {
+      "__id__": 75
+    },
     "_id": "eeMwzPFRxDHagQQngvIlbt"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "Sphere",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 76
+      }
+    ],
+    "_prefab": null,
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 2.314,
+      "y": 1,
+      "z": 2.603
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0.08715574274765817,
+      "z": 0,
+      "w": 0.9961946980917455
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 2,
+      "y": 2,
+      "z": 2
+    },
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 10,
+      "z": 0
+    },
+    "_id": "05mHWsl/lBW7R+AHu2jyXX"
+  },
+  {
+    "__type__": "cc.MeshRenderer",
+    "_name": "Sphere<ModelComponent>",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 75
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 77
+    },
+    "_materials": [
+      {
+        "__uuid__": "6b3220fe-c398-42b5-8056-588d8a3dced0"
+      }
+    ],
+    "_visFlags": 0,
+    "lightmapSettings": {
+      "__id__": 78
+    },
+    "_mesh": {
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@17020"
+    },
+    "_shadowCastingMode": 0,
+    "_shadowReceivingMode": 1,
+    "_enableMorph": true,
+    "_id": "fdQSRUahNK56SCjDIklfgp"
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "492SVdw3ZPdre+amT+eLU6"
+  },
+  {
+    "__type__": "cc.ModelLightmapSettings",
+    "texture": null,
+    "uvParam": {
+      "__type__": "cc.Vec4",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 0
+    },
+    "_bakeable": false,
+    "_castShadow": false,
+    "_receiveShadow": false,
+    "_recieveShadow": false,
+    "_lightmapSize": 64
   },
   {
     "__type__": "cc.Node",
@@ -2168,22 +2262,22 @@
     },
     "_children": [
       {
-        "__id__": 76
-      },
-      {
         "__id__": 80
       },
       {
         "__id__": 84
       },
       {
-        "__id__": 136
+        "__id__": 88
+      },
+      {
+        "__id__": 140
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 140
+        "__id__": 144
       }
     ],
     "_prefab": null,
@@ -2220,13 +2314,13 @@
     "_name": "Helmet",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 75
+      "__id__": 79
     },
     "_children": [],
     "_active": false,
     "_components": [
       {
-        "__id__": 77
+        "__id__": 81
       }
     ],
     "_prefab": null,
@@ -2263,11 +2357,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 76
+      "__id__": 80
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 78
+      "__id__": 82
     },
     "_materials": [
       {
@@ -2276,7 +2370,7 @@
     ],
     "_visFlags": 0,
     "lightmapSettings": {
-      "__id__": 79
+      "__id__": 83
     },
     "_mesh": {
       "__uuid__": "fb9825a0-fd7f-48c5-b121-9af90f9f2011@72704"
@@ -2288,7 +2382,7 @@
       "__uuid__": "90f86573-5baf-41e2-97db-8604d1f42b65@a9630"
     },
     "_skinningRoot": {
-      "__id__": 75
+      "__id__": 79
     },
     "_id": "64XMwWJ5JIYrQRe7vHWDgR"
   },
@@ -2317,13 +2411,13 @@
     "_name": "Body",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 75
+      "__id__": 79
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 81
+        "__id__": 85
       }
     ],
     "_prefab": null,
@@ -2360,11 +2454,11 @@
     "_name": "Body<SkinnedMeshRenderer>",
     "_objFlags": 0,
     "node": {
-      "__id__": 80
+      "__id__": 84
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 82
+      "__id__": 86
     },
     "_materials": [
       {
@@ -2382,7 +2476,7 @@
     ],
     "_visFlags": 0,
     "lightmapSettings": {
-      "__id__": 83
+      "__id__": 87
     },
     "_mesh": {
       "__uuid__": "5bee9f0c-9771-4e73-b0ea-0bbb6da67698@a865e"
@@ -2394,7 +2488,7 @@
       "__uuid__": "90f86573-5baf-41e2-97db-8604d1f42b65@a9630"
     },
     "_skinningRoot": {
-      "__id__": 75
+      "__id__": 79
     },
     "_id": "1fru8BGdBOBZbe7bSgAymp"
   },
@@ -2423,11 +2517,11 @@
     "_name": "Bip002",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 75
+      "__id__": 79
     },
     "_children": [
       {
-        "__id__": 85
+        "__id__": 89
       }
     ],
     "_active": true,
@@ -2466,11 +2560,11 @@
     "_name": "Bip002 Pelvis",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 84
+      "__id__": 88
     },
     "_children": [
       {
-        "__id__": 86
+        "__id__": 90
       }
     ],
     "_active": true,
@@ -2509,17 +2603,17 @@
     "_name": "Bip002 Spine",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 85
+      "__id__": 89
     },
     "_children": [
       {
-        "__id__": 87
-      },
-      {
-        "__id__": 128
+        "__id__": 91
       },
       {
         "__id__": 132
+      },
+      {
+        "__id__": 136
       }
     ],
     "_active": true,
@@ -2558,11 +2652,11 @@
     "_name": "Bip002 Spine1",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 86
+      "__id__": 90
     },
     "_children": [
       {
-        "__id__": 88
+        "__id__": 92
       }
     ],
     "_active": true,
@@ -2601,17 +2695,17 @@
     "_name": "Bip002 Neck",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 87
+      "__id__": 91
     },
     "_children": [
       {
-        "__id__": 89
+        "__id__": 93
       },
       {
-        "__id__": 108
+        "__id__": 112
       },
       {
-        "__id__": 127
+        "__id__": 131
       }
     ],
     "_active": true,
@@ -2650,11 +2744,11 @@
     "_name": "Bip002 L Clavicle",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 88
+      "__id__": 92
     },
     "_children": [
       {
-        "__id__": 90
+        "__id__": 94
       }
     ],
     "_active": true,
@@ -2693,11 +2787,11 @@
     "_name": "Bip002 L UpperArm",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 89
+      "__id__": 93
     },
     "_children": [
       {
-        "__id__": 91
+        "__id__": 95
       }
     ],
     "_active": true,
@@ -2736,11 +2830,11 @@
     "_name": "Bip002 L Forearm",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 90
+      "__id__": 94
     },
     "_children": [
       {
-        "__id__": 92
+        "__id__": 96
       }
     ],
     "_active": true,
@@ -2779,23 +2873,23 @@
     "_name": "Bip002 L Hand",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 91
+      "__id__": 95
     },
     "_children": [
       {
-        "__id__": 93
+        "__id__": 97
       },
       {
-        "__id__": 96
+        "__id__": 100
       },
       {
-        "__id__": 99
+        "__id__": 103
       },
       {
-        "__id__": 102
+        "__id__": 106
       },
       {
-        "__id__": 105
+        "__id__": 109
       }
     ],
     "_active": true,
@@ -2834,11 +2928,11 @@
     "_name": "Bip002 L Finger0",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 92
+      "__id__": 96
     },
     "_children": [
       {
-        "__id__": 94
+        "__id__": 98
       }
     ],
     "_active": true,
@@ -2877,11 +2971,11 @@
     "_name": "Bip002 L Finger01",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 93
+      "__id__": 97
     },
     "_children": [
       {
-        "__id__": 95
+        "__id__": 99
       }
     ],
     "_active": true,
@@ -2920,7 +3014,7 @@
     "_name": "Bip002 L Finger02",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 94
+      "__id__": 98
     },
     "_children": [],
     "_active": true,
@@ -2959,11 +3053,11 @@
     "_name": "Bip002 L Finger1",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 92
+      "__id__": 96
     },
     "_children": [
       {
-        "__id__": 97
+        "__id__": 101
       }
     ],
     "_active": true,
@@ -3002,11 +3096,11 @@
     "_name": "Bip002 L Finger11",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 96
+      "__id__": 100
     },
     "_children": [
       {
-        "__id__": 98
+        "__id__": 102
       }
     ],
     "_active": true,
@@ -3045,7 +3139,7 @@
     "_name": "Bip002 L Finger12",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 97
+      "__id__": 101
     },
     "_children": [],
     "_active": true,
@@ -3084,11 +3178,11 @@
     "_name": "Bip002 L Finger2",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 92
+      "__id__": 96
     },
     "_children": [
       {
-        "__id__": 100
+        "__id__": 104
       }
     ],
     "_active": true,
@@ -3127,11 +3221,11 @@
     "_name": "Bip002 L Finger21",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 99
+      "__id__": 103
     },
     "_children": [
       {
-        "__id__": 101
+        "__id__": 105
       }
     ],
     "_active": true,
@@ -3170,7 +3264,7 @@
     "_name": "Bip002 L Finger22",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 100
+      "__id__": 104
     },
     "_children": [],
     "_active": true,
@@ -3209,11 +3303,11 @@
     "_name": "Bip002 L Finger3",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 92
+      "__id__": 96
     },
     "_children": [
       {
-        "__id__": 103
+        "__id__": 107
       }
     ],
     "_active": true,
@@ -3252,11 +3346,11 @@
     "_name": "Bip002 L Finger31",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 102
+      "__id__": 106
     },
     "_children": [
       {
-        "__id__": 104
+        "__id__": 108
       }
     ],
     "_active": true,
@@ -3295,7 +3389,7 @@
     "_name": "Bip002 L Finger32",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 103
+      "__id__": 107
     },
     "_children": [],
     "_active": true,
@@ -3334,11 +3428,11 @@
     "_name": "Bip002 L Finger4",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 92
+      "__id__": 96
     },
     "_children": [
       {
-        "__id__": 106
+        "__id__": 110
       }
     ],
     "_active": true,
@@ -3377,11 +3471,11 @@
     "_name": "Bip002 L Finger41",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 105
+      "__id__": 109
     },
     "_children": [
       {
-        "__id__": 107
+        "__id__": 111
       }
     ],
     "_active": true,
@@ -3420,7 +3514,7 @@
     "_name": "Bip002 L Finger42",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 106
+      "__id__": 110
     },
     "_children": [],
     "_active": true,
@@ -3459,11 +3553,11 @@
     "_name": "Bip002 R Clavicle",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 88
+      "__id__": 92
     },
     "_children": [
       {
-        "__id__": 109
+        "__id__": 113
       }
     ],
     "_active": true,
@@ -3502,11 +3596,11 @@
     "_name": "Bip002 R UpperArm",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 108
+      "__id__": 112
     },
     "_children": [
       {
-        "__id__": 110
+        "__id__": 114
       }
     ],
     "_active": true,
@@ -3545,11 +3639,11 @@
     "_name": "Bip002 R Forearm",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 109
+      "__id__": 113
     },
     "_children": [
       {
-        "__id__": 111
+        "__id__": 115
       }
     ],
     "_active": true,
@@ -3588,23 +3682,23 @@
     "_name": "Bip002 R Hand",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 110
+      "__id__": 114
     },
     "_children": [
       {
-        "__id__": 112
+        "__id__": 116
       },
       {
-        "__id__": 115
+        "__id__": 119
       },
       {
-        "__id__": 118
+        "__id__": 122
       },
       {
-        "__id__": 121
+        "__id__": 125
       },
       {
-        "__id__": 124
+        "__id__": 128
       }
     ],
     "_active": true,
@@ -3643,11 +3737,11 @@
     "_name": "Bip002 R Finger0",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 111
+      "__id__": 115
     },
     "_children": [
       {
-        "__id__": 113
+        "__id__": 117
       }
     ],
     "_active": true,
@@ -3686,11 +3780,11 @@
     "_name": "Bip002 R Finger01",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 112
+      "__id__": 116
     },
     "_children": [
       {
-        "__id__": 114
+        "__id__": 118
       }
     ],
     "_active": true,
@@ -3729,7 +3823,7 @@
     "_name": "Bip002 R Finger02",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 113
+      "__id__": 117
     },
     "_children": [],
     "_active": true,
@@ -3768,11 +3862,11 @@
     "_name": "Bip002 R Finger1",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 111
+      "__id__": 115
     },
     "_children": [
       {
-        "__id__": 116
+        "__id__": 120
       }
     ],
     "_active": true,
@@ -3811,11 +3905,11 @@
     "_name": "Bip002 R Finger11",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 115
+      "__id__": 119
     },
     "_children": [
       {
-        "__id__": 117
+        "__id__": 121
       }
     ],
     "_active": true,
@@ -3854,7 +3948,7 @@
     "_name": "Bip002 R Finger12",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 116
+      "__id__": 120
     },
     "_children": [],
     "_active": true,
@@ -3893,11 +3987,11 @@
     "_name": "Bip002 R Finger2",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 111
+      "__id__": 115
     },
     "_children": [
       {
-        "__id__": 119
+        "__id__": 123
       }
     ],
     "_active": true,
@@ -3936,11 +4030,11 @@
     "_name": "Bip002 R Finger21",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 118
+      "__id__": 122
     },
     "_children": [
       {
-        "__id__": 120
+        "__id__": 124
       }
     ],
     "_active": true,
@@ -3979,7 +4073,7 @@
     "_name": "Bip002 R Finger22",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 119
+      "__id__": 123
     },
     "_children": [],
     "_active": true,
@@ -4018,11 +4112,11 @@
     "_name": "Bip002 R Finger3",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 111
+      "__id__": 115
     },
     "_children": [
       {
-        "__id__": 122
+        "__id__": 126
       }
     ],
     "_active": true,
@@ -4061,11 +4155,11 @@
     "_name": "Bip002 R Finger31",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 121
+      "__id__": 125
     },
     "_children": [
       {
-        "__id__": 123
+        "__id__": 127
       }
     ],
     "_active": true,
@@ -4104,7 +4198,7 @@
     "_name": "Bip002 R Finger32",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 122
+      "__id__": 126
     },
     "_children": [],
     "_active": true,
@@ -4143,11 +4237,11 @@
     "_name": "Bip002 R Finger4",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 111
+      "__id__": 115
     },
     "_children": [
       {
-        "__id__": 125
+        "__id__": 129
       }
     ],
     "_active": true,
@@ -4186,11 +4280,11 @@
     "_name": "Bip002 R Finger41",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 124
+      "__id__": 128
     },
     "_children": [
       {
-        "__id__": 126
+        "__id__": 130
       }
     ],
     "_active": true,
@@ -4229,7 +4323,7 @@
     "_name": "Bip002 R Finger42",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 125
+      "__id__": 129
     },
     "_children": [],
     "_active": true,
@@ -4268,7 +4362,7 @@
     "_name": "Bip002 Head",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 88
+      "__id__": 92
     },
     "_children": [],
     "_active": true,
@@ -4307,11 +4401,11 @@
     "_name": "Bip002 L Thigh",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 86
+      "__id__": 90
     },
     "_children": [
       {
-        "__id__": 129
+        "__id__": 133
       }
     ],
     "_active": true,
@@ -4350,11 +4444,11 @@
     "_name": "Bip002 L Calf",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 128
+      "__id__": 132
     },
     "_children": [
       {
-        "__id__": 130
+        "__id__": 134
       }
     ],
     "_active": true,
@@ -4393,11 +4487,11 @@
     "_name": "Bip002 L Foot",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 129
+      "__id__": 133
     },
     "_children": [
       {
-        "__id__": 131
+        "__id__": 135
       }
     ],
     "_active": true,
@@ -4436,7 +4530,7 @@
     "_name": "Bip002 L Toe0",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 130
+      "__id__": 134
     },
     "_children": [],
     "_active": true,
@@ -4475,11 +4569,11 @@
     "_name": "Bip002 R Thigh",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 86
+      "__id__": 90
     },
     "_children": [
       {
-        "__id__": 133
+        "__id__": 137
       }
     ],
     "_active": true,
@@ -4518,11 +4612,11 @@
     "_name": "Bip002 R Calf",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 132
+      "__id__": 136
     },
     "_children": [
       {
-        "__id__": 134
+        "__id__": 138
       }
     ],
     "_active": true,
@@ -4561,11 +4655,11 @@
     "_name": "Bip002 R Foot",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 133
+      "__id__": 137
     },
     "_children": [
       {
-        "__id__": 135
+        "__id__": 139
       }
     ],
     "_active": true,
@@ -4604,7 +4698,7 @@
     "_name": "Bip002 R Toe0",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 134
+      "__id__": 138
     },
     "_children": [],
     "_active": true,
@@ -4643,13 +4737,13 @@
     "_name": "Cone Socket",
     "_objFlags": 0,
     "_parent": {
-      "__id__": 75
+      "__id__": 79
     },
     "_children": [],
     "_active": true,
     "_components": [
       {
-        "__id__": 137
+        "__id__": 141
       }
     ],
     "_prefab": null,
@@ -4686,11 +4780,11 @@
     "_name": "Cone<ModelComponent>",
     "_objFlags": 0,
     "node": {
-      "__id__": 136
+      "__id__": 140
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 138
+      "__id__": 142
     },
     "_materials": [
       {
@@ -4699,7 +4793,7 @@
     ],
     "_visFlags": 0,
     "lightmapSettings": {
-      "__id__": 139
+      "__id__": 143
     },
     "_mesh": {
       "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@38fd2"
@@ -4734,11 +4828,11 @@
     "_name": "Cocos<SkeletalAnimation>",
     "_objFlags": 0,
     "node": {
-      "__id__": 75
+      "__id__": 79
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 141
+      "__id__": 145
     },
     "playOnLoad": true,
     "_clips": [
@@ -4776,7 +4870,7 @@
     "_useBakedAnimation": true,
     "_sockets": [
       {
-        "__id__": 142
+        "__id__": 146
       }
     ],
     "_id": "90eWoREoVITZqXvr7bE93u"
@@ -4789,99 +4883,8 @@
     "__type__": "cc.SkeletalAnimation.Socket",
     "path": "Bip002/Bip002 Pelvis/Bip002 Spine/Bip002 Spine1/Bip002 Neck/Bip002 L Clavicle/Bip002 L UpperArm/Bip002 L Forearm/Bip002 L Hand/Bip002 L Finger4/Bip002 L Finger41/Bip002 L Finger42/Cone",
     "target": {
-      "__id__": 136
+      "__id__": 140
     }
-  },
-  {
-    "__type__": "cc.Node",
-    "_name": "Sphere",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 1
-    },
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 144
-      }
-    ],
-    "_prefab": null,
-    "_lpos": {
-      "__type__": "cc.Vec3",
-      "x": 2.314,
-      "y": 1.241,
-      "z": 2.603
-    },
-    "_lrot": {
-      "__type__": "cc.Quat",
-      "x": 0,
-      "y": 0.08715574274765817,
-      "z": 0,
-      "w": 0.9961946980917455
-    },
-    "_lscale": {
-      "__type__": "cc.Vec3",
-      "x": 2,
-      "y": 2,
-      "z": 2
-    },
-    "_layer": 1073741824,
-    "_euler": {
-      "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 10,
-      "z": 0
-    },
-    "_id": "05mHWsl/lBW7R+AHu2jyXX"
-  },
-  {
-    "__type__": "cc.MeshRenderer",
-    "_name": "Sphere<ModelComponent>",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 143
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 145
-    },
-    "_materials": [
-      {
-        "__uuid__": "6b3220fe-c398-42b5-8056-588d8a3dced0"
-      }
-    ],
-    "_visFlags": 0,
-    "lightmapSettings": {
-      "__id__": 146
-    },
-    "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@17020"
-    },
-    "_shadowCastingMode": 0,
-    "_shadowReceivingMode": 1,
-    "_enableMorph": true,
-    "_id": "fdQSRUahNK56SCjDIklfgp"
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "492SVdw3ZPdre+amT+eLU6"
-  },
-  {
-    "__type__": "cc.ModelLightmapSettings",
-    "texture": null,
-    "uvParam": {
-      "__type__": "cc.Vec4",
-      "x": 0,
-      "y": 0,
-      "z": 0,
-      "w": 0
-    },
-    "_bakeable": false,
-    "_castShadow": false,
-    "_receiveShadow": false,
-    "_recieveShadow": false,
-    "_lightmapSize": 64
   },
   {
     "__type__": "cc.PrefabInfo",

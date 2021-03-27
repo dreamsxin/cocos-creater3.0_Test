@@ -1,11 +1,15 @@
 
 import { _decorator, Component, Node, Prefab, instantiate, Vec3 } from 'cc';
 import { PoolManager } from '../infinitymap/poolManager';
+import EventManager from '../shooting/eventManager';
+import PercenUtil, { RoadPoints } from './percenUtil';
+import { Straight } from './straight';
 import { TurnPoint } from './turnPoint';
 const { ccclass, property } = _decorator;
 
 @ccclass('PercenRun')
 export class PercenRun extends Component {
+
     @property(Prefab)
     straight: Prefab = null as unknown as Prefab;
 
@@ -15,18 +19,26 @@ export class PercenRun extends Component {
     @property(Node)
     camaraNode: Node = null as unknown as Node;
 
-
-    private turnLeftEular: number = 90;
-    private turnRightEular: number = -90;
+    /* 直行接直行偏移 */
     private straightTostraight: number = 20;
+    /* 直行接弯道偏移 */
     private straightToturn: number = 10;
+    /* 弯道接直行偏移 */
+    private turnTostraightX: number = 22;
+    /* 弯道接弯道偏移 */
+    private turnToturnZ: number = 12;
 
+    /* 路径列表,用于回收处理 */
     private roadList: Node[] = [];
 
     start() {
+        PercenUtil.Inst.clear();
+        //根据事件机智来触发回收和生成路径操作
+        EventManager.Inst.registerEevent(EventManager.EVT_recycle, this.recycleRoad.bind(this), this);
+        //初始化先快速生成前段道路
         this.schedule(() => {
             this.createRoad();
-        }, 1);
+        }, 0.5, 10);
     }
 
     async createRoad() {
@@ -49,14 +61,56 @@ export class PercenRun extends Component {
         let pos = node.getWorldPosition();
         this.camaraNode.setWorldPosition(new Vec3(pos.x, this.camaraNode.getWorldPosition().y, pos.z))
         this.roadList.push(node);
-        this.recycleRoad();
+
+        this.createRoadPoint(node);
+    }
+
+    /**
+     * 根据道路生成轨道点路径
+     * @param node 
+     */
+    createRoadPoint(node: Node) {
+        let pos: Vec3 = node.getWorldPosition();
+        let euler: Vec3 = node.eulerAngles;
+        let type: number = 0;
+        if (node.name == "turnpoint") {
+            let tp: TurnPoint = node.getComponent(TurnPoint) as TurnPoint;
+            if (tp.direction == 0) {
+                type = 1;//left
+                let posObj: RoadPoints = { pos: pos, type: type, euler: euler };
+                PercenUtil.Inst.pushPoint(posObj);
+
+                let centerLeftPos: Vec3 = tp.getCenterLeftPos();
+                euler = new Vec3(euler.x, euler.y + 45, euler.z);
+                posObj = { pos: centerLeftPos, type: type, euler: euler };
+                PercenUtil.Inst.pushPoint(posObj);
+            }
+            else {
+                type = 2;
+                let posObj: RoadPoints = { pos: pos, type: type, euler: euler };
+                PercenUtil.Inst.pushPoint(posObj);
+
+                let centerRightPos: Vec3 = tp.getCenterRightPos();
+                euler = new Vec3(euler.x, euler.y - 45, euler.z);
+                posObj = { pos: centerRightPos, type: type, euler: euler };
+                PercenUtil.Inst.pushPoint(posObj);
+            }
+        }
+        else {
+            type = 0;
+            let st: Straight = node.getComponent(Straight) as Straight;
+            let posArr = st.getPos();
+            let posObj: RoadPoints = { pos: posArr[0], type: type, euler: euler };
+            PercenUtil.Inst.pushPoint(posObj);
+            posObj = { pos: posArr[1], type: type, euler: euler };
+            PercenUtil.Inst.pushPoint(posObj);
+        }
     }
 
     recycleRoad() {
-        if (this.roadList.length > 15) {
-            PoolManager.setNode(this.roadList[0]);
-            this.roadList.splice(0, 1);
-        }
+        PoolManager.setNode(this.roadList[0]);
+        this.roadList.splice(0, 1);
+        this.createRoad();
     }
 
     async setRoadPosition(node: Node) {
@@ -197,8 +251,6 @@ export class PercenRun extends Component {
             resolve(null);
         });
     }
-    private turnTostraightX: number = 22;
-    private turnToturnZ: number = 12;
 
 }
 /*
