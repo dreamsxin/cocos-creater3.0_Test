@@ -1,0 +1,29 @@
+{
+  "__version__": "1.0.1",
+  "script": {
+    "useDefineForClassFields": false,
+    "allowDeclareFields": false
+  },
+  "general": {
+    "designResolution": {
+      "width": 1280
+    }
+  },
+  "physics": {
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "Player"
+      },
+      {
+        "index": 2,
+        "name": "Enemy"
+      }
+    ],
+    "collisionMatrix": {
+      "0": 1,
+      "1": 4,
+      "2": 2
+    }
+  }
+}

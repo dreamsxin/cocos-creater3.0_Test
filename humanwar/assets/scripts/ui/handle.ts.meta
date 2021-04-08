@@ -1,0 +1,14 @@
+{
+  "ver": "4.0.22",
+  "importer": "typescript",
+  "imported": true,
+  "uuid": "2beed778-de56-4ac1-8e7f-a5ead352fdf5",
+  "files": [],
+  "subMetas": {},
+  "userData": {
+    "importAsPlugin": false,
+    "moduleId": "project:///assets/script/ui/handle.js",
+    "importerSettings": 4,
+    "simulateGlobals": []
+  }
+}
