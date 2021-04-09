@@ -11,7 +11,7 @@
   },
   {
     "__type__": "cc.Scene",
-    "_name": "",
+    "_name": "main",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -9768,7 +9768,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_group": 2,
+    "_group": 1,
     "_type": 1,
     "_mass": 1,
     "_allowSleep": false,
@@ -10138,7 +10138,7 @@
     "_priority": 1073741824,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 398.125,
+    "_orthoHeight": 496.9983136593592,
     "_near": 1,
     "_far": 2000,
     "_color": {
@@ -11203,7 +11203,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_group": 1,
+    "_group": 8,
     "_type": 1,
     "_mass": 0.1,
     "_allowSleep": false,
@@ -11266,14 +11266,14 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -4.122,
+      "x": -8.112,
       "y": 0,
       "z": 17.554
     },
     "_lrot": {
       "__type__": "cc.Quat",
       "x": 0,
-      "y": -0.7071067811865475,
+      "y": 0.7071067811865475,
       "z": 0,
       "w": 0.7071067811865476
     },
@@ -11287,7 +11287,7 @@
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -90,
+      "y": 90,
       "z": 0
     },
     "_id": "eb1Q1viNZMxLLYQF/u9ZRA"
@@ -13992,7 +13992,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_group": 4,
+    "_group": 1,
     "_type": 1,
     "_mass": 1,
     "_allowSleep": false,
@@ -14088,22 +14088,6 @@
     }
   },
   {
-    "__type__": "a1072cHjShBvJAglKdAIXRj",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 343
-    },
-    "_enabled": true,
-    "__prefab": null,
-    "identity": 1,
-    "CocosAnim": {
-      "__id__": 416
-    },
-    "mainCamera": null,
-    "_id": "492g056b1DyZ5DyCqBEFYL"
-  },
-  {
     "__type__": "cc.BoxCollider",
     "_name": "",
     "_objFlags": 0,
@@ -14159,6 +14143,22 @@
       "z": 0
     },
     "_id": "f4pD0XFpVJO5J8g7ox5M0Z"
+  },
+  {
+    "__type__": "0b7262tKQdPk4NwGbtk/tYC",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 343
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "identity": 1,
+    "CocosAnim": {
+      "__id__": 416
+    },
+    "mainCamera": null,
+    "_id": "1apdeLhDdEWqO9Mof7VvDc"
   },
   {
     "__type__": "cc.PrefabInfo",

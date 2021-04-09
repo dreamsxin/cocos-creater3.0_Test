@@ -1,6 +1,7 @@
-import { _decorator, Component, Node, SkeletalAnimationComponent, Vec3, systemEvent, SystemEvent, EventKeyboard, Quat, math, sp, tween, Vec2, random } from 'cc';
-import { Player } from './player/player';
-import EventManager from './utils/eventManager';
+import { _decorator, Component, Node, SkeletalAnimationComponent, Vec3, systemEvent, SystemEvent, EventKeyboard, Quat, math, sp, tween, Vec2, random, ICollisionEvent } from 'cc';
+import EventManager from '../utils/eventManager';
+import { Enemy } from './enemy';
+import { IdentityType, Player } from './player';
 // import pitem from './astar/pitem';
 // import Ppath from './astar/ppath';
 // import PstarComponent from './astar/pstarComponent';
@@ -29,8 +30,38 @@ export class Role extends Player {
     }
     start() {
         super.start();
+        this.identity = IdentityType.player;
         // let pstartCon = this.node.getComponent(PstarComponent);
         // pstartCon?.setObstacle();
+    }
+
+    /**
+     * 子类重写,监听身体碰撞器碰撞事件
+     * @param event 
+     */
+    onBodyColliderEnter(event: ICollisionEvent) {
+        let enemy = event.otherCollider.node.parent;
+        /* 被攻击,对方处于攻击状态 other.attackBool=true */
+        if (enemy?.name == "enemy") {
+            let emy: Enemy = enemy.getComponent(Enemy) as Enemy;
+            if (emy.attackBool) {
+                this.handleHurt();
+            }
+        }
+    }
+
+    /**
+     * 子类重写,监听两个拳头碰撞器碰撞事件
+     * @param event 
+     */
+    onFishColliderEnter(event: ICollisionEvent) {
+        let enemy = event.otherCollider.node;
+        /* 主动攻击,自己处于攻击状态 attackBool=true */
+        if (this.attackBool) {
+            if (enemy?.name == "enemy") {
+                console.log("打中 AI 啦");
+            }
+        }
     }
 
     _onKeyDown(event: any) {

@@ -27,9 +27,6 @@ export class Player extends Component {
     @property({ type: Node, visible: function (this: Player) { return this.identity == IdentityType.player; } })
     mainCamera: Node = null as unknown as Node;
 
-    /* 是否释放播放动画 */
-    public isPlaySkills: boolean = false;
-
     /* 是否处于移动过程中 */
     public isMoving: boolean = false;
 
@@ -42,8 +39,20 @@ export class Player extends Component {
     /* 摄像机旋转半径 */
     private R: number = 0;
 
+    /* 是否真正播放某个动作 */
+    private isPlayingAnim: boolean = false;
+
     /* 死亡阵亡  */
     private isDied: boolean = false;
+
+    /* 释放攻击技能 */
+    public attackBool: boolean = false;
+
+    /* 释放受伤技能 */
+    public hurtBool: boolean = false;
+
+    /* 释放跳跃技能 */
+    private jumpBool: boolean = false;
 
     onLoad() {
         if (this.identity > 0) return;
@@ -77,6 +86,8 @@ export class Player extends Component {
     public handleMove(radian: number) {
         if (this.isAutoMoving || this.isDied) return;
 
+        this.attackBool = false;
+
         let mCameraEular = new Vec3();
         let ang = radian * 180 / Math.PI;
         if (this.identity < 1) {//区分玩家和AI
@@ -87,7 +98,7 @@ export class Player extends Component {
         /* 这里加了一个摄像机旋转的偏移角度 */
         let v3: Vec3 = new Vec3(0, ang + 180, 0);
         this.node.eulerAngles = v3;
-        let speed: number = 0.1;
+        let speed: number = 0.2;
 
         radian = ang / 180 * Math.PI;
         let xx: number = Math.cos(radian) * speed;
@@ -158,10 +169,23 @@ export class Player extends Component {
     /**
      * 移动,奔跑状态
      */
-    public handleStart() {
-        if (this.isPlaySkills) return;
+    public handleRun() {
         this.isMoving = true;
+        this.attackBool = false;
+        this.hurtBool = false;
+        this.jumpBool = false;
         this.CocosAnim.play("cocos_anim_run");
+    }
+
+    /**
+     * 移动,行走状态
+     */
+    public handleWalk() {
+        this.isMoving = true;
+        this.attackBool = false;
+        this.hurtBool = false;
+        this.jumpBool = false;
+        this.CocosAnim.play("cocos_anim_walk");
     }
 
     /**
@@ -174,22 +198,9 @@ export class Player extends Component {
     }
 
     /**
-     * 受到攻击
-     */
-    public handleHurt() {
-        if (this.isMoving || this.isPlaySkills) return;
-        this.isPlaySkills = true;
-        this.isMoving = false;
-        this.CocosAnim.play("cocos_anim_hurt");
-    }
-
-    /**
      * 死亡动画
      */
     public handleDied() {
-        if (this.isMoving || this.isPlaySkills) return;
-        this.isPlaySkills = true;
-        this.isMoving = false;
         this.isDied = true;
         this.CocosAnim.play("cocos_anim_die");
     }
@@ -198,20 +209,24 @@ export class Player extends Component {
      * 跳跃动画
      */
     public evt_Jump() {
-        if (this.isMoving || this.isPlaySkills) return;
-        this.isPlaySkills = true;
-        this.isMoving = false;
+        this.jumpBool = true;
         this.CocosAnim.play("cocos_anim_jump");
+    }
 
+    /**
+     * 受到攻击
+     */
+    public handleHurt() {
+        this.hurtBool = true;
+        this.isPlayingAnim = true;
+        this.CocosAnim.play("cocos_anim_hurt");
     }
 
     /**
      * 攻击
      */
     public evt_attack() {
-        if (this.isMoving || this.isPlaySkills) return;
-        this.isPlaySkills = true;
-        this.isMoving = false;
+        this.attackBool = true;
         this.CocosAnim.play("cocos_anim_attack");
 
     }
@@ -221,15 +236,31 @@ export class Player extends Component {
     }
 
     /**
+     * 恢复到Idle状态
+     */
+    private resumeIdleState() {
+        this.CocosAnim.play("cocos_anim_idle");
+    }
+
+    /**
      * 监听动画播放结束事件
      */
     public setAnimationEvent() {
         this.CocosAnim.on("finished", () => {
-            if (this.isPlaySkills) {
-                this.isPlaySkills = false;
-                /* 恢复到idle状态 */
-                this.handleStop();
-                console.log("attack");
+            /* 恢复到idle状态 */
+            this.resumeIdleState();
+            if (this.attackBool) {
+                this.attackBool = false;
+            }
+            if (this.hurtBool) {
+                this.hurtBool = false;
+                /* AI反击 */
+                // if (this.identity > 0) {
+                this.evt_attack();
+                // }
+            }
+            if (this.jumpBool) {
+                this.jumpBool = false;
             }
         });
     }
@@ -237,18 +268,18 @@ export class Player extends Component {
     /**
      * 添加碰撞事件
      */
-    addColliderEvent() {
+    private addColliderEvent() {
         /*
         这里在项目设置里面加了两个分组,Player,Enemy,只有Player和Enemy间会发生碰撞
          */
         let bodyCollider = this.node.getComponent(Collider);
-        bodyCollider?.on("onCollisionEnter", this._onBodyColliderEnter.bind(this), this);
+        bodyCollider?.on("onCollisionEnter", this.onBodyColliderEnter.bind(this), this);
 
         let leftfistCollider = this.node.getChildByName("leftfist")?.getComponent(Collider);
-        leftfistCollider?.on("onCollisionEnter", this._onFishColliderEnter.bind(this), this);
+        leftfistCollider?.on("onCollisionEnter", this.onFishColliderEnter.bind(this), this);
 
         let rightfistCollider = this.node.getChildByName("rightfist")?.getComponent(Collider);
-        rightfistCollider?.on("onCollisionEnter", this._onFishColliderEnter.bind(this), this);
+        rightfistCollider?.on("onCollisionEnter", this.onFishColliderEnter.bind(this), this);
         console.log(bodyCollider, leftfistCollider, rightfistCollider);
     }
 
@@ -256,18 +287,12 @@ export class Player extends Component {
      * 监听身体碰撞器碰撞事件
      * @param event 
      */
-    _onBodyColliderEnter(event: ICollisionEvent) {
-        let name = event.otherCollider.node.parent?.name;
-        console.log("body-> " + name + " - " + this.node.name);
-    }
+    onBodyColliderEnter(event: ICollisionEvent) { }
 
     /**
      * 监听两个拳头碰撞器碰撞事件
      * @param event 
      */
-    _onFishColliderEnter(event: ICollisionEvent) {
-        let name = event.otherCollider.node.name;
-        console.log("fist-> " + name + " - " + this.node.name);
-    }
+    onFishColliderEnter(event: ICollisionEvent) { }
 }
 

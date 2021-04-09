@@ -1,6 +1,6 @@
 
 import { _decorator, Component, Node, Vec3, Vec2, UITransform } from 'cc';
-import { Role } from '../Role';
+import { Role } from '../player/Role';
 // import { Role } from '../Role';
 // import { ILand } from './iLand';
 const { ccclass, property } = _decorator;
@@ -35,7 +35,7 @@ export class Handle extends Component {
         let pos = event.getLocation();
         let poss: Vec3 = new Vec3(pos.x - this.node.getWorldPosition().x, pos.y - this.node.getWorldPosition().y, 0);
         this.center.setPosition(poss);
-        this.role.getComponent(Role)?.handleStart();
+        this.role.getComponent(Role)?.handleRun();
         // this.iland.getComponent(ILand)?.setMoving(false);
     }
 
