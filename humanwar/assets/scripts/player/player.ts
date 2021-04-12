@@ -27,6 +27,9 @@ export class Player extends Component {
     @property({ type: Node, visible: function (this: Player) { return this.identity == IdentityType.player; } })
     mainCamera: Node = null as unknown as Node;
 
+    @property(Node)
+    bloodBar: Node = null as unknown as Node;
+
     /* 是否处于移动过程中 */
     public isMoving: boolean = false;
 
@@ -43,7 +46,7 @@ export class Player extends Component {
     private isPlayingAnim: boolean = false;
 
     /* 死亡阵亡  */
-    private isDied: boolean = false;
+    public isDied: boolean = false;
 
     /* 释放攻击技能 */
     public attackBool: boolean = false;
@@ -53,6 +56,9 @@ export class Player extends Component {
 
     /* 释放跳跃技能 */
     private jumpBool: boolean = false;
+
+    /* 总血量 */
+    private bloodTotal: number = 100;
 
     onLoad() {
         if (this.identity > 0) return;
@@ -120,6 +126,7 @@ export class Player extends Component {
      * 设置摄像机旋转半径
      */
     refreshRValue() {
+        if (this.isDied) return;
         if (this.identity > 0) { return; }
         //R:摄像机绕角色旋转半径
         let p1: Vec3 = this.node.getWorldPosition();
@@ -170,6 +177,7 @@ export class Player extends Component {
      * 移动,奔跑状态
      */
     public handleRun() {
+        if (this.isDied) return;
         this.isMoving = true;
         this.attackBool = false;
         this.hurtBool = false;
@@ -181,6 +189,7 @@ export class Player extends Component {
      * 移动,行走状态
      */
     public handleWalk() {
+        if (this.isDied) return;
         this.isMoving = true;
         this.attackBool = false;
         this.hurtBool = false;
@@ -192,6 +201,7 @@ export class Player extends Component {
      * 停下,待机状态
      */
     public handleStop() {
+        if (this.isDied) return;
         if (this.isAutoMoving) return;
         this.isMoving = false;
         this.CocosAnim.play("cocos_anim_idle");
@@ -201,6 +211,7 @@ export class Player extends Component {
      * 死亡动画
      */
     public handleDied() {
+        if (this.isDied) return;
         this.isDied = true;
         this.CocosAnim.play("cocos_anim_die");
     }
@@ -209,6 +220,7 @@ export class Player extends Component {
      * 跳跃动画
      */
     public evt_Jump() {
+        if (this.isDied) return;
         this.jumpBool = true;
         this.CocosAnim.play("cocos_anim_jump");
     }
@@ -217,6 +229,7 @@ export class Player extends Component {
      * 受到攻击
      */
     public handleHurt() {
+        if (this.isDied) return;
         this.hurtBool = true;
         this.isPlayingAnim = true;
         this.CocosAnim.play("cocos_anim_hurt");
@@ -226,6 +239,7 @@ export class Player extends Component {
      * 攻击
      */
     public evt_attack() {
+        if (this.isDied) return;
         this.attackBool = true;
         this.CocosAnim.play("cocos_anim_attack");
 
@@ -239,6 +253,7 @@ export class Player extends Component {
      * 恢复到Idle状态
      */
     private resumeIdleState() {
+        if (this.isDied) return;
         this.CocosAnim.play("cocos_anim_idle");
     }
 
@@ -254,6 +269,7 @@ export class Player extends Component {
             }
             if (this.hurtBool) {
                 this.hurtBool = false;
+                this.refreshBloodValue();
                 /* AI反击 */
                 // if (this.identity > 0) {
                 this.evt_attack();
@@ -294,5 +310,23 @@ export class Player extends Component {
      * @param event 
      */
     onFishColliderEnter(event: ICollisionEvent) { }
+
+    /**
+     * 刷新血量
+     */
+    refreshBloodValue() {
+        let scale: Vec3 = this.bloodBar.getScale();
+        if (this.identity > 0) {
+            scale.y -= 1;
+        }
+        else {
+            scale.y -= 0.1;
+        }
+        this.bloodBar.setScale(scale);
+        if (scale.y <= 0) {
+            this.bloodBar.active = false;
+            this.handleDied();
+        }
+    }
 }
 

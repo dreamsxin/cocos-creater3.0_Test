@@ -140,6 +140,7 @@ export class Enemy extends Player {
     }
 
     update() {
+        if (this.isDied) return;
         if (this.isMoveToPlayer) {
             this.moveToPlayer();
         }
