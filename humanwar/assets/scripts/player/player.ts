@@ -141,7 +141,7 @@ export class Player extends Component {
      * @param value 
      */
     setRotateByControl(value: number) {
-        this.i += 0.05 * (value);
+        this.i += 0.1 * (value);
 
         //绕着某个点做圆周运动
         let R: number = this.R;//20
@@ -153,7 +153,8 @@ export class Player extends Component {
         let p2: Vec3 = this.mainCamera.getWorldPosition();
         let radian: number = Math.atan2(p2.x - p1.x, p2.z - p1.z);
         let angle: number = radian * 180 / Math.PI;
-        this.mainCamera.eulerAngles = new Vec3(-20, angle, 0);
+        // this.mainCamera.eulerAngles = new Vec3(-20, angle, 0);
+        this.mainCamera.eulerAngles = new Vec3(this.mainCamera.eulerAngles.x, angle, 0);
     }
 
     /**
@@ -171,6 +172,19 @@ export class Player extends Component {
                 this.setRotateByControl(-1);
             }
         }
+
+        if (event.getDelta().y != 0) {
+            let v2: Vec2 = event.getDelta();
+            let euler: Vec3 = this.mainCamera.eulerAngles;
+            if (v2.y > 0) {
+                euler.x -= 0.2;
+            }
+            else {
+                euler.x += 0.2;
+            }
+            this.mainCamera.eulerAngles = euler;
+        }
+
     }
 
     /**
@@ -296,7 +310,6 @@ export class Player extends Component {
 
         let rightfistCollider = this.node.getChildByName("rightfist")?.getComponent(Collider);
         rightfistCollider?.on("onCollisionEnter", this.onFishColliderEnter.bind(this), this);
-        console.log(bodyCollider, leftfistCollider, rightfistCollider);
     }
 
     /**
