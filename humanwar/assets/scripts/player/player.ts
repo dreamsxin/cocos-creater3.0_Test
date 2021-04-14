@@ -254,6 +254,7 @@ export class Player extends Component {
             }
             PoolManager.setNode(this.node);
         }, 3);
+        EventManager.Inst.dispatchEvent(EventManager.EVT_skill_died);
     }
 
     /**
@@ -273,6 +274,7 @@ export class Player extends Component {
         this.hurtBool = true;
         this.isPlayingAnim = true;
         this.CocosAnim.play("cocos_anim_hurt");
+        EventManager.Inst.dispatchEvent(EventManager.EVT_skill_hurt);
     }
 
     /**
@@ -282,6 +284,7 @@ export class Player extends Component {
         if (this.isDied) return;
         this.attackBool = true;
         this.CocosAnim.play("cocos_anim_attack");
+        EventManager.Inst.dispatchEvent(EventManager.EVT_skill_attack_music);
 
     }
 

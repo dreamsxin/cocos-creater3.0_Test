@@ -1,6 +1,9 @@
 /* 自定义事件模块 */
 export default class EventManager {
+    public static EVT_skill_attack_music: string = "attack_music";
     public static EVT_skill_attack: string = "attack";
+    public static EVT_skill_hurt: string = "hurt";
+    public static EVT_skill_died: string = "died";
     public static EVT_skill_jump: string = "jump";
     public static EVT_generate_enemy: string = "generateEnemy";
     public static EVT_generate_player: string = "generatePlayer";
