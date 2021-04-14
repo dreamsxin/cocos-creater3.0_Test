@@ -2,6 +2,8 @@
 export default class EventManager {
     public static EVT_skill_attack: string = "attack";
     public static EVT_skill_jump: string = "jump";
+    public static EVT_generate_enemy: string = "generateEnemy";
+    public static EVT_generate_player: string = "generatePlayer";
     private static _instance: EventManager = null as unknown as EventManager;
     public static get Inst(): EventManager {
         if (!EventManager._instance) {

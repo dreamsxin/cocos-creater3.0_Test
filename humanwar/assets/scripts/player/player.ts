@@ -1,5 +1,7 @@
 
 import { _decorator, Component, Node, SkeletalAnimationComponent, Vec3, SystemEvent, systemEvent, Vec2, Collider, ICollisionEvent, Enum } from 'cc';
+import EventManager from '../utils/eventManager';
+import { PoolManager } from '../utils/poolManager';
 const { ccclass, property, type } = _decorator;
 /**
  * 
@@ -60,6 +62,9 @@ export class Player extends Component {
     /* 总血量 */
     private bloodTotal: number = 100;
 
+    /* id,唯标识 */
+    public id: number = -1;
+
     onLoad() {
         if (this.identity > 0) return;
         //触摸监听,控制摄像机旋转
@@ -69,7 +74,18 @@ export class Player extends Component {
     start() {
         this.addColliderEvent();
         this.setAnimationEvent();
-        this.initCameraPos(true);
+        if (this.identity < 1) {
+            this.initCameraPos(true);
+        }
+    }
+
+    onEnable() {
+        let scale: Vec3 = this.bloodBar.getScale();
+        scale.y = 2;
+        this.bloodBar.setScale(scale);
+        this.bloodBar.active = true;
+        this.isDied = false;
+        this.resumeIdleState();
     }
 
     /**
@@ -228,6 +244,16 @@ export class Player extends Component {
         if (this.isDied) return;
         this.isDied = true;
         this.CocosAnim.play("cocos_anim_die");
+        /* 回收并发送生成角色事件 */
+        this.scheduleOnce(() => {
+            if (this.identity > 0) {
+                EventManager.Inst.dispatchEvent(EventManager.EVT_generate_enemy, this.id);
+            }
+            else {
+                EventManager.Inst.dispatchEvent(EventManager.EVT_generate_player, this.id);
+            }
+            PoolManager.setNode(this.node);
+        }, 3);
     }
 
     /**
@@ -281,6 +307,7 @@ export class Player extends Component {
             if (this.attackBool) {
                 this.attackBool = false;
             }
+
             if (this.hurtBool) {
                 this.hurtBool = false;
                 this.refreshBloodValue();
@@ -289,6 +316,7 @@ export class Player extends Component {
                 this.evt_attack();
                 // }
             }
+
             if (this.jumpBool) {
                 this.jumpBool = false;
             }

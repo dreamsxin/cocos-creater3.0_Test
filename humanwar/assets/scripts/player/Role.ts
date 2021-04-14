@@ -66,7 +66,7 @@ export class Role extends Player {
     }
 
     /**
-     * 使得AI面向玩家
+     * 使得玩家面向AI
      */
     setEnemyRotateToPlayer(enemy: Node) {
         let v1: Vec3 = enemy.getWorldPosition();

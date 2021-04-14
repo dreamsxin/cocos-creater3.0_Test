@@ -18,6 +18,7 @@ export class Enemy extends Player {
 
     /* 移动速度 */
     private speed: number = 0.01;
+
     start() {
         super.start()
         this.identity = IdentityType.enemy;
@@ -31,25 +32,21 @@ export class Enemy extends Player {
     handleSchedule() {
         this.schedule(() => {
             let distance = this.getDistance();
-            if (this.isMoveToPlayer) {
-                this.isMoveToPlayer = false;
-                if (distance > this.offsetPlayer) {
-                    this.handleStop();
+            if (distance > this.offsetPlayer) {
+                this.isMoveToPlayer = true;
+                let random = Math.random();
+                this.speed = 0.01 + random * 0.1;
+                /* 给个随机因子来决定行走还是奔跑 */
+                if (random > 0.45) {
+                    this.handleRun();
+                }
+                else {
+                    this.handleWalk();
                 }
             }
             else {
-                this.isMoveToPlayer = true;
-                if (distance > this.offsetPlayer) {
-                    let random = Math.random();
-                    this.speed = 0.01 + random * 0.1;
-                    /* 给个随机因子来决定行走还是奔跑 */
-                    if (random > 0.45) {
-                        this.handleRun();
-                    }
-                    else {
-                        this.handleWalk();
-                    }
-                }
+                this.isMoveToPlayer = false;
+                this.handleStop();
             }
         }, 5);
     }
