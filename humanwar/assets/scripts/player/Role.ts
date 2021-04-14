@@ -45,6 +45,7 @@ export class Role extends Player {
         if (enemy?.name == "enemy") {
             let emy: Enemy = enemy.getComponent(Enemy) as Enemy;
             if (emy.attackBool) {
+                this.setEnemyRotateToPlayer(emy.node);
                 this.handleHurt();
             }
         }
@@ -62,6 +63,19 @@ export class Role extends Player {
                 console.log("打中 AI 啦");
             }
         }
+    }
+
+    /**
+     * 使得AI面向玩家
+     */
+    setEnemyRotateToPlayer(enemy: Node) {
+        let v1: Vec3 = enemy.getWorldPosition();
+        let v2: Vec3 = this.node.getWorldPosition();
+        let radian: number = Math.atan2(v1.x - v2.x, v1.z - v2.z);
+        let angle: number = radian / Math.PI * 180;
+        let euler: Vec3 = this.node.eulerAngles;
+        euler.y = angle;
+        this.node.eulerAngles = euler;
     }
 
     _onKeyDown(event: any) {

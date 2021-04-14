@@ -172,7 +172,7 @@ export class Player extends Component {
                 this.setRotateByControl(-1);
             }
         }
-
+        /* 上下旋转 */
         if (event.getDelta().y != 0) {
             let v2: Vec2 = event.getDelta();
             let euler: Vec3 = this.mainCamera.eulerAngles;
