@@ -30,6 +30,7 @@ export class Enemy extends Player {
      * 控制AI追踪玩家的时间间隔
      */
     handleSchedule() {
+        return;
         this.schedule(() => {
             let distance = this.getDistance();
             if (distance > this.offsetPlayer) {
