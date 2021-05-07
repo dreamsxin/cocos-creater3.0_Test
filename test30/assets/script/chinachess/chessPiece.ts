@@ -1,9 +1,13 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Vec3 } from 'cc';
+import EventManager from '../shooting/eventManager';
 import { ChessRole, ChessType } from './chessEnum';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChessPiece')
 export class ChessPiece extends Component {
+    /* 选中状态 */
+    @property(Node)
+    selectedNode: Node = null as unknown as Node;
 
     /* 类型,红/黑 */
     private _typee: number = 0;
@@ -11,10 +15,16 @@ export class ChessPiece extends Component {
     /* 角色,军/马/象/士/王/炮/兵 */
     private _role: ChessRole = ChessRole.boss;
 
-    /* 位置记录一下 */
-    private x: number = -1;
-    private z: number = -1;
+    /* 记录一下坐标 */
+    public x: number = -1;
+    public z: number = -1;
+    public y: number = 0.5;
 
+    /**
+     * 初始化角色/类型/坐标
+     * @param x 
+     * @param z 
+     */
     init(x: number, z: number) {
         this.x = x;
         this.z = z;
@@ -30,8 +40,18 @@ export class ChessPiece extends Component {
         let behand: string = this.getRole(this.role);
         let name = head + behand;
         (this.node.getChildByName(name) as Node).active = true;
+
+        this.selectedNode.eulerAngles = new Vec3(0, 0, 0);
+        if (this.type == ChessType.red) {
+            this.selectedNode.eulerAngles = new Vec3(0, 180, 0);
+        }
     }
 
+    /**
+     * 角色
+     * @param rl 
+     * @returns 
+     */
     private getRole(rl: ChessRole): string {
         switch (rl) {
             case ChessRole.bing:
@@ -51,6 +71,14 @@ export class ChessPiece extends Component {
             default: break;
         }
         return "";
+    }
+
+    /**
+     * 设置选中状态
+     * @param bool 
+     */
+    setSelected(bool: boolean = false) {
+        this.selectedNode.active = bool;
     }
 
     get type() {
