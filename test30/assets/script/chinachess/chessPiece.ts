@@ -85,6 +85,19 @@ export class ChessPiece extends Component {
     }
 
     /**
+     * 初始化棋子位置,给个出场动画
+     * @param pos 
+     * @returns 
+     */
+    async initPosition(pos: Vec3) {
+        return new Promise(resolve => {
+            tween(this.node).to(0.1, { worldPosition: pos }).call(() => {
+                resolve(null);
+            }).start();
+        });
+    }
+
+    /**
      * 更新棋子信息,坐标
      * @param pos 
      */
@@ -101,7 +114,7 @@ export class ChessPiece extends Component {
         let distance = Vec3.subtract(out, sPos, pos).length();
         sPos.y = 0.5;
         this.selectedNode.setWorldPosition(sPos);
-        tween(this.node).to(distance / 15, { worldPosition: pos }).call(() => {
+        tween(this.node).to(distance / 20, { worldPosition: pos }).call(() => {
             let sPos = this.selectedNode.getWorldPosition();
             sPos.y = 1.3;
             this.selectedNode.setWorldPosition(sPos);

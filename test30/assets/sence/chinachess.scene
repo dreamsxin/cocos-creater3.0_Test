@@ -28,10 +28,13 @@
         "__id__": 11
       },
       {
-        "__id__": 24
+        "__id__": 25
       },
       {
         "__id__": 27
+      },
+      {
+        "__id__": 23
       }
     ],
     "_active": true,
@@ -39,7 +42,7 @@
     "_prefab": null,
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 28
+      "__id__": 29
     },
     "_id": "6b47fabc-d605-41a9-8d78-6f5e6ac091ad"
   },
@@ -125,7 +128,7 @@
       "__id__": 1
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 6
@@ -319,7 +322,7 @@
         "__id__": 22
       },
       {
-        "__id__": 23
+        "__id__": 24
       }
     ],
     "_prefab": null,
@@ -626,7 +629,49 @@
     "chessTag": {
       "__uuid__": "4ff5674b-cc85-464a-9267-79e3ec1802b1"
     },
+    "layoutNode": {
+      "__id__": 23
+    },
     "_id": "c80+FKcJdL0Z+E6TnPkyG1"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "layoutRemoveChess",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [],
+    "_prefab": null,
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 1
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "_id": "69zONAKKBLhb/5b5EhNYip"
   },
   {
     "__type__": "cc.BoxCollider",
@@ -664,7 +709,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 25
+        "__id__": 26
       }
     ],
     "_prefab": null,
@@ -701,17 +746,60 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 24
+      "__id__": 25
     },
     "_enabled": true,
     "__prefab": null,
     "mainCamera": {
-      "__id__": 26
+      "__id__": 6
     },
     "chessGd": {
       "__id__": 22
     },
     "_id": "ceSqvTe7lGe4RvyvKnL0Nx"
+  },
+  {
+    "__type__": "cc.Node",
+    "_name": "Main Camera-001",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 1
+    },
+    "_children": [],
+    "_active": false,
+    "_components": [
+      {
+        "__id__": 28
+      }
+    ],
+    "_prefab": null,
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": -0.41482835791025635,
+      "y": 32.082805291629214,
+      "z": 49.88707002274167
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": -0.353897889943879,
+      "y": 0,
+      "z": 0,
+      "w": 0.9352840656684311
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": -41.451827434257744,
+      "y": 0,
+      "z": 0
+    },
+    "_id": "d8d9koIMtFpqhn2pTYBDvu"
   },
   {
     "__type__": "cc.Camera",
@@ -755,61 +843,18 @@
     "_id": "92RNDyLZ5IQa9RjixdwrPI"
   },
   {
-    "__type__": "cc.Node",
-    "_name": "Main Camera-001",
-    "_objFlags": 0,
-    "_parent": {
-      "__id__": 1
-    },
-    "_children": [],
-    "_active": true,
-    "_components": [
-      {
-        "__id__": 26
-      }
-    ],
-    "_prefab": null,
-    "_lpos": {
-      "__type__": "cc.Vec3",
-      "x": -0.41482835791025635,
-      "y": 32.082805291629214,
-      "z": 49.88707002274167
-    },
-    "_lrot": {
-      "__type__": "cc.Quat",
-      "x": -0.353897889943879,
-      "y": 0,
-      "z": 0,
-      "w": 0.9352840656684311
-    },
-    "_lscale": {
-      "__type__": "cc.Vec3",
-      "x": 1,
-      "y": 1,
-      "z": 1
-    },
-    "_layer": 1073741824,
-    "_euler": {
-      "__type__": "cc.Vec3",
-      "x": -41.451827434257744,
-      "y": 0,
-      "z": 0
-    },
-    "_id": "d8d9koIMtFpqhn2pTYBDvu"
-  },
-  {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 29
-    },
-    "shadows": {
       "__id__": 30
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 31
     },
-    "fog": {
+    "_skybox": {
       "__id__": 32
+    },
+    "fog": {
+      "__id__": 33
     }
   },
   {

@@ -1,10 +1,8 @@
 
-import { _decorator, Component, Node, Vec3, Prefab, instantiate, tween } from 'cc';
+import { _decorator, Component, Node, Vec3, Prefab, tween } from 'cc';
 import { PoolManager } from '../infinitymap/poolManager';
-import EventManager from '../shooting/eventManager';
 import { ChessRole, ChessType } from './chessEnum';
 import { ChessPiece } from './chessPiece';
-import { ChessPlayer } from './chessPlayer';
 import { ChessTag } from './chessTag';
 const { ccclass, property } = _decorator;
 
@@ -17,6 +15,9 @@ export class ChessGrid extends Component {
     /* 可行走路径 */
     @property(Prefab)
     chessTag: Prefab = null as unknown as Prefab;
+
+    @property(Node)
+    layoutNode: Node = null as unknown as Node;
 
     private offsetY: number = 0.5;
     private offsetX: number = 5;
@@ -36,10 +37,50 @@ export class ChessGrid extends Component {
     private curTargetChess: ChessPiece = null as unknown as ChessPiece;
     /* 炮打翻山,中间的棋子,用来做跳跃动画使用 */
     private paoBridgeChess: ChessPiece = null as unknown as ChessPiece;
+    /* 被吃掉的红棋子列表 */
+    private layoutRedGrid: Vec3[][] = [];
+    /* 被吃掉的黑棋子列表 */
+    private layoutBlackGrid: Vec3[][] = [];
+    /* 排列被吃掉的棋子 */
+    private lyRedChessArr: ChessPiece[] = [];
+    private lyBlackChessArr: ChessPiece[] = [];
 
     async start() {
         await this.generateGrid();
-        /* 初始化默认棋盘/棋子 */
+        this.initGenerateChess();
+        this.initLayoutRedBlackGrid();
+    }
+
+    /**
+     * 初始化排列被吃掉的棋子的网格
+     */
+    initLayoutRedBlackGrid() {
+        for (let x = 0; x < 2; x++) {
+            let arr: Vec3[] = [];
+            this.layoutRedGrid.push(arr);
+            for (let z = 0; z < 8; z++) {
+                let xx: number = -25 - x * 5;
+                let zz: number = 27 - z * 4;
+                let v3: Vec3 = new Vec3(xx, this.offsetY, zz);
+                this.layoutRedGrid[x].push(v3);
+            }
+        }
+        for (let x = 0; x < 2; x++) {
+            let arr: Vec3[] = [];
+            this.layoutBlackGrid.push(arr);
+            for (let z = 0; z < 8; z++) {
+                let xx1 = 25 + x * 5;
+                let zz1 = -27 + z * 4;
+                let v31 = new Vec3(xx1, this.offsetY, zz1);
+                this.layoutBlackGrid[x].push(v31);
+            }
+        }
+    }
+
+    /**
+     * 初始化默认棋盘/棋子
+     */
+    async initGenerateChess() {
         for (let x = 0; x < this.hor; x++) {
             for (let z = 0; z < this.ver; z++) {
                 let type: number = z < 5 ? ChessType.red : ChessType.black;
@@ -48,13 +89,14 @@ export class ChessGrid extends Component {
                 let pos: Vec3 = this.gridArr[x][z];
                 let chess: Node = PoolManager.getNode(this.chessPrefab);
                 this.node.scene.addChild(chess);
-                chess.setPosition(pos);
+                chess.setPosition(new Vec3(0, this.offsetY, 0));
 
                 let cp: ChessPiece = chess.getComponent(ChessPiece) as ChessPiece;
                 cp.type = type;
                 cp.role = role;
                 cp.init(x, z);
                 this.chessArr.push(cp);
+                await cp.initPosition(pos);
             }
         }
     }
@@ -170,9 +212,41 @@ export class ChessGrid extends Component {
         let out = new Vec3()
         let distance = Vec3.subtract(out, pos2, pos).length();
         this.removeEatedFromList(pos2);
-        tween(eated.node).to(distance / 15, {}).call(() => {
+        tween(eated.node).to(distance / 20, {}).call(() => {
+            this.layoutRemoveNode(eated);
             PoolManager.setNode(eated.node);
         }).start();
+    }
+
+    /**
+     * 将吃掉的棋子排列到两侧
+     * @param cp 
+     */
+    layoutRemoveNode(cpe: ChessPiece) {
+        let chess: Node = PoolManager.getNode(this.chessPrefab);
+        this.layoutNode.addChild(chess);
+        let type: number = cpe.type;
+
+        for (let x = 0; x < 2; x++) {
+            for (let z = 0; z < 8; z++) {
+                let grid: Vec3 = type == ChessType.red ? this.layoutRedGrid[x][z] : this.layoutBlackGrid[x][z];
+                if (!this.checkExistedLayout(grid, type)) {
+                    chess.setPosition(grid);
+
+                    let cp: ChessPiece = chess.getComponent(ChessPiece) as ChessPiece;
+                    cp.type = cpe.type;
+                    cp.role = cpe.role;
+                    cp.init(x, z);
+                    if (type == ChessType.red) {
+                        this.lyRedChessArr.push(cp)
+                    }
+                    else {
+                        this.lyBlackChessArr.push(cp);
+                    }
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -759,6 +833,39 @@ export class ChessGrid extends Component {
     }
 
     /**
+     * 清除棋盘上的棋子
+     */
+    clearningChess() {
+        for (let i = 0; i < this.chessArr.length; i++) {
+            PoolManager.setNode(this.chessArr[i].node);
+        }
+        this.chessArr.splice(0);
+    }
+
+    clearningLayoutChess() {
+        for (let i = 0; i < this.lyBlackChessArr.length; i++) {
+            PoolManager.setNode(this.lyBlackChessArr[i].node);
+        }
+        this.lyBlackChessArr.splice(0);
+        for (let i = 0; i < this.lyRedChessArr.length; i++) {
+            PoolManager.setNode(this.lyRedChessArr[i].node);
+        }
+        this.lyRedChessArr.splice(0);
+    }
+
+    /**
+     * 清场
+     */
+    clearningAll() {
+        this.clearningChessTag();
+        this.clearningLayoutChess();
+        this.clearningChess();
+        this.scheduleOnce(() => {
+            this.initGenerateChess();
+        }, 3);
+    }
+
+    /**
      * 检测该位置是否已经有棋子了
      * @param pos 
      */
@@ -767,6 +874,17 @@ export class ChessGrid extends Component {
             let cpos: Vec3 = this.chessArr[i].node.getWorldPosition();
             if (pos.x == cpos.x && pos.z == cpos.z) {
                 return this.chessArr[i];
+            }
+        }
+        return null as unknown as ChessPiece;
+    }
+
+    checkExistedLayout(pos: Vec3, type: number) {
+        let chessArr: ChessPiece[] = type == ChessType.red ? this.lyRedChessArr : this.lyBlackChessArr;
+        for (let i = 0; i < chessArr.length; i++) {
+            let cpos: Vec3 = chessArr[i].node.getWorldPosition();
+            if (pos.x == cpos.x && pos.z == cpos.z) {
+                return chessArr[i];
             }
         }
         return null as unknown as ChessPiece;
