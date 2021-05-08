@@ -17,7 +17,6 @@ export class ChinaChessMain extends Component {
     }
 
     touchStart(event: any) {
-        this.chessGd.hideAllSelected();
         let pos: Vec2 = event.getLocation();
         /* 从摄像机创建一条射线 */
         let ray: geometry.Ray = this.mainCamera.screenPointToRay(pos.x, pos.y);
@@ -27,15 +26,18 @@ export class ChinaChessMain extends Component {
             let result = PhysicsSystem.instance.raycastClosestResult;
             if (result.collider.node.name == "chessPrefab") {
                 let cp: ChessPiece = result.collider.node.getComponent(ChessPiece) as ChessPiece;
-                cp.setSelected(true);
                 this.chessGd.evtHandleSelected(cp);
+                return;
             }
             else if (result.collider.node.name == "qipan") {
                 let pos = this.handleDetailPos(result.hitPoint);
-                console.log(pos);
-                //走棋
+                if (pos) {
+                    this.chessGd.moveToTargetPos(pos);
+                    return;
+                }
             }
         }
+        this.chessGd.hideAllSelected();
     }
 
     /**

@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, Component, Node, Vec3, tween, Vec2, sp, SkeletalAnimationComponent } from 'cc';
 import EventManager from '../shooting/eventManager';
 import { ChessRole, ChessType } from './chessEnum';
 const { ccclass, property } = _decorator;
@@ -28,7 +28,10 @@ export class ChessPiece extends Component {
     init(x: number, z: number) {
         this.x = x;
         this.z = z;
+        this.showRole();
+    }
 
+    showRole() {
         let childs = this.node.children;
         for (let i = 0; i < childs.length; i++) {
             childs[i].active = false;
@@ -44,6 +47,14 @@ export class ChessPiece extends Component {
         this.selectedNode.eulerAngles = new Vec3(0, 0, 0);
         if (this.type == ChessType.red) {
             this.selectedNode.eulerAngles = new Vec3(0, 180, 0);
+        }
+        (this.selectedNode.getComponent(SkeletalAnimationComponent) as SkeletalAnimationComponent).play("cocos_anim_idle")
+    }
+
+    hideRole() {
+        let childs = this.node.children;
+        for (let i = 0; i < childs.length; i++) {
+            childs[i].active = false;
         }
     }
 
@@ -71,6 +82,40 @@ export class ChessPiece extends Component {
             default: break;
         }
         return "";
+    }
+
+    /**
+     * 更新棋子信息,坐标
+     * @param pos 
+     */
+    updateInfo(pos: Vec3, x: number, z: number) {
+        (this.selectedNode.getComponent(SkeletalAnimationComponent) as SkeletalAnimationComponent).play("cocos_anim_run");
+        this.x = x;
+        this.z = z;
+        this.hideRole();
+        this.setSelected(true);
+        this.setRotateXY(pos);
+        let sPos = this.selectedNode.getWorldPosition();
+
+        let out = new Vec3();
+        let distance = Vec3.subtract(out, sPos, pos).length();
+        sPos.y = 0.5;
+        this.selectedNode.setWorldPosition(sPos);
+        tween(this.node).to(distance / 15, { worldPosition: pos }).call(() => {
+            let sPos = this.selectedNode.getWorldPosition();
+            sPos.y = 1.3;
+            this.selectedNode.setWorldPosition(sPos);
+            this.showRole();
+        }).start();
+    }
+
+    setRotateXY(p: Vec3) {
+        let pos = this.node.getWorldPosition();
+        let p1: Vec2 = new Vec2(pos.x, pos.z);
+        let p2: Vec2 = new Vec2(p.x, p.z);
+        let radian: number = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+        let angle: number = radian * 180 / Math.PI;
+        this.selectedNode.eulerAngles = new Vec3(0, -angle + 90, 0);
     }
 
     /**

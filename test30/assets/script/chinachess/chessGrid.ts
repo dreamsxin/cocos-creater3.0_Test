@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec3, Prefab, instantiate } from 'cc';
+import { _decorator, Component, Node, Vec3, Prefab, instantiate, tween } from 'cc';
 import { PoolManager } from '../infinitymap/poolManager';
 import EventManager from '../shooting/eventManager';
 import { ChessRole, ChessType } from './chessEnum';
@@ -32,6 +32,10 @@ export class ChessGrid extends Component {
 
     /* 当前选中的棋子 */
     private curSelectChess: ChessPiece = null as unknown as ChessPiece;
+    /* 选中的第二颗棋子,可能是要吃掉的 */
+    private curTargetChess: ChessPiece = null as unknown as ChessPiece;
+    /* 炮打翻山,中间的棋子,用来做跳跃动画使用 */
+    private paoBridgeChess: ChessPiece = null as unknown as ChessPiece;
 
     async start() {
         await this.generateGrid();
@@ -42,7 +46,7 @@ export class ChessGrid extends Component {
                 let role: number = this.getChessRoleByPos(x, z);
                 if (role < 0) continue;
                 let pos: Vec3 = this.gridArr[x][z];
-                let chess: Node = instantiate(this.chessPrefab);
+                let chess: Node = PoolManager.getNode(this.chessPrefab);
                 this.node.scene.addChild(chess);
                 chess.setPosition(pos);
 
@@ -82,16 +86,6 @@ export class ChessGrid extends Component {
      */
     getChessRoleByPos(x: number, z: number) {
         let role: number = -1;
-        // test
-        // if (z == 1 || z == this.ver - 5) {
-        //     if (x == 1) {
-        //         role = ChessRole.xiang;
-        //     }
-        // }
-
-
-        //---------------------------------
-
         if (z == 0 || z == this.ver - 1) {
             /* 军 */
             if (x == 0 || x == this.hor - 1) {
@@ -135,17 +129,75 @@ export class ChessGrid extends Component {
      */
     hideAllSelected() {
         this.curSelectChess = null as unknown as ChessPiece;
+        this.curTargetChess = null as unknown as ChessPiece;
         for (let i = 0; i < this.chessArr.length; i++) {
             this.chessArr[i].setSelected();
         }
+        this.clearningChessTag();
     }
+
+    /**
+     * 处理前两次点中的棋子
+     * @param cp 
+     */
+    handleClickChessPiece(cp: ChessPiece): boolean {
+        let continueBool: boolean = true;
+        if (this.curSelectChess) {
+            if (this.curSelectChess.x == cp.x && this.curSelectChess.z == cp.z) {
+                continueBool = false;
+            }
+            else {
+                if (!this.curTargetChess) {
+                    this.curTargetChess = cp;
+                    let pos = this.curSelectChess.node.getWorldPosition();
+                    /* 可以吃该棋子 */
+                    if (this.moveToTargetPos(cp.node.getWorldPosition())) {
+                        continueBool = false;
+                        this.handleEatChess(cp, pos);
+                    }
+                }
+            }
+        }
+        return continueBool;
+    }
+
+    /**
+     * 吃棋子操作
+     * @param eated 
+     */
+    handleEatChess(eated: ChessPiece, pos: Vec3) {
+        let pos2 = eated.node.getWorldPosition();
+        let out = new Vec3()
+        let distance = Vec3.subtract(out, pos2, pos).length();
+        this.removeEatedFromList(pos2);
+        tween(eated.node).to(distance / 15, {}).call(() => {
+            PoolManager.setNode(eated.node);
+        }).start();
+    }
+
+    /**
+     * 将被吃掉的棋子从列表中移除
+     * @param pos 
+     * @returns 
+     */
+    removeEatedFromList(pos: Vec3) {
+        for (let i = 0; i < this.chessArr.length; i++) {
+            let cpos: Vec3 = this.chessArr[i].node.getWorldPosition();
+            if (pos.x == cpos.x && pos.z == cpos.z) {
+                this.chessArr.splice(i, 1);
+            }
+        }
+    }
+
 
     /**
      * 点中棋子事件
      * @param cp
      */
     evtHandleSelected(cp: ChessPiece) {
-        this.clearningChessTag();
+        if (!this.handleClickChessPiece(cp)) return;
+        this.hideAllSelected();
+        cp.setSelected(true);
         this.curSelectChess = cp;
         switch (cp.role) {
             case ChessRole.bing:
@@ -161,6 +213,7 @@ export class ChessGrid extends Component {
                 break;
 
             case ChessRole.ma:
+                this.handleMaPath(cp.type);
                 break;
 
             case ChessRole.pao:
@@ -179,7 +232,98 @@ export class ChessGrid extends Component {
         }
     }
 
-    // todo
+    /**
+     * 马将可以走的步,河内/外,
+     * @param role 
+     */
+    handleMaPath(role: number) {
+        let cp: ChessPiece = this.curSelectChess;
+        let grid = this.gridArr[cp.x][cp.z];
+        let v3: Vec3 = new Vec3(0, cp.y, 0);
+        /* 马心 */
+        let center: Vec3 = new Vec3(0, cp.y, 0);
+        /* 左上 */
+        if (cp.x > 0 && cp.z <= this.ver - 3) {
+            v3.x = grid.x - this.offsetX;
+            v3.z = grid.z - this.offsetZ * 2;
+            center.x = grid.x;
+            center.z = grid.z - this.offsetZ;
+            /* 判断马心是否有棋子 */
+            if (!this.checkExisted(center)) {
+                this.jugedGenerateChessTag(v3);
+            }
+        }
+        if (cp.x > 1 && cp.z <= this.ver - 2) {
+            v3.x = grid.x - this.offsetX * 2;
+            v3.z = grid.z - this.offsetZ;
+            center.x = grid.x - this.offsetX;
+            center.z = grid.z;
+            if (!this.checkExisted(center)) {
+                this.jugedGenerateChessTag(v3);
+            }
+        }
+        /* 左下 */
+        if (cp.x > 0 && cp.z >= 2) {
+            v3.x = grid.x - this.offsetX;
+            v3.z = grid.z + this.offsetZ * 2;
+            center.x = grid.x;
+            center.z = grid.z + this.offsetZ;
+            if (!this.checkExisted(center)) {
+                this.jugedGenerateChessTag(v3);
+            }
+        }
+        if (cp.x > 1 && cp.z >= 1) {
+            v3.x = grid.x - this.offsetX * 2;
+            v3.z = grid.z + this.offsetZ;
+            center.x = grid.x - this.offsetX;
+            center.z = grid.z;
+            if (!this.checkExisted(center)) {
+                this.jugedGenerateChessTag(v3);
+            }
+        }
+        /* 右上 */
+        if (cp.x < this.hor - 1 && cp.z <= this.ver - 3) {
+            v3.x = grid.x + this.offsetX;
+            v3.z = grid.z - this.offsetZ * 2;
+            center.x = grid.x;
+            center.z = grid.z - this.offsetZ;
+            if (!this.checkExisted(center)) {
+                this.jugedGenerateChessTag(v3);
+            }
+        }
+        if (cp.x < this.hor - 2 && cp.z <= this.ver - 2) {
+            v3.x = grid.x + this.offsetX * 2;
+            v3.z = grid.z - this.offsetZ;
+            center.x = grid.x + this.offsetX;
+            center.z = grid.z;
+            if (!this.checkExisted(center)) {
+                this.jugedGenerateChessTag(v3);
+            }
+        }
+        /* 右下 */
+        if (cp.x < this.hor - 1 && cp.z >= 2) {
+            v3.x = grid.x + this.offsetX;
+            v3.z = grid.z + this.offsetZ * 2;
+            center.x = grid.x;
+            center.z = grid.z + this.offsetZ;
+            if (!this.checkExisted(center)) {
+                this.jugedGenerateChessTag(v3);
+            }
+        }
+        if (cp.x < this.hor - 2 && cp.z >= 1) {
+            v3.x = grid.x + this.offsetX * 2;
+            v3.z = grid.z + this.offsetZ;
+            center.x = grid.x + this.offsetX;
+            center.z = grid.z;
+            if (!this.checkExisted(center)) {
+                this.jugedGenerateChessTag(v3);
+            }
+        }
+    }
+    /**
+     * 象将可以走的步,河内/外,
+     * @param role 
+     */
     handleXiangPath(role: number) {
         let cp: ChessPiece = this.curSelectChess;
         let grid = this.gridArr[cp.x][cp.z];
@@ -220,7 +364,7 @@ export class ChessGrid extends Component {
                 }
             }
             else {
-                if (cp.z > 2) {
+                if (cp.z >= 2) {
                     center.z = grid.z + this.offsetZ;
                     if (!this.checkExisted(center)) {
                         v3.z = grid.z + this.offsetZ * 2;
@@ -229,7 +373,7 @@ export class ChessGrid extends Component {
                 }
             }
         }
-        if (cp.x < this.ver - 1) {
+        if (cp.x < this.hor - 1) {
             /* 右上 */
             v3.x = grid.x + this.offsetX * 2;
             center.x = grid.x + this.offsetX;
@@ -262,7 +406,7 @@ export class ChessGrid extends Component {
                 }
             }
             else {
-                if (cp.z > 2) {
+                if (cp.z >= 2) {
                     center.z = grid.z + this.offsetZ;
                     if (!this.checkExisted(center)) {
                         v3.z = grid.z + this.offsetZ * 2;
@@ -418,7 +562,7 @@ export class ChessGrid extends Component {
             }
             else {//河外
                 /* 前 */
-                let v3: Vec3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ);
+                let v3: Vec3 = new Vec3(grid.x, cp.y, grid.z + this.offsetZ);
                 if (cp.z > 0) {
                     this.jugedGenerateChessTag(v3);
                 }
@@ -497,6 +641,7 @@ export class ChessGrid extends Component {
      * @param role 
      */
     handlePaoPath(role: number) {
+        this.paoBridgeChess = null as unknown as ChessPiece;
         let cp: ChessPiece = this.curSelectChess;
         let grid = this.gridArr[cp.x][cp.z];
         let v3: Vec3 = new Vec3();
@@ -507,6 +652,9 @@ export class ChessGrid extends Component {
             v3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ * (i - cp.z));
             let chess = this.checkExisted(v3);
             if (chess) {
+                if (!this.paoBridgeChess) {
+                    this.paoBridgeChess = chess;
+                }
                 count++;
                 if (count == 2) {//翻山有子,可打
                     if (chess.type != cp.type) {
@@ -526,6 +674,9 @@ export class ChessGrid extends Component {
             v3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ * (i - cp.z));
             let chess = this.checkExisted(v3);
             if (chess) {
+                if (!this.paoBridgeChess) {
+                    this.paoBridgeChess = chess;
+                }
                 count++;
                 if (count == 2) {//翻山有子,可打
                     if (chess.type != cp.type) {
@@ -545,6 +696,9 @@ export class ChessGrid extends Component {
             v3 = new Vec3(grid.x - this.offsetX * (cp.x - i), cp.y, grid.z);
             let chess = this.checkExisted(v3);
             if (chess) {
+                if (!this.paoBridgeChess) {
+                    this.paoBridgeChess = chess;
+                }
                 count++;
                 if (count == 2) {//翻山有子,可打
                     if (chess.type != cp.type) {
@@ -564,6 +718,9 @@ export class ChessGrid extends Component {
             v3 = new Vec3(grid.x + this.offsetX * (i - cp.x), cp.y, grid.z);
             let chess = this.checkExisted(v3);
             if (chess) {
+                if (!this.paoBridgeChess) {
+                    this.paoBridgeChess = chess;
+                }
                 count++;
                 if (count == 2) {//翻山有子,可打
                     if (chess.type != cp.type) {
@@ -630,5 +787,58 @@ export class ChessGrid extends Component {
             this.generateChessTag(v3);
         }
     }
+
+    /**
+     * 获取棋子合法行走路径
+     * @returns 
+     */
+    getPath(): Vec3[] {
+        let result: Vec3[] = [];
+        for (let i = 0; i < this.chessTagArr.length; i++) {
+            result.push(this.chessTagArr[i].getWorldPosition());
+        }
+        return result;
+    }
+
+    /**
+     * 移动到目标位置
+     * @param pos 
+     */
+    moveToTargetPos(pos: Vec3): boolean {
+        let isCanMove: boolean = false;
+        let pArr: Vec3[] = this.getPath();
+        for (let i = 0; i < pArr.length; i++) {
+            let p = pArr[i];
+            if (Vec3.equals(p, pos)) {
+                let xz: { x: number, z: number } = this.getOffsetXZ(p);
+                this.curSelectChess.updateInfo(p, xz.x, xz.z);
+                /* 炮翻山动作 */
+                if (this.curSelectChess.role == ChessRole.pao) {
+                    // this.paoBridgeChess
+                    //todo
+                }
+                isCanMove = true;
+                break;
+            }
+        }
+        this.clearningChessTag();
+        this.curSelectChess = null as unknown as ChessPiece;
+        return isCanMove;
+    }
+
+    getOffsetXZ(pos: Vec3): { x: number, z: number } {
+        let xz = { x: 0, z: 0 }
+        for (let x = 0; x < this.hor; x++) {
+            for (let z = 0; z < this.ver; z++) {
+                let p: Vec3 = this.gridArr[x][z];
+                if (p && Vec3.equals(p, pos)) {
+                    xz.z = z;
+                    xz.x = x;
+                }
+            }
+        }
+        return xz;
+    }
+
 }
 
