@@ -4,6 +4,7 @@ export default class EventManager {
     public static EVT_recycle: string = "recycle";
     public static EVT_openDoor: string = "openthedoor";
     public static EVT_closeDoor: string = "closethedoor";
+    public static EVT_chessGameOver: string = "chessgameover";
     private static _instance: EventManager = null as unknown as EventManager;
     public static get Inst(): EventManager {
         if (!EventManager._instance) {

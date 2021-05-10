@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Vec3, tween, Vec2, sp, SkeletalAnimationComponent } from 'cc';
 import EventManager from '../shooting/eventManager';
-import { ChessRole, ChessType } from './chessEnum';
+import ChessUtil, { ChessRole, ChessType } from './chessEnum';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChessPiece')
@@ -8,6 +8,9 @@ export class ChessPiece extends Component {
     /* 选中状态 */
     @property(Node)
     selectedNode: Node = null as unknown as Node;
+
+    @property(Node)
+    camera: Node = null as unknown as Node;
 
     /* 类型,红/黑 */
     private _typee: number = 0;
@@ -28,6 +31,7 @@ export class ChessPiece extends Component {
     init(x: number, z: number) {
         this.x = x;
         this.z = z;
+        this.camera.active = false;
         this.showRole();
     }
 
@@ -101,7 +105,7 @@ export class ChessPiece extends Component {
      * 更新棋子信息,坐标
      * @param pos 
      */
-    updateInfo(pos: Vec3, x: number, z: number) {
+    updateInfo(pos: Vec3, x: number, z: number, cb?: Function) {
         (this.selectedNode.getComponent(SkeletalAnimationComponent) as SkeletalAnimationComponent).play("cocos_anim_run");
         this.x = x;
         this.z = z;
@@ -114,11 +118,16 @@ export class ChessPiece extends Component {
         let distance = Vec3.subtract(out, sPos, pos).length();
         sPos.y = 0.5;
         this.selectedNode.setWorldPosition(sPos);
-        tween(this.node).to(distance / 20, { worldPosition: pos }).call(() => {
+        // this.camera.active = true;
+        tween(this.node).to(distance / ChessUtil.chessMoveTime, { worldPosition: pos }).call(() => {
             let sPos = this.selectedNode.getWorldPosition();
             sPos.y = 1.3;
             this.selectedNode.setWorldPosition(sPos);
             this.showRole();
+            this.camera.active = false;
+            if (cb) {
+                cb();
+            }
         }).start();
     }
 
@@ -137,6 +146,14 @@ export class ChessPiece extends Component {
      */
     setSelected(bool: boolean = false) {
         this.selectedNode.active = bool;
+    }
+
+    getCameraPos() {
+        return this.camera.getWorldPosition();
+    }
+
+    getCameraEul() {
+        return this.camera.eulerAngles;
     }
 
     get type() {

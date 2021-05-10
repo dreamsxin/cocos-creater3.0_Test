@@ -65,14 +65,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 274
+        "__id__": 278
       },
       {
-        "__id__": 276
+        "__id__": 280
       }
     ],
     "_prefab": {
-      "__id__": 278
+      "__id__": 282
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -3842,16 +3842,19 @@
       },
       {
         "__id__": 167
+      },
+      {
+        "__id__": 271
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 271
+        "__id__": 275
       }
     ],
     "_prefab": {
-      "__id__": 273
+      "__id__": 277
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -6953,6 +6956,108 @@
     "fileId": "a18b0WSP1IJYLSp2LzpK6G"
   },
   {
+    "__type__": "cc.Node",
+    "_name": "Camera",
+    "_objFlags": 0,
+    "_parent": {
+      "__id__": 156
+    },
+    "_children": [],
+    "_active": true,
+    "_components": [
+      {
+        "__id__": 272
+      }
+    ],
+    "_prefab": {
+      "__id__": 274
+    },
+    "_lpos": {
+      "__type__": "cc.Vec3",
+      "x": 0,
+      "y": 11.652,
+      "z": -21.69
+    },
+    "_lrot": {
+      "__type__": "cc.Quat",
+      "x": -1.0632884247878856e-17,
+      "y": 0.984807753012208,
+      "z": 0.17364817766693033,
+      "w": 6.030208312509488e-17
+    },
+    "_lscale": {
+      "__type__": "cc.Vec3",
+      "x": 1,
+      "y": 1,
+      "z": 1
+    },
+    "_layer": 1073741824,
+    "_euler": {
+      "__type__": "cc.Vec3",
+      "x": -20,
+      "y": 180,
+      "z": 0
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.Camera",
+    "_name": "Camera<CameraComponent>",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 271
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 273
+    },
+    "_projection": 1,
+    "_priority": 1,
+    "_fov": 45,
+    "_fovAxis": 0,
+    "_orthoHeight": 10,
+    "_near": 1,
+    "_far": 1000,
+    "_color": {
+      "__type__": "cc.Color",
+      "r": 51,
+      "g": 76,
+      "b": 120,
+      "a": 255
+    },
+    "_depth": 1,
+    "_stencil": 0,
+    "_clearFlags": 7,
+    "_rect": {
+      "__type__": "cc.Rect",
+      "x": 0,
+      "y": 0,
+      "width": 1,
+      "height": 1
+    },
+    "_aperture": 19,
+    "_shutter": 7,
+    "_iso": 0,
+    "_screenScale": 1,
+    "_visibility": 1822425087,
+    "_targetTexture": null,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "dbCiGR9T1E0oZwxclTRFEj"
+  },
+  {
+    "__type__": "cc.PrefabInfo",
+    "root": {
+      "__id__": 1
+    },
+    "asset": {
+      "__id__": 0
+    },
+    "fileId": "66CpzfmVxC77C4dCjyZf8i"
+  },
+  {
     "__type__": "cc.SkeletalAnimation",
     "_name": "Cocos<SkeletalAnimation>",
     "_objFlags": 0,
@@ -6961,7 +7066,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 272
+      "__id__": 276
     },
     "playOnLoad": true,
     "_clips": [
@@ -7023,10 +7128,13 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 275
+      "__id__": 279
     },
     "selectedNode": {
       "__id__": 156
+    },
+    "camera": {
+      "__id__": 271
     },
     "_id": ""
   },
@@ -7043,7 +7151,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 277
+      "__id__": 281
     },
     "_material": null,
     "_isTrigger": false,

@@ -1,13 +1,17 @@
 
 import { _decorator, Component, Node, Vec3, Prefab, tween } from 'cc';
 import { PoolManager } from '../infinitymap/poolManager';
-import { ChessRole, ChessType } from './chessEnum';
+import EventManager from '../shooting/eventManager';
+import ChessUtil, { ChessRole, ChessType } from './chessEnum';
 import { ChessPiece } from './chessPiece';
 import { ChessTag } from './chessTag';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChessGrid')
 export class ChessGrid extends Component {
+
+    @property(Node)
+    mainCamera: Node = null as unknown as Node;
 
     @property(Prefab)
     chessPrefab: Prefab = null as unknown as Prefab;
@@ -44,10 +48,14 @@ export class ChessGrid extends Component {
     /* 排列被吃掉的棋子 */
     private lyRedChessArr: ChessPiece[] = [];
     private lyBlackChessArr: ChessPiece[] = [];
+    /* 记录主摄像机的初始变换信息 */
+    private mainCameraOriginPos: Vec3 = new Vec3();
+    /* 棋子是否真正行走 */
+    public isMoving: boolean = false;
 
     async start() {
+        this.mainCameraOriginPos = this.mainCamera.getWorldPosition();
         await this.generateGrid();
-        this.initGenerateChess();
         this.initLayoutRedBlackGrid();
     }
 
@@ -193,9 +201,10 @@ export class ChessGrid extends Component {
                     this.curTargetChess = cp;
                     let pos = this.curSelectChess.node.getWorldPosition();
                     /* 可以吃该棋子 */
-                    if (this.moveToTargetPos(cp.node.getWorldPosition())) {
-                        continueBool = false;
+                    if (this.moveToTargetPos(cp.node.getWorldPosition(), () => {
                         this.handleEatChess(cp, pos);
+                    })) {
+                        continueBool = false;
                     }
                 }
             }
@@ -207,15 +216,15 @@ export class ChessGrid extends Component {
      * 吃棋子操作
      * @param eated 
      */
-    handleEatChess(eated: ChessPiece, pos: Vec3) {
+    async handleEatChess(eated: ChessPiece, pos: Vec3) {
         let pos2 = eated.node.getWorldPosition();
         let out = new Vec3()
         let distance = Vec3.subtract(out, pos2, pos).length();
-        this.removeEatedFromList(pos2);
-        tween(eated.node).to(distance / 20, {}).call(() => {
-            this.layoutRemoveNode(eated);
-            PoolManager.setNode(eated.node);
-        }).start();
+        this.layoutRemoveNode(eated);
+        PoolManager.setNode(eated.node);
+        if (eated.role == ChessRole.boss) {
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessGameOver, eated);
+        }
     }
 
     /**
@@ -259,6 +268,7 @@ export class ChessGrid extends Component {
             let cpos: Vec3 = this.chessArr[i].node.getWorldPosition();
             if (pos.x == cpos.x && pos.z == cpos.z) {
                 this.chessArr.splice(i, 1);
+                break;
             }
         }
     }
@@ -860,9 +870,14 @@ export class ChessGrid extends Component {
         this.clearningChessTag();
         this.clearningLayoutChess();
         this.clearningChess();
-        this.scheduleOnce(() => {
-            this.initGenerateChess();
-        }, 3);
+    }
+
+    /**
+     * 重新开始游戏
+     */
+    startGame() {
+        this.clearningAll();
+        this.initGenerateChess();
     }
 
     /**
@@ -922,26 +937,56 @@ export class ChessGrid extends Component {
      * 移动到目标位置
      * @param pos 
      */
-    moveToTargetPos(pos: Vec3): boolean {
-        let isCanMove: boolean = false;
-        let pArr: Vec3[] = this.getPath();
-        for (let i = 0; i < pArr.length; i++) {
-            let p = pArr[i];
-            if (Vec3.equals(p, pos)) {
-                let xz: { x: number, z: number } = this.getOffsetXZ(p);
-                this.curSelectChess.updateInfo(p, xz.x, xz.z);
-                /* 炮翻山动作 */
-                if (this.curSelectChess.role == ChessRole.pao) {
-                    // this.paoBridgeChess
-                    //todo
+    moveToTargetPos(pos: Vec3, cb?: Function): Promise<boolean> {
+        return new Promise(async resolve => {
+            let isCanMove: boolean = false;
+            let pArr: Vec3[] = this.getPath();
+            for (let i = 0; i < pArr.length; i++) {
+                let p = pArr[i];
+                if (Vec3.equals(p, pos)) {
+                    this.isMoving = true;
+                    let xz: { x: number, z: number } = this.getOffsetXZ(p);
+                    await this.handleCameraAction();
+                    if (cb) {
+                        /*  将被吃掉的棋子移除 */
+                        this.removeEatedFromList(pos);
+                    }
+                    this.curSelectChess.updateInfo(p, xz.x, xz.z, () => {
+                        this.chessMovedCallBack();
+                        if (cb) {
+                            cb();
+                        }
+                        this.isMoving = false;
+                    });
+                    /* 炮翻山动作 */
+                    if (this.curSelectChess.role == ChessRole.pao) {
+                        // this.paoBridgeChess
+                        //todo
+                    }
+                    isCanMove = true;
+                    break;
                 }
-                isCanMove = true;
-                break;
             }
-        }
-        this.clearningChessTag();
-        this.curSelectChess = null as unknown as ChessPiece;
-        return isCanMove;
+            this.clearningChessTag();
+            this.curSelectChess = null as unknown as ChessPiece;
+            resolve(isCanMove);
+        });
+    }
+
+    /**
+     * 走棋回调函数
+     */
+    chessMovedCallBack() {
+    }
+
+    /**
+     * 摄像机移动处理
+     * @returns 
+     */
+    async handleCameraAction() {
+        return new Promise(resolve => {
+            resolve(null);
+        });
     }
 
     getOffsetXZ(pos: Vec3): { x: number, z: number } {

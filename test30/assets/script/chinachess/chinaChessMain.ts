@@ -17,6 +17,7 @@ export class ChinaChessMain extends Component {
     }
 
     touchStart(event: any) {
+        if (this.chessGd.isMoving) return;
         let pos: Vec2 = event.getLocation();
         /* 从摄像机创建一条射线 */
         let ray: geometry.Ray = this.mainCamera.screenPointToRay(pos.x, pos.y);
@@ -56,5 +57,12 @@ export class ChinaChessMain extends Component {
             }
         }
         return null as unknown as Vec3;
+    }
+
+    /**
+     * 开局
+     */
+    startGame() {
+        this.chessGd.startGame();
     }
 }
