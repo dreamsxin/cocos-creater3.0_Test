@@ -11,4 +11,10 @@ export class ChessPlayer {
 
     /* 红/黑方 */
     public type: ChessType = ChessType.red;
+
+    public roomId: number = -1;
+
+    init() {
+        this.roomId = -1;
+    }
 }

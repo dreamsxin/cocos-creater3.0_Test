@@ -1,7 +1,11 @@
 
 import { _decorator, Component, Node, systemEvent, SystemEvent, SystemEventType, Vec2, geometry, Camera, PhysicsSystem, Vec3 } from 'cc';
+import EventManager from '../shooting/eventManager';
 import { ChessGrid } from './chessGrid';
 import { ChessPiece } from './chessPiece';
+import { ChessPlayer } from './chessPlayer';
+import { ModelAny, playChessReq } from './net/globalUtils';
+import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChinaChessMain')
@@ -12,7 +16,12 @@ export class ChinaChessMain extends Component {
     @property(ChessGrid)
     chessGd: ChessGrid = null as unknown as ChessGrid;
 
+    onLoad() {
+        EventManager.Inst.registerEevent(Router.rut_playChess, this.handleServerPlayChess.bind(this), this);
+    }
+
     start() {
+        ChessPlayer.Inst.init();
         systemEvent.on(SystemEventType.TOUCH_START, this.touchStart, this);
     }
 
@@ -65,4 +74,20 @@ export class ChinaChessMain extends Component {
     startGame() {
         this.chessGd.startGame();
     }
+
+    /* 接收到服务器其他玩家消息 */
+    /**
+     * 走棋/落子
+     * @param data 
+     */
+    handleServerPlayChess(data: ModelAny) {
+        let rmData: playChessReq = data.msg;
+        let cp: ChessPiece = this.chessGd.getChessPieceByRole(rmData.role, rmData.type, rmData.ox, rmData.oz);
+        let pos: Vec3 = this.chessGd.gridArr[rmData.x][rmData.z];
+        if (cp) {
+            this.chessGd.curSelectChess = cp;
+            this.chessGd.moveToTargetPos(pos, () => { }, [pos]);
+        }
+    }
+
 }

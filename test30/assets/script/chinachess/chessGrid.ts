@@ -4,7 +4,11 @@ import { PoolManager } from '../infinitymap/poolManager';
 import EventManager from '../shooting/eventManager';
 import ChessUtil, { ChessRole, ChessType } from './chessEnum';
 import { ChessPiece } from './chessPiece';
+import { ChessPlayer } from './chessPlayer';
 import { ChessTag } from './chessTag';
+import { playChessReq } from './net/globalUtils';
+import { Net } from './net/net';
+import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChessGrid')
@@ -36,7 +40,7 @@ export class ChessGrid extends Component {
     private chessTagArr: Node[] = [];
 
     /* 当前选中的棋子 */
-    private curSelectChess: ChessPiece = null as unknown as ChessPiece;
+    public curSelectChess: ChessPiece = null as unknown as ChessPiece;
     /* 选中的第二颗棋子,可能是要吃掉的 */
     private curTargetChess: ChessPiece = null as unknown as ChessPiece;
     /* 炮打翻山,中间的棋子,用来做跳跃动画使用 */
@@ -279,6 +283,10 @@ export class ChessGrid extends Component {
      * @param cp
      */
     evtHandleSelected(cp: ChessPiece) {
+        if (!this.curSelectChess) {
+            /* 只能操作自己的棋子 */
+            if (cp.type != ChessPlayer.Inst.type) return;
+        }
         if (!this.handleClickChessPiece(cp)) return;
         this.hideAllSelected();
         cp.setSelected(true);
@@ -937,15 +945,28 @@ export class ChessGrid extends Component {
      * 移动到目标位置
      * @param pos 
      */
-    moveToTargetPos(pos: Vec3, cb?: Function): Promise<boolean> {
+    moveToTargetPos(pos: Vec3, cb?: Function, v3?: Vec3[]): Promise<boolean> {
+        console.log("------------3");
         return new Promise(async resolve => {
             let isCanMove: boolean = false;
             let pArr: Vec3[] = this.getPath();
+            if (v3) {
+                pArr = v3;
+            }
+            console.log(pos);
+            console.log("------------4");
             for (let i = 0; i < pArr.length; i++) {
                 let p = pArr[i];
+                console.log(p);
                 if (Vec3.equals(p, pos)) {
                     this.isMoving = true;
                     let xz: { x: number, z: number } = this.getOffsetXZ(p);
+                    console.log("-----------xz--------");
+                    console.log(this.curSelectChess.type);
+                    console.log(ChessPlayer.Inst.type);
+                    if (this.curSelectChess.type == ChessPlayer.Inst.type) {
+                        this.sendPlayChessReq(xz.x, xz.z);
+                    }
                     await this.handleCameraAction();
                     if (cb) {
                         /*  将被吃掉的棋子移除 */
@@ -971,6 +992,19 @@ export class ChessGrid extends Component {
             this.curSelectChess = null as unknown as ChessPiece;
             resolve(isCanMove);
         });
+    }
+
+    //发送走棋消息
+    sendPlayChessReq(x: number, z: number) {
+        let p: Vec3 = this.curSelectChess.node.getWorldPosition();
+        let xz: { x: number, z: number } = this.getOffsetXZ(p);
+        let data: playChessReq = {
+            type: this.curSelectChess.type,
+            roomId: ChessPlayer.Inst.roomId,
+            role: this.curSelectChess.role,
+            x: x, z: z, ox: xz.x, oz: xz.z
+        }
+        Net.sendMsg(data, Router.rut_playChess);
     }
 
     /**
@@ -1001,6 +1035,21 @@ export class ChessGrid extends Component {
             }
         }
         return xz;
+    }
+
+    /**
+     * 通过角色和阵营获取棋子
+     * @param role 
+     * @param type 
+     */
+    getChessPieceByRole(role: number, type: number, x: number, z: number): ChessPiece {
+        for (let i = 0; i < this.chessArr.length; i++) {
+            let item = this.chessArr[i];
+            if (item.role == role && item.type == type && item.x == x && item.z == z) {
+                return item;
+            }
+        }
+        return null as unknown as ChessPiece;
     }
 
 }

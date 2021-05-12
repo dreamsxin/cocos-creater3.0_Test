@@ -3,7 +3,13 @@ import { _decorator, Component, Node, tween, Vec3, Label } from 'cc';
 import EventManager from '../shooting/eventManager';
 import { ChessType } from './chessEnum';
 import { ChessPiece } from './chessPiece';
+import { ChessPlayer } from './chessPlayer';
+import Room from './chessRoom';
+import RoomtManager from './chessRoomMgr';
 import { ChinaChessMain } from './chinaChessMain';
+import { createRoomRes, ModelAny } from './net/globalUtils';
+import { Net } from './net/net';
+import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChessUI')
@@ -23,19 +29,33 @@ export class ChessUI extends Component {
     @property(Label)
     winLable: Label = null as unknown as Label;
 
+    @property(Label)
+    matchLable: Label = null as unknown as Label;
+
     onLoad() {
         EventManager.Inst.registerEevent(EventManager.EVT_chessGameOver, this.gameOver.bind(this), this)
+        EventManager.Inst.registerEevent(Router.rut_createRoom, this.handleServerCreateRoom.bind(this), this);
     }
 
     start() {
+        if (!Net.isConnected) {
+            Net.init();
+        }
         this.showStartTag();
         this.showBackground();
         this.gameOverNode.active = false;
+        this.matchLable.node.active = false;
     }
 
     handleGameStart() {
-        this.hideBackgroud();
-        this.hideStartTag();
+        if (Net.isConnected) {
+            // this.hideBackgroud();
+            // this.hideStartTag();
+            Net.sendMsg({}, Router.rut_createRoom);
+        }
+        else {
+            console.log("服务器未连接");
+        }
     }
 
     handleRestart() {
@@ -66,5 +86,37 @@ export class ChessUI extends Component {
 
     showBackground() {
         this.background.active = true;
+    }
+
+    startGame() {
+        this.matchLable.node.active = false;
+        this.hideBackgroud();
+        this.hideStartTag();
+    }
+
+    /* 接收到服务器其他玩家消息 */
+    /**
+     * 创建房间
+     * @param data 
+     */
+    handleServerCreateRoom(data: ModelAny) {
+        let rmData: createRoomRes = data.msg;
+        let room: Room = RoomtManager.Instance.getRoomById(rmData.roomId);
+        room.init(rmData.roomId, rmData.count);
+        if (room.count == 1) {
+            this.matchLable.node.active = true;
+            this.startTag.active = false;
+            ChessPlayer.Inst.type = ChessType.red;
+            ChessPlayer.Inst.roomId = rmData.roomId;
+        }
+        else if (room.count == 2) {
+            if (ChessPlayer.Inst.roomId < 0) {
+                ChessPlayer.Inst.roomId = rmData.roomId;
+                ChessPlayer.Inst.type = ChessType.black;
+            }
+        }
+        if (room.count == 2) {
+            this.startGame();
+        }
     }
 }
