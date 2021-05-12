@@ -1,3 +1,10 @@
 /.DS_Store
 /humanwar/assets/model/cocos/.DS_Store
 /humanwar/.DS_Store
+/chinaChessServer/.DS_Store
+/chinaChessServer/build/.DS_Store
+/chinaChessServer/node_modules
+/chinaChessServer/src/.DS_Store
+/chinaChessServer/src/config/.DS_Store
+/chinaChessServer/src/modules/.DS_Store
+/chinaChessServer/src/modules/controller/.DS_Store
