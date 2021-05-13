@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, Vec3, tween, Vec2, sp, SkeletalAnimationComponent } from 'cc';
 import EventManager from '../shooting/eventManager';
 import ChessUtil, { ChessRole, ChessType } from './chessEnum';
+import { ChessPlayer } from './chessPlayer';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChessPiece')
@@ -46,7 +47,12 @@ export class ChessPiece extends Component {
         }
         let behand: string = this.getRole(this.role);
         let name = head + behand;
-        (this.node.getChildByName(name) as Node).active = true;
+        let chess = (this.node.getChildByName(name) as Node);
+        chess.active = true;
+        chess.eulerAngles = new Vec3(0, 0, 0);
+        if (ChessPlayer.Inst.type == ChessType.black) {
+            chess.eulerAngles = new Vec3(0, 180, 0);
+        }
 
         this.selectedNode.eulerAngles = new Vec3(0, 0, 0);
         if (this.type == ChessType.red) {

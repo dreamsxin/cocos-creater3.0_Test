@@ -7,7 +7,7 @@ import { ChessPlayer } from './chessPlayer';
 import Room from './chessRoom';
 import RoomtManager from './chessRoomMgr';
 import { ChinaChessMain } from './chinaChessMain';
-import { createRoomRes, ModelAny } from './net/globalUtils';
+import { createRoomRes, ModelAny, restartReq } from './net/globalUtils';
 import { Net } from './net/net';
 import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
@@ -35,6 +35,7 @@ export class ChessUI extends Component {
     onLoad() {
         EventManager.Inst.registerEevent(EventManager.EVT_chessGameOver, this.gameOver.bind(this), this)
         EventManager.Inst.registerEevent(Router.rut_createRoom, this.handleServerCreateRoom.bind(this), this);
+        EventManager.Inst.registerEevent(Router.rut_restart, this.handleServerRestart.bind(this), this);
     }
 
     start() {
@@ -59,10 +60,28 @@ export class ChessUI extends Component {
     }
 
     handleRestart() {
-        this.gameOverNode.active = false;
-        this.showBackground();
-        this.showStartTag();
+        Net.sendMsg({ type: ChessPlayer.Inst.type }, Router.rut_restart);
     }
+
+    /**
+     * 切换视角
+     */
+    handleSwitchPerspective() {
+        this.ccm.chessGd.switchPerspective();
+    }
+
+    handleServerRestart(data: ModelAny) {
+        let dt: restartReq = data.msg;
+        if (dt.type == ChessPlayer.Inst.type) {
+            this.gameOverNode.active = false;
+            this.showBackground();
+            this.showStartTag();
+        }
+        else {
+            console.log("对家离开")
+        }
+    }
+
 
     gameOver(cp: ChessPiece) {
         this.gameOverNode.active = true;

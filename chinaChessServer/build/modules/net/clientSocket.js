@@ -90,6 +90,12 @@ class ClientSocket {
                 case routers_1.Router.rut_playChess:
                     this.handlePlayChess(data);
                     break;
+                case routers_1.Router.rut_eatChess:
+                    this.handleEatChess(data);
+                    break;
+                case routers_1.Router.rut_restart:
+                    this.handleRestart(data);
+                    break;
                 default: break;
             }
         });
@@ -109,7 +115,6 @@ class ClientSocket {
             let roomData = { roomId: rm.id, count: rm.count };
             reData.msg = roomData;
             rm.createJoinRoom(reData);
-            // this.sendMsg(Router.rut_createRoom, reData);
         });
     }
     /**
@@ -120,6 +125,23 @@ class ClientSocket {
         return __awaiter(this, void 0, void 0, function* () {
             let room = clientManager_1.default.Instance.getRoomById(data.roomId);
             room.playChess(this, data);
+        });
+    }
+    /**
+     * 吃棋
+     */
+    handleEatChess(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let room = clientManager_1.default.Instance.getRoomById(data.roomId);
+            room.eatChess(this, data);
+        });
+    }
+    /**
+     * 重新开始,清理房间和房间Id
+     */
+    handleRestart(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            clientManager_1.default.Instance.removeFromRoom(this);
         });
     }
 }

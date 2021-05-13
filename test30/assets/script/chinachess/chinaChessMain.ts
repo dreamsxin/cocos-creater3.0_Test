@@ -4,7 +4,7 @@ import EventManager from '../shooting/eventManager';
 import { ChessGrid } from './chessGrid';
 import { ChessPiece } from './chessPiece';
 import { ChessPlayer } from './chessPlayer';
-import { ModelAny, playChessReq } from './net/globalUtils';
+import { eatChessReq, ModelAny, playChessReq } from './net/globalUtils';
 import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
 
@@ -18,6 +18,7 @@ export class ChinaChessMain extends Component {
 
     onLoad() {
         EventManager.Inst.registerEevent(Router.rut_playChess, this.handleServerPlayChess.bind(this), this);
+        EventManager.Inst.registerEevent(Router.rut_eatChess, this.handleServerEatChess.bind(this), this);
     }
 
     start() {
@@ -87,6 +88,19 @@ export class ChinaChessMain extends Component {
         if (cp) {
             this.chessGd.curSelectChess = cp;
             this.chessGd.moveToTargetPos(pos, () => { }, [pos]);
+        }
+    }
+
+    /**
+     * 吃棋子
+     * @param data 
+     */
+    handleServerEatChess(data: ModelAny) {
+        let rmData: eatChessReq = data.msg;
+        let cp: ChessPiece = this.chessGd.getChessPieceByRole(rmData.role, rmData.type, rmData.ox, rmData.oz);
+        let pos: Vec3 = this.chessGd.gridArr[rmData.ox][rmData.oz];
+        if (cp) {
+            this.chessGd.handleEatChess(cp, pos);
         }
     }
 

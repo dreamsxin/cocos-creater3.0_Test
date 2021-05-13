@@ -2,6 +2,7 @@ import Logger from "../utils/logger";
 import EventManager from "./EventManager";
 import ClientSocket from "../net/clientSocket";
 import Room from "../controller/room";
+import { restartReq } from "../utils/globalUtils";
 
 /* 客户端 socket 连接管理 */
 export default class ClientManager {
@@ -48,10 +49,10 @@ export default class ClientManager {
      * 玩家离开房间
      * @param clientSocket 
      */
-    removeFromRoom(clientSocket: ClientSocket) {
+    removeFromRoom(clientSocket: ClientSocket, req?: restartReq) {
         let rm: Room = this.getRoomById(clientSocket.roomId);
         if (rm) {
-            rm.removeClient(clientSocket);
+            rm.removeClient(clientSocket, req);
             if (rm.count < 1) {
                 this.removeRoomFromList(rm);
             }

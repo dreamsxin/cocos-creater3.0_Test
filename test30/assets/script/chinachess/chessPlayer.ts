@@ -10,7 +10,7 @@ export class ChessPlayer {
     }
 
     /* 红/黑方 */
-    public type: ChessType = ChessType.red;
+    public type: ChessType = ChessType.black;
 
     public roomId: number = -1;
 

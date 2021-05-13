@@ -42,10 +42,10 @@ class ClientManager {
      * 玩家离开房间
      * @param clientSocket
      */
-    removeFromRoom(clientSocket) {
+    removeFromRoom(clientSocket, req) {
         let rm = this.getRoomById(clientSocket.roomId);
         if (rm) {
-            rm.removeClient(clientSocket);
+            rm.removeClient(clientSocket, req);
             if (rm.count < 1) {
                 this.removeRoomFromList(rm);
             }

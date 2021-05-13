@@ -1,5 +1,5 @@
 import ClientManager from "../common/clientManager";
-import { createRoomRes, Head, ModelAny, playChessReq } from "../utils/globalUtils";
+import { createRoomRes, eatChessReq, Head, ModelAny, playChessReq, restartReq } from "../utils/globalUtils";
 import DataViewUtils from "../utils/dataviewUtils";
 import Logger from "../utils/logger";
 import { Router } from "../controller/routers";
@@ -91,6 +91,15 @@ export default class ClientSocket {
             case Router.rut_playChess:
                 this.handlePlayChess(data);
                 break;
+
+            case Router.rut_eatChess:
+                this.handleEatChess(data);
+                break;
+
+            case Router.rut_restart:
+                this.handleRestart(data);
+                break;
+
             default: break;
         }
     }
@@ -109,7 +118,6 @@ export default class ClientSocket {
         let roomData: createRoomRes = { roomId: rm.id, count: rm.count };
         reData.msg = roomData;
         rm.createJoinRoom(reData);
-        // this.sendMsg(Router.rut_createRoom, reData);
     }
 
     /**
@@ -119,6 +127,21 @@ export default class ClientSocket {
     private async handlePlayChess(data: playChessReq) {
         let room: Room = ClientManager.Instance.getRoomById(data.roomId);
         room.playChess(this, data);
+    }
+
+    /**
+     * 吃棋
+     */
+    private async handleEatChess(data: eatChessReq) {
+        let room: Room = ClientManager.Instance.getRoomById(data.roomId);
+        room.eatChess(this, data);
+    }
+
+    /**
+     * 重新开始,清理房间和房间Id
+     */
+    private async handleRestart(data: restartReq) {
+        ClientManager.Instance.removeFromRoom(this);
     }
 }
 

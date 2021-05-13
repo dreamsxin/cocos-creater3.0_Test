@@ -50,3 +50,21 @@ export interface playChessReq {
     ox: number,//原始坐标
     oz: number,
 }
+
+/**
+ * 吃棋
+ */
+export interface eatChessReq {
+    roomId: number,
+    type: number,//红/黑方
+    role: number,//角色马/炮/军/兵/士
+    ox: number,//原始坐标
+    oz: number,
+}
+
+/**
+ * 重新开始
+ */
+export interface restartReq {
+    type: number,//红/黑方
+}
