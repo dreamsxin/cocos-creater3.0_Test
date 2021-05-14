@@ -36,11 +36,8 @@ export class ILand extends Component {
      * @param touch 
      * @param event 
      */
-    onTouchStart(touch: Touch, event: EventTouch) {
+    onTouchStart(touch: any) {
         this.cameraCom.screenPointToRay(touch._point.x, touch._point.y, this._ray);
-        if (geometry.intersect.rayModel(this._ray, this.modelCom.model)) {
-        } else {
-        }
 
         PhysicsSystem.instance.raycast(this._ray);
         let temp = PhysicsSystem.instance.raycastResults;

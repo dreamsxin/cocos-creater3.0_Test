@@ -138,8 +138,8 @@
     }
   },
   "userData": {
-    "normals": 2,
-    "tangents": 2,
+    "normals": 3,
+    "tangents": 3,
     "dumpMaterials": false,
     "redirect": "14c08caf-9370-4796-ba18-4f8f5b61131f@7b338",
     "animationImportSettings": [

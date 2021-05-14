@@ -16,7 +16,7 @@ export class Role extends Component {
     verticalViewNode: Node | null = null;
 
     @type(Node)
-    mainCamera: Node = null;
+    mainCamera: Node = null as unknown as Node;
 
     private _curPos: Vec3 = new Vec3(0, 0, 0);
 
