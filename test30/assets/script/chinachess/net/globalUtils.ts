@@ -29,6 +29,7 @@ export interface roomReq {
  * 创建房间req
  */
 export interface createRoomReq {
+    roomId: number,
 }
 /**
  * 创建房间res

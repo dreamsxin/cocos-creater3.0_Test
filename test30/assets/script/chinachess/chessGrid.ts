@@ -59,29 +59,32 @@ export class ChessGrid extends Component {
     private cameraEulArr: Vec3[] = [];
     private perspectiveIndex = 0;
 
-    onLoad() {
-        let redPos: Vec3 = new Vec3(-0.4, 32, 50);
-        let redEul: Vec3 = new Vec3(-40, 0, 0);
-        this.cameraPosArr.push(redPos);
-        this.cameraEulArr.push(redEul);
+    onEnable() {
+        if (this.cameraPosArr.length < 1 && this.cameraEulArr.length < 1) {
+            let redPos: Vec3 = new Vec3(-0.4, 32, 50);
+            let redEul: Vec3 = new Vec3(-40, 0, 0);
+            this.cameraPosArr.push(redPos);
+            this.cameraEulArr.push(redEul);
 
-        let centerPos: Vec3 = new Vec3(-0.7, 73, 0.1);
-        let centerEul: Vec3 = new Vec3(-90, 0, 0);
-        this.cameraPosArr.push(centerPos);
-        this.cameraEulArr.push(centerEul);
+            let centerPos: Vec3 = new Vec3(-0.7, 73, 0.1);
+            let centerEul: Vec3 = new Vec3(-90, 0, 0);
+            this.cameraPosArr.push(centerPos);
+            this.cameraEulArr.push(centerEul);
 
-        let centerPos1: Vec3 = new Vec3(-0.7, 73, 0.1);
-        let centerEul1: Vec3 = new Vec3(-90, 180, 0);
-        this.cameraPosArr.push(centerPos1);
-        this.cameraEulArr.push(centerEul1);
+            let centerPos1: Vec3 = new Vec3(-0.7, 73, 0.1);
+            let centerEul1: Vec3 = new Vec3(-90, 180, 0);
+            this.cameraPosArr.push(centerPos1);
+            this.cameraEulArr.push(centerEul1);
 
-        let blackPos: Vec3 = new Vec3(-0.4, 32, -50);
-        let blackEul: Vec3 = new Vec3(-40, 180, 0);
-        this.cameraPosArr.push(blackPos);
-        this.cameraEulArr.push(blackEul);
+            let blackPos: Vec3 = new Vec3(-0.4, 32, -50);
+            let blackEul: Vec3 = new Vec3(-40, 180, 0);
+            this.cameraPosArr.push(blackPos);
+            this.cameraEulArr.push(blackEul);
+            this.init();
+        }
     }
 
-    async start() {
+    async init() {
         await this.generateGrid();
         this.initLayoutRedBlackGrid();
         // this.initGenerateChess();

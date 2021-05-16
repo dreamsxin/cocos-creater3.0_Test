@@ -9,4 +9,6 @@ exports.Router = {
     rut_eatChess: "1003",
     /** 重新开始 */
     rut_restart: "1004",
+    /** 房间列表 */
+    rut_roomList: "1005",
 };

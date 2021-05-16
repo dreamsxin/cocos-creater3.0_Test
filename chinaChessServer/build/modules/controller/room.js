@@ -6,17 +6,17 @@ class Room {
     constructor() {
         this.id = -1;
         /* 房间人数 */
-        this.count = -1;
+        this.count = 0;
         /* 客户端 */
         this.clients = [];
     }
-    init(id, client) {
-        if (this.count < 2) {
-            client.roomId = id;
-            this.id = id;
-            this.clients.push(client);
-            this.count = this.clients.length;
-        }
+    init(id) {
+        this.id = id;
+    }
+    updateInfo(client) {
+        client.roomId = this.id;
+        this.clients.push(client);
+        this.count = this.clients.length;
     }
     createJoinRoom(reData) {
         for (let i = 0; i < this.clients.length; i++) {

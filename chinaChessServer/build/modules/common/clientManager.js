@@ -10,6 +10,7 @@ class ClientManager {
         this.roomList = [];
         /* 客户端socket数组 */
         this._clientSockets = [];
+        this.initRoomList();
         EventManager_1.default.Instance.registerEevent(EventManager_1.default.EvtSaveClientSocket, this._evtSaveClientSocket.bind(this), this);
         EventManager_1.default.Instance.registerEevent(EventManager_1.default.EvtRemoveClientSocket, this._evtRemoveClientSocket.bind(this), this);
     }
@@ -31,6 +32,8 @@ class ClientManager {
      * @param clientSocket
      */
     _evtRemoveClientSocket(clientSocket) {
+        /* 玩家有可能已加入房间,所以要过一遍从房间删除玩家的操作 */
+        this.removeFromRoom(clientSocket);
         for (let i = 0; i < this._clientSockets.length; i++) {
             if (this._clientSockets[i].id == clientSocket.id) {
                 this._clientSockets.splice(i, 1);
@@ -46,9 +49,9 @@ class ClientManager {
         let rm = this.getRoomById(clientSocket.roomId);
         if (rm) {
             rm.removeClient(clientSocket, req);
-            if (rm.count < 1) {
-                this.removeRoomFromList(rm);
-            }
+            // if (rm.count < 1) {
+            //     this.removeRoomFromList(rm);
+            // }
         }
     }
     /**
@@ -95,17 +98,9 @@ class ClientManager {
      * @param id
      * @param client
      */
-    createJoinRoom(client) {
-        let rm = this.checkExitSingleRoom();
-        if (rm) {
-            rm.init(rm.id, client);
-        }
-        else {
-            rm = new room_1.default();
-            let id = this.getId();
-            rm.init(id, client);
-            this.roomList.push(rm);
-        }
+    createJoinRoom(client, roomId) {
+        let rm = this.getRoomById(roomId);
+        rm.updateInfo(client);
         return rm;
     }
     /**
@@ -115,12 +110,16 @@ class ClientManager {
      */
     getRoomById(roomId) {
         for (let i = 0; i < this.roomList.length; i++) {
-            if (this.roomList[i].id == roomId) {
+            if (this.roomList[i].id == roomId && this.roomList[i].count <= 2) {
                 return this.roomList[i];
             }
         }
         return null;
     }
+    /**
+     * 检测只有一人的房间
+     * @returns
+     */
     checkExitSingleRoom() {
         for (let i = 0; i < this.roomList.length; i++) {
             if (this.roomList[i].count < 2) {
@@ -128,6 +127,27 @@ class ClientManager {
             }
         }
         return null;
+    }
+    /**
+     * 初始化房间列表
+     */
+    initRoomList() {
+        /* 房间数量一定要是开平方根为整数的数字 */
+        for (let i = 0; i < 16; i++) {
+            let rm = new room_1.default();
+            let id = this.getId();
+            rm.init(id);
+            this.roomList.push(rm);
+        }
+    }
+    /**
+     * 更新房间列表信息,给所有玩家推送
+     */
+    pushUpdateRoomToAllClient() {
+        let list = this._clientSockets;
+        for (let i = 0; i < list.length; i++) {
+            list[i].pushRoomListToClient();
+        }
     }
 }
 exports.default = ClientManager;

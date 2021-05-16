@@ -1,6 +1,14 @@
 
 import { _decorator, Component, Node, Camera, SystemEventType, systemEvent, Vec2, geometry, PhysicsSystem, Vec3, tween, SkeletalAnimationComponent, Prefab } from 'cc';
 import { PoolManager } from '../infinitymap/poolManager';
+import EventManager from '../shooting/eventManager';
+import { ChessType } from './chessEnum';
+import { ChessPlayer } from './chessPlayer';
+import Room from './chessRoom';
+import RoomtManager from './chessRoomMgr';
+import { createRoomReq, createRoomRes, ModelAny } from './net/globalUtils';
+import { Net } from './net/net';
+import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
 
 @ccclass('ChessRoomNode')
@@ -14,17 +22,30 @@ export class ChessRoomNode extends Component {
     @property(Prefab)
     desk: Prefab = null as unknown as Prefab;
 
+    @property(Node)
+    gameNode: Node = null as unknown as Node;
+
     private isMoving: boolean = false;
     private count: number = 0;
 
+    /* 当前选中的房间ID */
+    private currentRoomId: number = 0;
+
+    private isJoinRoom: boolean = false;
+
+    onLoad() {
+        EventManager.Inst.registerEevent(Router.rut_createRoom, this.handleServerCreateRoom.bind(this), this);
+    }
+
     start() {
         systemEvent.on(SystemEventType.TOUCH_START, this.touchStart, this);
+    }
+    onEnable() {
         this.resetCameraPos();
         this.layoutDesk();
     }
     onDisable() {
-        /* 注销射线碰撞检测 */
-        systemEvent.off(SystemEventType.TOUCH_START, this.touchStart, this);
+        this.gameNode.active = false;
     }
 
     touchStart(event: any) {
@@ -40,9 +61,12 @@ export class ChessRoomNode extends Component {
                 this.handleRoleMove(point);
             }
             else if (result.collider.node.name == "chessDesk") {
+                /* 得到当前房间ID */
+                this.currentRoomId = (result.collider.node.getComponent(Room) as Room).roomId;
                 let pos = this.role.getWorldPosition();
                 let distance = this.getDistance(pos, point);
-                console.log(distance);
+                this.checkCanJoinRoom(distance);
+                console.log(distance, this.isMoving);
             }
             console.log(result.collider.node.name);
         }
@@ -58,7 +82,12 @@ export class ChessRoomNode extends Component {
         this.mainCamera.node.setPosition(cameraPos);
     }
 
+    /**
+     * 玩家走动
+     * @param v3 
+     */
     handleRoleMove(v3: Vec3) {
+        if (this.isJoinRoom) { return; }
         if (this.count == 0) {
             (this.role.getComponent(SkeletalAnimationComponent) as SkeletalAnimationComponent).play("cocos_anim_run");
         }
@@ -70,8 +99,6 @@ export class ChessRoomNode extends Component {
         let angle: number = radian * 180 / Math.PI;
         this.role.eulerAngles = new Vec3(0, angle, 0);
 
-        // let out: Vec3 = new Vec3();
-        // Vec3.subtract(out, v3, this.role.getWorldPosition());
         let distance = this.getDistance(v3, this.role.getWorldPosition());
         let time = distance / 10;
         tween(this.role).to(time, { worldPosition: pos }).call(() => {
@@ -102,15 +129,67 @@ export class ChessRoomNode extends Component {
         return distance;
     }
 
+    /**
+     * 排列棋桌
+     */
     layoutDesk() {
-        let len: number = 4;
-        for (let z = 0; z < len; z++) {
-            for (let x = 0; x < len; x++) {
-                let ds: Node = PoolManager.getNode(this.desk);
-                this.node.addChild(ds);
-                let pos: Vec3 = new Vec3(-(len * 15 / 2) + x * 15, 0, len * 18 / 2 - z * 18);
-                ds.setWorldPosition(pos);
+        let rmMgr = RoomtManager.Instance;
+        let list = rmMgr.roomInfoList;
+        let len: number = Math.sqrt(list.length);
+        let cout: number = 0;
+        if (rmMgr.roomList.length < 1) {
+            for (let z = 0; z < len; z++) {
+                for (let x = 0; x < len; x++) {
+                    let ds: Node = PoolManager.getNode(this.desk);
+                    this.node.addChild(ds);
+                    let pos: Vec3 = new Vec3(-(len * 15 / 2) + x * 15, 0, len * 18 / 2 - z * 18);
+                    ds.setWorldPosition(pos);
+                    let rm: Room = ds.getComponent(Room) as Room;
+                    rm.init(list[cout].roomId, list[cout].count);
+                    rmMgr.roomList.push(rm);
+                    cout++;
+                }
             }
+        }
+        rmMgr.updateRoomList();
+    }
+
+    /**
+     * 当玩家与桌子足够近的时候,点击桌子发送加入房间请求
+     * @param distance 
+     */
+    checkCanJoinRoom(distance: number) {
+        if (distance < 6 && !this.isMoving) {
+            let data: createRoomReq = { roomId: this.currentRoomId };
+            Net.sendMsg(data, Router.rut_createRoom);
+        }
+    }
+
+    /* 接收到服务器其他玩家消息 */
+    /**
+     * 创建房间
+     * @param data 
+     */
+    handleServerCreateRoom(data: ModelAny) {
+        this.isJoinRoom = true;
+        this.role.active = false;
+
+        let rmData: createRoomRes = data.msg;
+        let room: Room = RoomtManager.Instance.getRoomById(rmData.roomId);
+        room.init(rmData.roomId, rmData.count);
+        if (room.count == 1) {
+            ChessPlayer.Inst.type = ChessType.red;
+            ChessPlayer.Inst.roomId = rmData.roomId;
+        }
+        else if (room.count == 2) {
+            if (ChessPlayer.Inst.roomId < 0) {
+                ChessPlayer.Inst.roomId = rmData.roomId;
+                ChessPlayer.Inst.type = ChessType.black;
+            }
+        }
+        if (room.count == 2) {
+            this.node.active = false;
+            this.gameNode.active = true;
         }
     }
 }

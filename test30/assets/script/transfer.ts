@@ -14,6 +14,9 @@ export class Transfer extends Component {
         EventManager.Inst.removeEvent(EventManager.EVT_closeDoor);
         EventManager.Inst.removeEvent(Router.rut_createRoom);
         EventManager.Inst.removeEvent(Router.rut_playChess);
+        EventManager.Inst.removeEvent(Router.rut_roomList);
+        EventManager.Inst.removeEvent(Router.rut_restart);
+        EventManager.Inst.removeEvent(Router.rut_eatChess);
     }
     public gotoScene(event: any, scenename: string) {
         director.preloadScene(scenename, () => {

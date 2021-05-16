@@ -29,11 +29,7 @@ class ClientSocket {
     _init() {
         this.socket.on('message', this._resaveMassage.bind(this));
         this.socket.on('close', this._clientClose.bind(this));
-        // setInterval(() => {
-        //     let str = "文字尺寸不会根据 Bounding Box 的大小进行缩放，Wrap Text 关闭的情况下，按照正常文字排列，超出 Bounding Box 的部分将不会显示。Wrap Text 开启的情况下，会试图将本行超出范围的文字换行到下一行。如果纵向空间也不够时，也会隐藏无法完整显示的文字。"
-        //     let info = str.substring(0, Math.random() * str.length);
-        //     this.sendMsg(this.id, 1, 0, { info: info })
-        // }, 500);
+        this.pushRoomListToClient();
     }
     /**
      * 接收消息
@@ -75,7 +71,7 @@ class ClientSocket {
         }
     }
     _clientClose(client) {
-        logger_1.default.info("client_close" + client);
+        logger_1.default.info("client_close " + client + "  id= " + this.id + " roomId= " + this.roomId);
         this.isLogined = false;
         EventManager_1.default.Instance.dispatchEvent(EventManager_1.default.EvtRemoveClientSocket, this);
     }
@@ -111,10 +107,11 @@ class ClientSocket {
                 return;
             }
             let reData = { code: err_1.ErrEnum.OK };
-            let rm = clientManager_1.default.Instance.createJoinRoom(this);
+            let rm = clientManager_1.default.Instance.createJoinRoom(this, data.roomId);
             let roomData = { roomId: rm.id, count: rm.count };
             reData.msg = roomData;
             rm.createJoinRoom(reData);
+            clientManager_1.default.Instance.pushUpdateRoomToAllClient();
         });
     }
     /**
@@ -142,7 +139,22 @@ class ClientSocket {
     handleRestart(data) {
         return __awaiter(this, void 0, void 0, function* () {
             clientManager_1.default.Instance.removeFromRoom(this);
+            clientManager_1.default.Instance.pushUpdateRoomToAllClient();
         });
+    }
+    /**
+     * 给玩家推送房间列表,玩家加入/退出房间的时候也要推送这个消息,给所有玩家推送
+     */
+    pushRoomListToClient() {
+        let reData = { code: err_1.ErrEnum.OK };
+        let dt = [];
+        let rmList = clientManager_1.default.Instance.roomList;
+        for (let i = 0; i < rmList.length; i++) {
+            let rd = { roomId: rmList[i].id, count: rmList[i].count };
+            dt.push(rd);
+        }
+        reData.msg = dt;
+        this.sendMsg(routers_1.Router.rut_roomList, reData);
     }
 }
 exports.default = ClientSocket;

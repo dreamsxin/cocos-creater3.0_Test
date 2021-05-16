@@ -16,14 +16,25 @@ export class ChinaChessMain extends Component {
     @property(ChessGrid)
     chessGd: ChessGrid = null as unknown as ChessGrid;
 
+
+    @property(Node)
+    switchBtn: Node = null as unknown as Node;
+
     onLoad() {
         EventManager.Inst.registerEevent(Router.rut_playChess, this.handleServerPlayChess.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_eatChess, this.handleServerEatChess.bind(this), this);
     }
 
     start() {
-        ChessPlayer.Inst.init();
         systemEvent.on(SystemEventType.TOUCH_START, this.touchStart, this);
+    }
+
+    onEnable() {
+        this.switchBtn.active = true;
+        this.startGame();
+    }
+    onDisable() {
+        this.switchBtn.active = false;
     }
 
     touchStart(event: any) {

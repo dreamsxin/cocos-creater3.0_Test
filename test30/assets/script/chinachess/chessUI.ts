@@ -21,6 +21,15 @@ export class ChessUI extends Component {
     background: Node = null as unknown as Node;
 
     @property(Node)
+    roomNode: Node = null as unknown as Node;
+
+    @property(Node)
+    gameNode: Node = null as unknown as Node;
+
+    @property(Node)
+    switchBtn: Node = null as unknown as Node;
+
+    @property(Node)
     startTag: Node = null as unknown as Node;
 
     @property(Node)
@@ -34,25 +43,27 @@ export class ChessUI extends Component {
 
     onLoad() {
         EventManager.Inst.registerEevent(EventManager.EVT_chessGameOver, this.gameOver.bind(this), this)
-        EventManager.Inst.registerEevent(Router.rut_createRoom, this.handleServerCreateRoom.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_restart, this.handleServerRestart.bind(this), this);
+        EventManager.Inst.registerEevent(Router.rut_roomList, this.handleServerRoomList.bind(this), this);
     }
 
     start() {
+        ChessPlayer.Inst.init();
+        this.roomNode.active = false;
+        this.gameNode.active = false;
+        this.startTag.active = true;
+        this.background.active = true;
+        this.gameOverNode.active = false;
+        this.matchLable.node.active = false;
+        this.switchBtn.active = false;
         if (!Net.isConnected) {
             Net.init();
         }
-        this.showStartTag();
-        this.showBackground();
-        this.gameOverNode.active = false;
-        this.matchLable.node.active = false;
     }
 
     handleGameStart() {
         if (Net.isConnected) {
-            // this.hideBackgroud();
-            // this.hideStartTag();
-            Net.sendMsg({}, Router.rut_createRoom);
+            this.startGame();
         }
         else {
             console.log("服务器未连接");
@@ -74,8 +85,8 @@ export class ChessUI extends Component {
         let dt: restartReq = data.msg;
         if (dt.type == ChessPlayer.Inst.type) {
             this.gameOverNode.active = false;
-            this.showBackground();
-            this.showStartTag();
+            this.background.active = true;
+            this.startTag.active = true;
         }
         else {
             console.log("对家离开")
@@ -91,51 +102,39 @@ export class ChessUI extends Component {
         }
     }
 
-    hideStartTag() {
-        this.startTag.active = false;
-        this.ccm.startGame();
-    }
-    showStartTag() {
-        this.startTag.active = true;
-    }
+    // hideStartTag() {
+    //     this.startTag.active = false;
+    //     this.ccm.startGame();
+    // }
+    // showStartTag() {
+    //     this.startTag.active = true;
+    // }
 
-    hideBackgroud() {
-        this.background.active = false;
-    }
+    // hideBackgroud() {
+    //     this.background.active = false;
+    // }
 
-    showBackground() {
-        this.background.active = true;
-    }
+    // showBackground() {
+    //     this.background.active = true;
+    // }
 
     startGame() {
         this.matchLable.node.active = false;
-        this.hideBackgroud();
-        this.hideStartTag();
+        this.background.active = false;
+        this.startTag.active = false;
+        this.roomNode.active = true;
+        this.gameNode.active = false;
     }
 
     /* 接收到服务器其他玩家消息 */
     /**
-     * 创建房间
+     * 初始化/更新房间列表
      * @param data 
      */
-    handleServerCreateRoom(data: ModelAny) {
-        let rmData: createRoomRes = data.msg;
-        let room: Room = RoomtManager.Instance.getRoomById(rmData.roomId);
-        room.init(rmData.roomId, rmData.count);
-        if (room.count == 1) {
-            this.matchLable.node.active = true;
-            this.startTag.active = false;
-            ChessPlayer.Inst.type = ChessType.red;
-            ChessPlayer.Inst.roomId = rmData.roomId;
-        }
-        else if (room.count == 2) {
-            if (ChessPlayer.Inst.roomId < 0) {
-                ChessPlayer.Inst.roomId = rmData.roomId;
-                ChessPlayer.Inst.type = ChessType.black;
-            }
-        }
-        if (room.count == 2) {
-            this.startGame();
-        }
+    handleServerRoomList(data: ModelAny) {
+        let rmList: createRoomRes[] = data.msg;
+        RoomtManager.Instance.initRoomListData(rmList);
     }
+
+
 }

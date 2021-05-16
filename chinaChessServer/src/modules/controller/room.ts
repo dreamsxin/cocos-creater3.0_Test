@@ -6,17 +6,18 @@ import { Router } from "./routers";
 export default class Room {
     public id: number = -1;
     /* 房间人数 */
-    public count: number = -1;
+    public count: number = 0;
     /* 客户端 */
     public clients: ClientSocket[] = [];
 
-    init(id: number, client: ClientSocket) {
-        if (this.count < 2) {
-            client.roomId = id;
-            this.id = id;
-            this.clients.push(client);
-            this.count = this.clients.length;
-        }
+    init(id: number) {
+        this.id = id;
+    }
+
+    updateInfo(client: ClientSocket) {
+        client.roomId = this.id;
+        this.clients.push(client);
+        this.count = this.clients.length;
     }
 
     createJoinRoom(reData: ModelAny) {

@@ -1,5 +1,5 @@
 import ClientManager from "../common/clientManager";
-import { createRoomRes, eatChessReq, Head, ModelAny, playChessReq, restartReq } from "../utils/globalUtils";
+import { createRoomReq, createRoomRes, eatChessReq, Head, ModelAny, playChessReq, restartReq } from "../utils/globalUtils";
 import DataViewUtils from "../utils/dataviewUtils";
 import Logger from "../utils/logger";
 import { Router } from "../controller/routers";
@@ -26,11 +26,7 @@ export default class ClientSocket {
     private _init(): void {
         this.socket.on('message', this._resaveMassage.bind(this));
         this.socket.on('close', this._clientClose.bind(this));
-        // setInterval(() => {
-        //     let str = "文字尺寸不会根据 Bounding Box 的大小进行缩放，Wrap Text 关闭的情况下，按照正常文字排列，超出 Bounding Box 的部分将不会显示。Wrap Text 开启的情况下，会试图将本行超出范围的文字换行到下一行。如果纵向空间也不够时，也会隐藏无法完整显示的文字。"
-        //     let info = str.substring(0, Math.random() * str.length);
-        //     this.sendMsg(this.id, 1, 0, { info: info })
-        // }, 500);
+        this.pushRoomListToClient();
     }
 
     /**
@@ -75,7 +71,7 @@ export default class ClientSocket {
     }
 
     private _clientClose(client: any): void {
-        Logger.info("client_close" + client);
+        Logger.info("client_close " + client + "  id= " + this.id + " roomId= " + this.roomId);
         this.isLogined = false;
         EventManager.Instance.dispatchEvent(EventManager.EvtRemoveClientSocket, this);
     }
@@ -108,16 +104,17 @@ export default class ClientSocket {
      * 创建/加入房间
      * @param data 
      */
-    private async handleCreateJoinRoom(data: any) {
+    private async handleCreateJoinRoom(data: createRoomReq) {
         if (this.roomId > 0) {
             Logger.info("已在房间");
             return;
         }
         let reData: ModelAny = { code: ErrEnum.OK };
-        let rm: Room = ClientManager.Instance.createJoinRoom(this);
+        let rm: Room = ClientManager.Instance.createJoinRoom(this, data.roomId);
         let roomData: createRoomRes = { roomId: rm.id, count: rm.count };
         reData.msg = roomData;
         rm.createJoinRoom(reData);
+        ClientManager.Instance.pushUpdateRoomToAllClient();
     }
 
     /**
@@ -142,6 +139,23 @@ export default class ClientSocket {
      */
     private async handleRestart(data: restartReq) {
         ClientManager.Instance.removeFromRoom(this);
+        ClientManager.Instance.pushUpdateRoomToAllClient();
     }
+
+    /**
+     * 给玩家推送房间列表,玩家加入/退出房间的时候也要推送这个消息,给所有玩家推送
+     */
+    pushRoomListToClient() {
+        let reData: ModelAny = { code: ErrEnum.OK };
+        let dt: createRoomRes[] = [];
+        let rmList: Room[] = ClientManager.Instance.roomList;
+        for (let i = 0; i < rmList.length; i++) {
+            let rd: createRoomRes = { roomId: rmList[i].id, count: rmList[i].count };
+            dt.push(rd);
+        }
+        reData.msg = dt;
+        this.sendMsg(Router.rut_roomList, reData);
+    }
+
 }
 
