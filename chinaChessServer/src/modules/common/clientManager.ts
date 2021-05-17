@@ -55,9 +55,6 @@ export default class ClientManager {
         let rm: Room = this.getRoomById(clientSocket.roomId);
         if (rm) {
             rm.removeClient(clientSocket, req);
-            // if (rm.count < 1) {
-            //     this.removeRoomFromList(rm);
-            // }
         }
     }
 

@@ -92,6 +92,9 @@ class ClientSocket {
                 case routers_1.Router.rut_restart:
                     this.handleRestart(data);
                     break;
+                case routers_1.Router.rut_leaveRoom:
+                    this.handleLeaveRoom(data);
+                    break;
                 default: break;
             }
         });
@@ -137,6 +140,15 @@ class ClientSocket {
      * 重新开始,清理房间和房间Id
      */
     handleRestart(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            clientManager_1.default.Instance.removeFromRoom(this, data);
+            clientManager_1.default.Instance.pushUpdateRoomToAllClient();
+        });
+    }
+    /**
+     * 离开房间
+     */
+    handleLeaveRoom(data) {
         return __awaiter(this, void 0, void 0, function* () {
             clientManager_1.default.Instance.removeFromRoom(this);
             clientManager_1.default.Instance.pushUpdateRoomToAllClient();

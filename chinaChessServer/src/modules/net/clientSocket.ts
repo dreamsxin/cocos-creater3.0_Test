@@ -96,6 +96,10 @@ export default class ClientSocket {
                 this.handleRestart(data);
                 break;
 
+            case Router.rut_leaveRoom:
+                this.handleLeaveRoom(data);
+                break;
+
             default: break;
         }
     }
@@ -138,6 +142,14 @@ export default class ClientSocket {
      * 重新开始,清理房间和房间Id
      */
     private async handleRestart(data: restartReq) {
+        ClientManager.Instance.removeFromRoom(this, data);
+        ClientManager.Instance.pushUpdateRoomToAllClient();
+    }
+
+    /**
+     * 离开房间
+     */
+    private async handleLeaveRoom(data: restartReq) {
         ClientManager.Instance.removeFromRoom(this);
         ClientManager.Instance.pushUpdateRoomToAllClient();
     }

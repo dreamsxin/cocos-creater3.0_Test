@@ -60,6 +60,8 @@ class Room {
             let cs = cl.id == this.clients[0].id ? this.clients[1] : this.clients[0];
             cs.sendMsg(routers_1.Router.rut_restart, reData);
         }
+        reData = { code: err_1.ErrEnum.OK };
+        cl.sendMsg(routers_1.Router.rut_leaveRoom, reData);
         for (let i = 0; i < this.clients.length; i++) {
             if (this.clients[i].id == cl.id) {
                 this.count--;

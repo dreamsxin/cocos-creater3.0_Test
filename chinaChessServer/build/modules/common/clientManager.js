@@ -49,9 +49,6 @@ class ClientManager {
         let rm = this.getRoomById(clientSocket.roomId);
         if (rm) {
             rm.removeClient(clientSocket, req);
-            // if (rm.count < 1) {
-            //     this.removeRoomFromList(rm);
-            // }
         }
     }
     /**

@@ -70,8 +70,12 @@ export class ChessUI extends Component {
         }
     }
 
+    /**
+     * 游戏结束,离开房间
+     */
     handleRestart() {
-        Net.sendMsg({ type: ChessPlayer.Inst.type }, Router.rut_restart);
+        let dt = { type: ChessPlayer.Inst.type };
+        Net.sendMsg(dt, Router.rut_restart);
     }
 
     /**
@@ -81,12 +85,19 @@ export class ChessUI extends Component {
         this.ccm.chessGd.switchPerspective();
     }
 
+    /**
+     * 离开房间,重新选房间
+     * @param data 
+     */
     handleServerRestart(data: ModelAny) {
         let dt: restartReq = data.msg;
         if (dt.type == ChessPlayer.Inst.type) {
             this.gameOverNode.active = false;
-            this.background.active = true;
-            this.startTag.active = true;
+            this.background.active = false;
+            this.startTag.active = false;
+            this.gameNode.active = false;
+            this.roomNode.active = true;
+            this.ccm.chessGd.clearningAll();
         }
         else {
             console.log("对家离开")
@@ -101,22 +112,6 @@ export class ChessUI extends Component {
             this.winLable.string = "黑方胜";
         }
     }
-
-    // hideStartTag() {
-    //     this.startTag.active = false;
-    //     this.ccm.startGame();
-    // }
-    // showStartTag() {
-    //     this.startTag.active = true;
-    // }
-
-    // hideBackgroud() {
-    //     this.background.active = false;
-    // }
-
-    // showBackground() {
-    //     this.background.active = true;
-    // }
 
     startGame() {
         this.matchLable.node.active = false;

@@ -28,8 +28,8 @@ export default class ChessNet {
             let head = DataViewUtils.getHeadData(dtView);
             let body = DataViewUtils.decoding(dtView, buf.byteLength);
 
-            // console.log("head=>"+JSON.stringify(head));
-            console.log(JSON.stringify(body));
+            console.log("------------------receiveData------------------");
+            console.log("router:" + head.router + " body:" + JSON.stringify(body));
             this.handleRecvdate(head, body);
         };
     }
@@ -39,6 +39,8 @@ export default class ChessNet {
     }
 
     sendMsg(data: any, router: string) {
+        console.log("------------------sendData------------------");
+        console.log(data, router);
         let dt = DataViewUtils.encoding(this.id, this.serverType, Number(router), data);
         this.socket.send(dt);
     }

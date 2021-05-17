@@ -55,7 +55,6 @@ export default class Room {
      * @param cl 
      */
     removeClient(cl: ClientSocket, req?: restartReq) {
-
         let reData: ModelAny = { code: ErrEnum.OK };
         reData.msg = {};
         if (req) {
@@ -67,6 +66,8 @@ export default class Room {
             cs.sendMsg(Router.rut_restart, reData);
         }
 
+        reData = { code: ErrEnum.OK };
+        cl.sendMsg(Router.rut_leaveRoom, reData);
         for (let i = 0; i < this.clients.length; i++) {
             if (this.clients[i].id == cl.id) {
                 this.count--;

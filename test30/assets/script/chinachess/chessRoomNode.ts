@@ -6,7 +6,7 @@ import { ChessType } from './chessEnum';
 import { ChessPlayer } from './chessPlayer';
 import Room from './chessRoom';
 import RoomtManager from './chessRoomMgr';
-import { createRoomReq, createRoomRes, ModelAny } from './net/globalUtils';
+import { createRoomReq, createRoomRes, ModelAny, restartReq } from './net/globalUtils';
 import { Net } from './net/net';
 import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
@@ -15,6 +15,9 @@ const { ccclass, property } = _decorator;
 export class ChessRoomNode extends Component {
     @property(Camera)
     mainCamera: Camera = null as unknown as Camera;
+
+    @property(Node)
+    leaveBtn: Node = null as unknown as Node;
 
     @property(Node)
     role: Node = null as unknown as Node;
@@ -35,9 +38,12 @@ export class ChessRoomNode extends Component {
 
     onLoad() {
         EventManager.Inst.registerEevent(Router.rut_createRoom, this.handleServerCreateRoom.bind(this), this);
+        EventManager.Inst.registerEevent(Router.rut_restart, this.handleServerRestart.bind(this), this);
+        EventManager.Inst.registerEevent(Router.rut_leaveRoom, this.handleServerLeaveRoom.bind(this), this);
     }
 
     start() {
+        this.leaveBtn.active = false;
         systemEvent.on(SystemEventType.TOUCH_START, this.touchStart, this);
     }
     onEnable() {
@@ -46,6 +52,7 @@ export class ChessRoomNode extends Component {
     }
     onDisable() {
         this.gameNode.active = false;
+        this.leaveBtn.active = false;
     }
 
     touchStart(event: any) {
@@ -165,6 +172,13 @@ export class ChessRoomNode extends Component {
         }
     }
 
+    /**
+     * 离开房间
+     */
+    handleLeaveRoom() {
+        Net.sendMsg({}, Router.rut_leaveRoom);
+    }
+
     /* 接收到服务器其他玩家消息 */
     /**
      * 创建房间
@@ -173,6 +187,7 @@ export class ChessRoomNode extends Component {
     handleServerCreateRoom(data: ModelAny) {
         this.isJoinRoom = true;
         this.role.active = false;
+        this.leaveBtn.active = true;
 
         let rmData: createRoomRes = data.msg;
         let room: Room = RoomtManager.Instance.getRoomById(rmData.roomId);
@@ -192,5 +207,31 @@ export class ChessRoomNode extends Component {
             this.gameNode.active = true;
         }
     }
+
+    /**
+     * 离开房间,重新选房间
+     * @param data 
+     */
+    handleServerRestart(data: ModelAny) {
+        let dt: restartReq = data.msg;
+        if (dt.type == ChessPlayer.Inst.type) {
+            this.role.active = true;
+            this.isJoinRoom = false;
+            this.leaveBtn.active = false;
+        }
+        else {
+            console.log("对家离开")
+        }
+    }
+    /**
+     * 离开房间,重新选房间
+     * @param data 
+     */
+    handleServerLeaveRoom(data: ModelAny) {
+        this.role.active = true;
+        this.isJoinRoom = false;
+        this.leaveBtn.active = false;
+    }
+
 }
 
