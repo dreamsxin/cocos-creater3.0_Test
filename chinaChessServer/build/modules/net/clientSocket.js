@@ -30,15 +30,16 @@ class ClientSocket {
         this.socket.on('message', this._resaveMassage.bind(this));
         this.socket.on('close', this._clientClose.bind(this));
         this.pushRoomListToClient();
+        this.pushPlayerListToClient();
     }
     /**
      * 接收消息
      * @param message
      */
     _resaveMassage(message) {
-        logger_1.default.info(message);
         this.dataType = typeof (message);
         if (this.dataType == 'string') {
+            logger_1.default.info(message);
             // this.socket.send("333");
         }
         else {
@@ -46,9 +47,6 @@ class ClientSocket {
             let dtView = new DataView(buf);
             let head = dataviewUtils_1.default.getHeadData(dtView);
             let body = dataviewUtils_1.default.decoding(dtView, buf.byteLength);
-            // Logger.info(head);
-            // Logger.info(body);
-            // this.sendMsg(this.id, 1, 0, body);
             this.serverType = head.serverType;
             this._handleClientData(head.router, body);
         }
@@ -95,6 +93,9 @@ class ClientSocket {
                 case routers_1.Router.rut_leaveRoom:
                     this.handleLeaveRoom(data);
                     break;
+                case routers_1.Router.rut_move:
+                    this.handleMove(data);
+                    break;
                 default: break;
             }
         });
@@ -114,6 +115,7 @@ class ClientSocket {
             let roomData = { roomId: rm.id, count: rm.count };
             reData.msg = roomData;
             rm.createJoinRoom(reData);
+            clientManager_1.default.Instance.pushJoinRoomToAllClient(this.id);
             clientManager_1.default.Instance.pushUpdateRoomToAllClient();
         });
     }
@@ -141,6 +143,7 @@ class ClientSocket {
      */
     handleRestart(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            clientManager_1.default.Instance.pushLeaveRoomToAllClient(this.id);
             clientManager_1.default.Instance.removeFromRoom(this, data);
             clientManager_1.default.Instance.pushUpdateRoomToAllClient();
         });
@@ -150,6 +153,7 @@ class ClientSocket {
      */
     handleLeaveRoom(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            clientManager_1.default.Instance.pushLeaveRoomToAllClient(this.id);
             clientManager_1.default.Instance.removeFromRoom(this);
             clientManager_1.default.Instance.pushUpdateRoomToAllClient();
         });
@@ -167,6 +171,72 @@ class ClientSocket {
         }
         reData.msg = dt;
         this.sendMsg(routers_1.Router.rut_roomList, reData);
+    }
+    /**
+     * 给玩家推送玩家列表
+     */
+    pushPlayerListToClient() {
+        let reData = { code: err_1.ErrEnum.OK };
+        let dt = { id: [] };
+        let rmList = clientManager_1.default.Instance.getAllClient();
+        for (let i = 0; i < rmList.length; i++) {
+            let id = rmList[i].id;
+            dt.id.push(id);
+        }
+        reData.msg = dt;
+        this.sendMsg(routers_1.Router.rut_playerInfo, reData);
+    }
+    /**
+     * 角色移动
+     * @param data
+     */
+    handleMove(data) {
+        clientManager_1.default.Instance.pushMoveInfoToAllClient(data);
+    }
+    /**
+     * 推送移动数据
+     * @param data
+     */
+    pushMoveInfoToClient(data) {
+        let reData = { code: err_1.ErrEnum.OK };
+        reData.msg = data;
+        this.sendMsg(routers_1.Router.rut_move, reData);
+    }
+    /**
+     * 用户上线
+     * @id:玩家id
+     */
+    pushUplineToClient(id) {
+        let reData = { code: err_1.ErrEnum.OK };
+        reData.msg = { id: id };
+        this.sendMsg(routers_1.Router.rut_upLine, reData);
+    }
+    /**
+     * 用户下线
+     * @id:玩家id
+     */
+    pushDownlineToClient(id) {
+        let reData = { code: err_1.ErrEnum.OK };
+        reData.msg = { id: id };
+        this.sendMsg(routers_1.Router.rut_downLine, reData);
+    }
+    /**
+     * 进入房间
+     * @id:玩家id
+     */
+    pushJoinRoomToClient(id) {
+        let reData = { code: err_1.ErrEnum.OK };
+        reData.msg = { id: id };
+        this.sendMsg(routers_1.Router.rut_joinRoom, reData);
+    }
+    /**
+     * 离开房间
+     * @id:玩家id
+     */
+    pushLeaveRoomToClient(id) {
+        let reData = { code: err_1.ErrEnum.OK };
+        reData.msg = { id: id };
+        this.sendMsg(routers_1.Router.rut_leaveRoom, reData);
     }
 }
 exports.default = ClientSocket;

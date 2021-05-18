@@ -12,12 +12,19 @@ export class Transfer extends Component {
         EventManager.Inst.removeEvent(EventManager.EVT_shooted);
         EventManager.Inst.removeEvent(EventManager.EVT_openDoor);
         EventManager.Inst.removeEvent(EventManager.EVT_closeDoor);
+        EventManager.Inst.removeEvent(EventManager.EVT_chessDownLine);
+        EventManager.Inst.removeEvent(EventManager.EVT_chessGameOver);
         EventManager.Inst.removeEvent(Router.rut_createRoom);
         EventManager.Inst.removeEvent(Router.rut_playChess);
         EventManager.Inst.removeEvent(Router.rut_roomList);
         EventManager.Inst.removeEvent(Router.rut_restart);
         EventManager.Inst.removeEvent(Router.rut_eatChess);
         EventManager.Inst.removeEvent(Router.rut_leaveRoom);
+        EventManager.Inst.removeEvent(Router.rut_move);
+        EventManager.Inst.removeEvent(Router.rut_upLine);
+        EventManager.Inst.removeEvent(Router.rut_downLine);
+        EventManager.Inst.removeEvent(Router.rut_playerInfo);
+        EventManager.Inst.removeEvent(Router.rut_joinRoom);
     }
     public gotoScene(event: any, scenename: string) {
         director.preloadScene(scenename, () => {

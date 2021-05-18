@@ -2,7 +2,7 @@ import Logger from "../utils/logger";
 import EventManager from "./EventManager";
 import ClientSocket from "../net/clientSocket";
 import Room from "../controller/room";
-import { restartReq } from "../utils/globalUtils";
+import { moveReq, restartReq } from "../utils/globalUtils";
 
 /* 客户端 socket 连接管理 */
 export default class ClientManager {
@@ -17,7 +17,7 @@ export default class ClientManager {
     /* 房间列表 */
     public roomList: Room[] = [];
     /* 客户端socket数组 */
-    private _clientSockets: any[] = [];
+    private _clientSockets: ClientSocket[] = [];
     constructor() {
         this.initRoomList();
         EventManager.Instance.registerEevent(EventManager.EvtSaveClientSocket, this._evtSaveClientSocket.bind(this), this);
@@ -30,6 +30,12 @@ export default class ClientManager {
      */
     private _evtSaveClientSocket(clientSocket: ClientSocket): void {
         this._clientSockets.push(clientSocket);
+        /* 通知其他人,他上线了 */
+        let list = this._clientSockets;
+        for (let i = 0; i < list.length; i++) {
+            list[i].pushUplineToClient(clientSocket.id);
+        }
+
     }
 
     /**
@@ -38,6 +44,7 @@ export default class ClientManager {
      */
     private _evtRemoveClientSocket(clientSocket: ClientSocket): void {
         /* 玩家有可能已加入房间,所以要过一遍从房间删除玩家的操作 */
+        this.pushDownLineToAllClient(clientSocket.id);
         this.removeFromRoom(clientSocket);
         for (let i = 0; i < this._clientSockets.length; i++) {
             if (this._clientSockets[i].id == clientSocket.id) {
@@ -80,25 +87,15 @@ export default class ClientManager {
 
     /**
      * 根据pid获取clientsocket
-     * @param pid 
+     * @param id 
      */
-    public getClientSocketByPid(pid: number): ClientSocket {
-        let cs: ClientSocket = this._clientSockets.find(item => { return item.id == pid });
+    public getClientSocketByPid(id: number): ClientSocket {
+        let cs: ClientSocket = this._clientSockets.find(item => { return item.id == id });
         return cs;
     }
 
-    /**
-     * 获取所有客户端
-     * @param pid 
-     */
-    public getAllClientSocket(pid: number): ClientSocket[] {
-        let list = [];
-        for (let i = 0; i < this._clientSockets.length; i++) {
-            if (this._clientSockets[i].pid != pid) {
-                list.push(this._clientSockets[i]);
-            }
-        }
-        return list;
+    public getAllClient(): ClientSocket[] {
+        return this._clientSockets;
     }
 
     /**
@@ -159,6 +156,54 @@ export default class ClientManager {
         let list = this._clientSockets;
         for (let i = 0; i < list.length; i++) {
             list[i].pushRoomListToClient();
+        }
+    }
+
+    /**
+     * 推送移动数据,出了自己以外的所有客户端
+     * @param data 
+     */
+    pushMoveInfoToAllClient(data: moveReq) {
+        let list = this._clientSockets;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].id == data.id) continue;
+            list[i].pushMoveInfoToClient(data);
+        }
+    }
+
+    /**
+     * 推送玩家下线数据给所有客户端
+     * @param id 
+     */
+    pushDownLineToAllClient(id: number) {
+        let list = this._clientSockets;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].id == id) continue;
+            list[i].pushDownlineToClient(id);
+        }
+    }
+
+    /**
+     * 推送玩家进入房间给所有客户端
+     * @param id 
+     */
+    pushJoinRoomToAllClient(id: number) {
+        let list = this._clientSockets;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].id == id) continue;
+            list[i].pushJoinRoomToClient(id);
+        }
+    }
+
+    /**
+     * 推送玩家离开房间给所有客户端
+     * @param id 
+     */
+    pushLeaveRoomToAllClient(id: number) {
+        let list = this._clientSockets;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].id == id) continue;
+            list[i].pushLeaveRoomToClient(id);
         }
     }
 

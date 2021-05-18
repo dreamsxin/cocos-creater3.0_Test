@@ -7,7 +7,7 @@ import { ChessPlayer } from './chessPlayer';
 import Room from './chessRoom';
 import RoomtManager from './chessRoomMgr';
 import { ChinaChessMain } from './chinaChessMain';
-import { createRoomRes, ModelAny, restartReq } from './net/globalUtils';
+import { createRoomRes, ModelAny, restartReq, upLineReq } from './net/globalUtils';
 import { Net } from './net/net';
 import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
@@ -45,10 +45,12 @@ export class ChessUI extends Component {
         EventManager.Inst.registerEevent(EventManager.EVT_chessGameOver, this.gameOver.bind(this), this)
         EventManager.Inst.registerEevent(Router.rut_restart, this.handleServerRestart.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_roomList, this.handleServerRoomList.bind(this), this);
+        EventManager.Inst.registerEevent(Router.rut_upLine, this.handleServeUpLine.bind(this), this);
+        RoomtManager.Instance.init();
+        ChessPlayer.Inst.init();
     }
 
     start() {
-        ChessPlayer.Inst.init();
         this.roomNode.active = false;
         this.gameNode.active = false;
         this.startTag.active = true;
@@ -129,6 +131,21 @@ export class ChessUI extends Component {
     handleServerRoomList(data: ModelAny) {
         let rmList: createRoomRes[] = data.msg;
         RoomtManager.Instance.initRoomListData(rmList);
+    }
+
+    /**
+     * 用户上线
+     * @param data 
+     */
+    handleServeUpLine(data: ModelAny) {
+        let dt: upLineReq = data.msg;
+        RoomtManager.Instance.addToPlayerList(dt.id);
+        if (ChessPlayer.Inst.playerId < 0) {
+            ChessPlayer.Inst.playerId = dt.id;
+        }
+        else {
+            console.log(`${dt.id} 玩家上线 selfID= ${ChessPlayer.Inst.playerId}`);
+        }
     }
 
 

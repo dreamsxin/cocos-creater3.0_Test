@@ -1,11 +1,14 @@
+import EventManager from "../shooting/eventManager";
 import Room from "./chessRoom";
-import { createRoomRes } from "./net/globalUtils";
+import { createRoomRes, ModelAny, playerInfoRes, upLineReq } from "./net/globalUtils";
+import { Router } from "./net/routers";
 
 /* 客户端 socket 连接管理 */
 export default class RoomtManager {
     private static _instance: RoomtManager;
     private _index: number = 1000;
     public roomInfoList: createRoomRes[] = [];
+    public playerList: number[] = [];
     public static get Instance(): RoomtManager {
         if (!RoomtManager._instance) {
             RoomtManager._instance = new RoomtManager();
@@ -15,6 +18,12 @@ export default class RoomtManager {
 
     /* 房间列表 */
     public roomList: Room[] = [];
+
+
+    init() {
+        EventManager.Inst.registerEevent(Router.rut_playerInfo, this.handleServeplayerInfo.bind(this), this);
+        EventManager.Inst.registerEevent(Router.rut_downLine, this.handleServeplayerDownLine.bind(this), this);
+    }
 
     /**
      * 初始化并更新房间信息
@@ -53,5 +62,51 @@ export default class RoomtManager {
             }
         }
         return null as unknown as Room;
+    }
+
+    /**
+     * 将新上线的玩家添加到玩家列表
+     * @param id 
+     * @returns 
+     */
+    addToPlayerList(id: number) {
+        for (let i = 0; i < this.playerList.length; i++) {
+            if (id == this.playerList[i]) {
+                return;
+            }
+        }
+        this.playerList.push(id);
+    }
+
+    /**
+     * 将玩家从列表中删除
+     * @param id 
+     * @returns 
+     */
+    removeToPlayerList(id: number) {
+        for (let i = 0; i < this.playerList.length; i++) {
+            if (id == this.playerList[i]) {
+                this.playerList.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    /**
+     * 玩家列表
+     * @param data 
+     */
+    handleServeplayerInfo(data: ModelAny) {
+        let dt: playerInfoRes = data.msg;
+        this.playerList = dt.id;
+    }
+
+    /**
+     * 玩家下线
+     * @param data 
+     */
+    handleServeplayerDownLine(data: ModelAny) {
+        let dt: upLineReq = data.msg;
+        this.removeToPlayerList(dt.id);
     }
 }

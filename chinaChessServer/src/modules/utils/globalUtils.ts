@@ -18,6 +18,12 @@ export interface Head {
     router: string,
 }
 
+
+export enum ChessType {
+    red = 0,
+    black,
+}
+
 /**
  * 房间信息
  */
@@ -39,6 +45,7 @@ export interface createRoomRes {
     /* 房间人数 */
     count: number,
 }
+
 /**
  * 走棋
  */
@@ -70,8 +77,33 @@ export interface restartReq {
     type: number,//红/黑方
 }
 
+/**
+ * 角色移动
+ */
+export interface moveReq {
+    id: number,
+    x: number,
+    y: number,
+    z: number,
+}
 
-export enum ChessType {
-    red = 0,
-    black,
+/**
+ * 用户上/下线
+ */
+export interface upLineReq {
+    id: number,
+}
+
+/**
+ *  玩家信息,推送
+ */
+export interface playerInfoRes {
+    id: number[],
+}
+
+/**
+ *  玩家进入房间,推送
+ */
+export interface joinRoomRes {
+    id: number,
 }

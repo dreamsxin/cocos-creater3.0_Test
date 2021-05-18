@@ -9,10 +9,13 @@ export class ChessPlayer {
         return ChessPlayer._instance;
     }
 
+    public offsetY: number = -9.123;
+
     /* 红/黑方 */
     public type: ChessType = ChessType.black;
 
     public roomId: number = -1;
+    public playerId: number = -1;
 
     init() {
         this.roomId = -1;

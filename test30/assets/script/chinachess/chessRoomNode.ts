@@ -4,9 +4,10 @@ import { PoolManager } from '../infinitymap/poolManager';
 import EventManager from '../shooting/eventManager';
 import { ChessType } from './chessEnum';
 import { ChessPlayer } from './chessPlayer';
+import { ChessRole } from './chessRole';
 import Room from './chessRoom';
 import RoomtManager from './chessRoomMgr';
-import { createRoomReq, createRoomRes, ModelAny, restartReq } from './net/globalUtils';
+import { createRoomReq, createRoomRes, ModelAny, moveReq, restartReq, upLineReq } from './net/globalUtils';
 import { Net } from './net/net';
 import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
@@ -25,6 +26,9 @@ export class ChessRoomNode extends Component {
     @property(Prefab)
     desk: Prefab = null as unknown as Prefab;
 
+    @property(Prefab)
+    chessRole: Prefab = null as unknown as Prefab;
+
     @property(Node)
     gameNode: Node = null as unknown as Node;
 
@@ -36,10 +40,14 @@ export class ChessRoomNode extends Component {
 
     private isJoinRoom: boolean = false;
 
+    private crArr: ChessRole[] = [];
+
     onLoad() {
         EventManager.Inst.registerEevent(Router.rut_createRoom, this.handleServerCreateRoom.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_restart, this.handleServerRestart.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_leaveRoom, this.handleServerLeaveRoom.bind(this), this);
+        EventManager.Inst.registerEevent(Router.rut_upLine, this.handleServeUpLine.bind(this), this);
+        EventManager.Inst.registerEevent(EventManager.EVT_chessDownLine, this.removePlayer.bind(this), this);
     }
 
     start() {
@@ -49,6 +57,7 @@ export class ChessRoomNode extends Component {
     onEnable() {
         this.resetCameraPos();
         this.layoutDesk();
+        this.initGeneralPlayers();
     }
     onDisable() {
         this.gameNode.active = false;
@@ -98,6 +107,8 @@ export class ChessRoomNode extends Component {
         if (this.count == 0) {
             (this.role.getComponent(SkeletalAnimationComponent) as SkeletalAnimationComponent).play("cocos_anim_run");
         }
+
+        this.sendMoveMsg(v3);
         this.count++;
         this.isMoving = true;
         let pos = v3;
@@ -117,6 +128,19 @@ export class ChessRoomNode extends Component {
         }).start();
     }
 
+    /**
+     * 发送玩家移动数据
+     * @param v3 
+     */
+    sendMoveMsg(v3: Vec3) {
+        console.log(v3);
+        let dt: moveReq = {
+            id: ChessPlayer.Inst.playerId,
+            x: v3.x, y: v3.y, z: v3.z,
+        }
+        Net.sendMsg(dt, Router.rut_move);
+    }
+
     update() {
         if (this.isMoving) {
             this.resetCameraPos();
@@ -134,6 +158,69 @@ export class ChessRoomNode extends Component {
         Vec3.subtract(out, pos1, pos2);
         let distance = out.length();
         return distance;
+    }
+
+    initGeneralPlayers() {
+        let list = RoomtManager.Instance.playerList;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i] == ChessPlayer.Inst.playerId) continue;
+            this.generatePlayer(list[i]);
+        }
+    }
+
+    /**
+     * 用户上线
+     * @param data 
+     */
+    handleServeUpLine(data: ModelAny) {
+        let dt: upLineReq = data.msg;
+        RoomtManager.Instance.playerList.push(dt.id);
+        if (ChessPlayer.Inst.playerId != dt.id && ChessPlayer.Inst.playerId > 0) {
+            this.generatePlayer(dt.id);
+        }
+    }
+
+    /**
+     * 通过玩家ID 创建玩家
+     * @param playerId 
+     */
+    generatePlayer(playerId: number) {
+        if (this.checkExistPlayer(playerId)) return;
+        let origin: Vec3 = new Vec3(0, 0, ChessPlayer.Inst.offsetY);
+        let role: Node = PoolManager.getNode(this.chessRole);
+        let cr: ChessRole = role.getComponent(ChessRole) as ChessRole;
+        cr.init(playerId);
+        role.setWorldPosition(origin);
+        this.node.addChild(role);
+        this.crArr.push(cr);
+        console.log(role.getWorldPosition(), this.role.getWorldPosition());
+        console.log("------generate------");
+    }
+
+    /**
+     * 玩家是否已存在
+     * @param playerId 
+     * @returns 
+     */
+    checkExistPlayer(playerId: number) {
+        for (let i = 0; i < this.crArr.length; i++) {
+            if (this.crArr[i].playerId == playerId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 从玩家列表中删除
+     * @param playerId 
+     */
+    removePlayer(playerId: number) {
+        for (let i = 0; i < this.crArr.length; i++) {
+            if (this.crArr[i].playerId == playerId) {
+                this.crArr.splice(i, 1);
+            }
+        }
     }
 
     /**
@@ -232,6 +319,5 @@ export class ChessRoomNode extends Component {
         this.isJoinRoom = false;
         this.leaveBtn.active = false;
     }
-
 }
 

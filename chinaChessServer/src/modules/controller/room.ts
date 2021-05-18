@@ -67,6 +67,7 @@ export default class Room {
         }
 
         reData = { code: ErrEnum.OK };
+        reData.msg = { id: cl.id }
         cl.sendMsg(Router.rut_leaveRoom, reData);
         for (let i = 0; i < this.clients.length; i++) {
             if (this.clients[i].id == cl.id) {

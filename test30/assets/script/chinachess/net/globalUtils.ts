@@ -1,3 +1,4 @@
+
 /**
  * 消息格式
  */
@@ -31,6 +32,7 @@ export interface roomReq {
 export interface createRoomReq {
     roomId: number,
 }
+
 /**
  * 创建房间res
  */
@@ -39,6 +41,7 @@ export interface createRoomRes {
     /* 房间人数 */
     count: number,
 }
+
 /**
  * 走棋
  */
@@ -68,4 +71,35 @@ export interface eatChessReq {
  */
 export interface restartReq {
     type: number,//红/黑方
+}
+
+/**
+ * 角色移动
+ */
+export interface moveReq {
+    id: number,
+    x: number,
+    y: number,
+    z: number,
+}
+
+/**
+ * 用户上/下线
+ */
+export interface upLineReq {
+    id: number,
+}
+
+/**
+ *  玩家信息,推送
+ */
+export interface playerInfoRes {
+    id: number[],
+}
+
+/**
+ *  玩家进入房间,推送
+ */
+export interface joinRoomRes {
+    id: number,
 }
