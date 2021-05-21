@@ -13,11 +13,12 @@ export class ChessPlayer {
 
     /* 红/黑方 */
     public type: ChessType = ChessType.black;
-
     public roomId: number = -1;
     public playerId: number = -1;
+    public isCanPlay: boolean = false;
 
     init() {
         this.roomId = -1;
+        this.type = -1;
     }
 }

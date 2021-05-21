@@ -6,6 +6,7 @@ import { ChessPiece } from './chessPiece';
 import { ChessPlayer } from './chessPlayer';
 import Room from './chessRoom';
 import RoomtManager from './chessRoomMgr';
+import { ChessTip } from './chessTip';
 import { ChinaChessMain } from './chinaChessMain';
 import { createRoomRes, ModelAny, restartReq, upLineReq } from './net/globalUtils';
 import { Net } from './net/net';
@@ -19,6 +20,9 @@ export class ChessUI extends Component {
 
     @property(Node)
     background: Node = null as unknown as Node;
+
+    @property(Node)
+    chessTip: Node = null as unknown as Node;
 
     @property(Node)
     roomNode: Node = null as unknown as Node;
@@ -43,6 +47,7 @@ export class ChessUI extends Component {
 
     onLoad() {
         EventManager.Inst.registerEevent(EventManager.EVT_chessGameOver, this.gameOver.bind(this), this)
+        EventManager.Inst.registerEevent(EventManager.EVT_chessTip, this.handleChessTip.bind(this), this)
         EventManager.Inst.registerEevent(Router.rut_restart, this.handleServerRestart.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_roomList, this.handleServerRoomList.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_upLine, this.handleServeUpLine.bind(this), this);
@@ -51,6 +56,7 @@ export class ChessUI extends Component {
     }
 
     start() {
+        this.chessTip.active = false;
         this.roomNode.active = false;
         this.gameNode.active = false;
         this.startTag.active = true;
@@ -68,7 +74,7 @@ export class ChessUI extends Component {
             this.startGame();
         }
         else {
-            console.log("服务器未连接");
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessTip, "服务器未连接");
         }
     }
 
@@ -94,15 +100,16 @@ export class ChessUI extends Component {
     handleServerRestart(data: ModelAny) {
         let dt: restartReq = data.msg;
         if (dt.type == ChessPlayer.Inst.type) {
+            this.ccm.chessGd.clearningAll();
             this.gameOverNode.active = false;
             this.background.active = false;
             this.startTag.active = false;
             this.gameNode.active = false;
             this.roomNode.active = true;
-            this.ccm.chessGd.clearningAll();
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessRestart, data);
         }
         else {
-            console.log("对家离开")
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessTip, "对家离开");
         }
     }
 
@@ -146,7 +153,15 @@ export class ChessUI extends Component {
         else {
             console.log(`${dt.id} 玩家上线 selfID= ${ChessPlayer.Inst.playerId}`);
         }
+        EventManager.Inst.dispatchEvent(EventManager.EVT_chessUpLine, data)
     }
 
-
+    /**
+     * 提示
+     * @param info 
+     */
+    handleChessTip(info: string) {
+        this.chessTip.active = true;
+        (this.chessTip.getComponent(ChessTip) as ChessTip).showInfo(info);
+    }
 }

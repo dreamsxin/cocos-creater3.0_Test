@@ -8,12 +8,25 @@ const { ccclass, property } = _decorator;
 export class Transfer extends Component {
 
     start() {
+        this.removeCusEventlistener();
+    }
+
+    public gotoScene(event: any, scenename: string) {
+        director.preloadScene(scenename, () => {
+            director.loadScene(scenename);
+        });
+    }
+
+    removeCusEventlistener() {
         EventManager.Inst.removeEvent(EventManager.EVT_recycle);
         EventManager.Inst.removeEvent(EventManager.EVT_shooted);
         EventManager.Inst.removeEvent(EventManager.EVT_openDoor);
         EventManager.Inst.removeEvent(EventManager.EVT_closeDoor);
         EventManager.Inst.removeEvent(EventManager.EVT_chessDownLine);
         EventManager.Inst.removeEvent(EventManager.EVT_chessGameOver);
+        EventManager.Inst.removeEvent(EventManager.EVT_chessRestart);
+        EventManager.Inst.removeEvent(EventManager.EVT_chessUpLine);
+        EventManager.Inst.removeEvent(EventManager.EVT_chessTip);
         EventManager.Inst.removeEvent(Router.rut_createRoom);
         EventManager.Inst.removeEvent(Router.rut_playChess);
         EventManager.Inst.removeEvent(Router.rut_roomList);
@@ -25,10 +38,5 @@ export class Transfer extends Component {
         EventManager.Inst.removeEvent(Router.rut_downLine);
         EventManager.Inst.removeEvent(Router.rut_playerInfo);
         EventManager.Inst.removeEvent(Router.rut_joinRoom);
-    }
-    public gotoScene(event: any, scenename: string) {
-        director.preloadScene(scenename, () => {
-            director.loadScene(scenename);
-        });
     }
 }

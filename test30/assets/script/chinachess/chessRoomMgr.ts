@@ -1,3 +1,4 @@
+import { _decorator, Node, Label } from 'cc';
 import EventManager from "../shooting/eventManager";
 import Room from "./chessRoom";
 import { createRoomRes, ModelAny, playerInfoRes, upLineReq } from "./net/globalUtils";
@@ -108,5 +109,7 @@ export default class RoomtManager {
     handleServeplayerDownLine(data: ModelAny) {
         let dt: upLineReq = data.msg;
         this.removeToPlayerList(dt.id);
+        console.log("玩家下线 " + dt.id)
     }
+
 }

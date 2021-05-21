@@ -22,5 +22,5 @@ export default class ChessUtil {
         return this._instance;
     }
 
-    public static chessMoveTime: number = 10;
+    public static chessMoveTime: number = 20;
 }

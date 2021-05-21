@@ -38,6 +38,10 @@ export class ChinaChessMain extends Component {
     }
 
     touchStart(event: any) {
+        if (!ChessPlayer.Inst.isCanPlay) {
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessTip, "等待对方落子");
+            return;
+        }
         if (this.chessGd.isMoving) return;
         let pos: Vec2 = event.getLocation();
         /* 从摄像机创建一条射线 */
@@ -97,6 +101,7 @@ export class ChinaChessMain extends Component {
         let cp: ChessPiece = this.chessGd.getChessPieceByRole(rmData.role, rmData.type, rmData.ox, rmData.oz);
         let pos: Vec3 = this.chessGd.gridArr[rmData.x][rmData.z];
         if (cp) {
+            ChessPlayer.Inst.isCanPlay = true;
             this.chessGd.curSelectChess = cp;
             this.chessGd.moveToTargetPos(pos, () => { }, [pos]);
         }

@@ -291,7 +291,7 @@ export class ChessGrid extends Component {
         let pos2 = eated.node.getWorldPosition();
         let out = new Vec3()
         let distance = Vec3.subtract(out, pos2, pos).length();
-        this.removeEatedFromList(pos);
+        this.removeEatedFromList(pos, eated);
         /*  将被吃掉的棋子移除 */
         this.layoutRemoveNode(eated);
         PoolManager.setNode(eated.node);
@@ -336,10 +336,10 @@ export class ChessGrid extends Component {
      * @param pos 
      * @returns 
      */
-    removeEatedFromList(pos: Vec3) {
+    removeEatedFromList(pos: Vec3, cs: ChessPiece) {
         for (let i = 0; i < this.chessArr.length; i++) {
             let cpos: Vec3 = this.chessArr[i].node.getWorldPosition();
-            if (pos.x == cpos.x && pos.z == cpos.z) {
+            if (pos.x == cpos.x && pos.z == cpos.z && cs.type == this.chessArr[i].type && cs.role == this.chessArr[i].role) {
                 this.chessArr.splice(i, 1);
                 break;
             }
@@ -1067,6 +1067,7 @@ export class ChessGrid extends Component {
             x: x, z: z, ox: xz.x, oz: xz.z
         }
         Net.sendMsg(data, Router.rut_playChess);
+        ChessPlayer.Inst.isCanPlay = false;
     }
 
     /**

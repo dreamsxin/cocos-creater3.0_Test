@@ -5,7 +5,10 @@ export default class EventManager {
     public static EVT_openDoor: string = "openthedoor";
     public static EVT_closeDoor: string = "closethedoor";
     public static EVT_chessGameOver: string = "chessgameover";
+    public static EVT_chessTip: string = "chessTip";
     public static EVT_chessDownLine: string = "chessdownline";
+    public static EVT_chessRestart: string = "EVT_chessrestart";
+    public static EVT_chessUpLine: string = "EVT_chessupline";
     private static _instance: EventManager = null as unknown as EventManager;
     public static get Inst(): EventManager {
         if (!EventManager._instance) {

@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Camera, SystemEventType, systemEvent, Vec2, geometry, PhysicsSystem, Vec3, tween, SkeletalAnimationComponent, Prefab } from 'cc';
+import { _decorator, Component, Node, Camera, SystemEventType, systemEvent, Vec2, geometry, PhysicsSystem, Vec3, tween, SkeletalAnimationComponent, Prefab, sp } from 'cc';
 import { PoolManager } from '../infinitymap/poolManager';
 import EventManager from '../shooting/eventManager';
 import { ChessType } from './chessEnum';
@@ -7,7 +7,7 @@ import { ChessPlayer } from './chessPlayer';
 import { ChessRole } from './chessRole';
 import Room from './chessRoom';
 import RoomtManager from './chessRoomMgr';
-import { createRoomReq, createRoomRes, ModelAny, moveReq, restartReq, upLineReq } from './net/globalUtils';
+import { createRoomReq, createRoomRes, joinRoomRes, ModelAny, moveReq, restartReq, upLineReq } from './net/globalUtils';
 import { Net } from './net/net';
 import { Router } from './net/routers';
 const { ccclass, property } = _decorator;
@@ -41,18 +41,20 @@ export class ChessRoomNode extends Component {
     private isJoinRoom: boolean = false;
 
     private crArr: ChessRole[] = [];
+    private isTouchMove: boolean = false;
 
     onLoad() {
+        EventManager.Inst.registerEevent(EventManager.EVT_chessRestart, this.handleServerRestart.bind(this), this);
+        EventManager.Inst.registerEevent(EventManager.EVT_chessUpLine, this.handleServeUpLine.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_createRoom, this.handleServerCreateRoom.bind(this), this);
-        EventManager.Inst.registerEevent(Router.rut_restart, this.handleServerRestart.bind(this), this);
         EventManager.Inst.registerEevent(Router.rut_leaveRoom, this.handleServerLeaveRoom.bind(this), this);
-        EventManager.Inst.registerEevent(Router.rut_upLine, this.handleServeUpLine.bind(this), this);
         EventManager.Inst.registerEevent(EventManager.EVT_chessDownLine, this.removePlayer.bind(this), this);
     }
 
     start() {
         this.leaveBtn.active = false;
-        systemEvent.on(SystemEventType.TOUCH_START, this.touchStart, this);
+        systemEvent.on(SystemEventType.TOUCH_MOVE, this.touchMove, this);
+        systemEvent.on(SystemEventType.TOUCH_END, this.touchEnd, this);
     }
     onEnable() {
         this.resetCameraPos();
@@ -64,7 +66,29 @@ export class ChessRoomNode extends Component {
         this.leaveBtn.active = false;
     }
 
-    touchStart(event: any) {
+    touchMove(event: any) {
+        return;
+        if (!this.node.active) return;
+        this.isTouchMove = true;
+        let pos: Vec2 = event._prevPoint;
+        let pos1: Vec2 = event._startPoint;
+        let out: Vec2 = new Vec2();
+        Vec2.subtract(out, pos1, pos);
+        let speed: number = 0.2;
+        let speedz: number = out.y > 0 ? speed : -speed;
+        let speedx: number = out.x > 0 ? speed : -speed;
+        let v3: Vec3 = this.mainCamera.node.getWorldPosition();
+        v3.z += speedx;
+        v3.x += speedz;
+        this.mainCamera.node.setWorldPosition(v3);
+    }
+
+    touchEnd(event: any) {
+        if (this.isTouchMove) {
+            this.resetCameraPos();
+            this.isTouchMove = false;
+            return;
+        }
         let pos: Vec2 = event.getLocation();
         /* 从摄像机创建一条射线 */
         let ray: geometry.Ray = this.mainCamera.screenPointToRay(pos.x, pos.y);
@@ -174,7 +198,7 @@ export class ChessRoomNode extends Component {
      */
     handleServeUpLine(data: ModelAny) {
         let dt: upLineReq = data.msg;
-        RoomtManager.Instance.playerList.push(dt.id);
+        console.log(dt.id + " - " + ChessPlayer.Inst.playerId);
         if (ChessPlayer.Inst.playerId != dt.id && ChessPlayer.Inst.playerId > 0) {
             this.generatePlayer(dt.id);
         }
@@ -281,10 +305,12 @@ export class ChessRoomNode extends Component {
         room.init(rmData.roomId, rmData.count);
         if (room.count == 1) {
             ChessPlayer.Inst.type = ChessType.red;
+            ChessPlayer.Inst.isCanPlay = true;
             ChessPlayer.Inst.roomId = rmData.roomId;
         }
         else if (room.count == 2) {
             if (ChessPlayer.Inst.roomId < 0) {
+                ChessPlayer.Inst.isCanPlay = false;
                 ChessPlayer.Inst.roomId = rmData.roomId;
                 ChessPlayer.Inst.type = ChessType.black;
             }
@@ -301,23 +327,23 @@ export class ChessRoomNode extends Component {
      */
     handleServerRestart(data: ModelAny) {
         let dt: restartReq = data.msg;
-        if (dt.type == ChessPlayer.Inst.type) {
-            this.role.active = true;
-            this.isJoinRoom = false;
-            this.leaveBtn.active = false;
-        }
-        else {
-            console.log("对家离开")
-        }
+        ChessPlayer.Inst.init();
+        this.role.active = true;
+        this.isJoinRoom = false;
+        this.leaveBtn.active = false;
     }
     /**
      * 离开房间,重新选房间
      * @param data 
      */
     handleServerLeaveRoom(data: ModelAny) {
-        this.role.active = true;
-        this.isJoinRoom = false;
-        this.leaveBtn.active = false;
+        let dt: joinRoomRes = data.msg;
+        if (dt.id == ChessPlayer.Inst.playerId) {
+            ChessPlayer.Inst.init();
+            this.role.active = true;
+            this.isJoinRoom = false;
+            this.leaveBtn.active = false;
+        }
     }
 }
 
