@@ -5,7 +5,7 @@ export enum IpType {
 
 export function getIp(type: number): string {
     if (type == IpType.local) {
-        return "ws://127.0.0.1:9000/ws";
+        return "ws://192.168.0.131:9000/ws";
         // return "ws://192.168.0.197:8089/ws";
     }
     else if (type == IpType.remote) {

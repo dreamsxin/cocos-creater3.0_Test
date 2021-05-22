@@ -15,7 +15,7 @@ class ServerConfig {
 }
 exports.default = ServerConfig;
 ServerConfig.port = 9000;
-ServerConfig.ip = "0.0.0.0";
+ServerConfig.ip = "192.168.0.131";
 ServerConfig.remoteIp = "172.16.0.14"; //"139.199.80.239";
 ServerConfig.dbName = "chat";
 ServerConfig.dbPort = 27017;
