@@ -272,8 +272,6 @@ export class ChessGrid extends Component {
      * @param pos 
      */
     async sendEatChessInof(eated: ChessPiece, pos: Vec3) {
-        console.log("chessarr.length=> " + this.chessArr.length);
-        // let xz = this.getOffsetXZ(pos);
         let data: eatChessReq = {
             roomId: ChessPlayer.Inst.roomId,
             type: ChessPlayer.Inst.type == ChessType.red ? ChessType.black : ChessType.red,
@@ -583,6 +581,7 @@ export class ChessGrid extends Component {
      * @param role 
      */
     handleBossPath(role: number) {
+        //todo:还有老王相对的情况,可以走过去吃对方的老王,暂时先留一下,后面补上
         let cp: ChessPiece = this.curSelectChess;
         let grid = this.gridArr[cp.x][cp.z];
         let v3: Vec3 = new Vec3(0, cp.y, 0);
@@ -1034,8 +1033,9 @@ export class ChessGrid extends Component {
                         // /*  将被吃掉的棋子移除 */
                         // this.removeEatedFromList(pos);
                     }
+                    let type: number = this.curSelectChess.type;
                     this.curSelectChess.updateInfo(p, xz.x, xz.z, () => {
-                        this.chessMovedCallBack();
+                        this.chessMovedCallBack(type);
                         if (cb) {
                             cb();
                         }
@@ -1073,7 +1073,8 @@ export class ChessGrid extends Component {
     /**
      * 走棋回调函数
      */
-    chessMovedCallBack() {
+    chessMovedCallBack(type: number) {
+        this.checkJiangju(type);
     }
 
     /**
@@ -1113,6 +1114,425 @@ export class ChessGrid extends Component {
             }
         }
         return null as unknown as ChessPiece;
+    }
+
+    /**
+     * 通过角色和阵营获取棋子
+     * @param role 
+     * @param type 
+     */
+    getChessPieceByRoleType(role: number, type: number): ChessPiece[] {
+        let arr: ChessPiece[] = [];
+        for (let i = 0; i < this.chessArr.length; i++) {
+            let item = this.chessArr[i];
+            if (item.role == role && item.type == type) {
+                arr.push(this.chessArr[i]);
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * 获取boss
+     * @param type 
+     */
+    getBossByType(type: number): ChessPiece {
+        let tp: number = type == ChessType.red ? ChessType.black : ChessType.red;
+        let bossArr: ChessPiece[] = this.getChessPieceByRoleType(ChessRole.boss, tp);
+        return bossArr[0];
+    }
+
+    /**
+     * 检查v3是否和boss的x,z相等
+     * @param boss 
+     * @param v3 
+     */
+    checkNextStepBoss(boss: ChessPiece, v3: Vec3): boolean {
+        let xz = this.getOffsetXZ(v3);
+        if (boss && boss.x == xz.x && boss.z == xz.z) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 检测将军
+     */
+    checkJiangju(type: number): boolean {
+        let bool: boolean = false;
+        if (type == ChessPlayer.Inst.type) {
+            type = ChessPlayer.Inst.type;
+        }
+        let str: string = type == ChessType.red ? "红方" : "黑方"
+        /* 兵 */
+        bool = this.checkBingJiangju(type);
+        if (bool) {
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessTip, str + "-兵-将军");
+            return bool;
+        }
+
+        /* 车 */
+        bool = this.checkJuJiangju(type);
+        if (bool) {
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessTip, str + "-车-将军");
+            return bool;
+        }
+
+        /* 炮 */
+        bool = this.checkPaoJiangju(type);
+        if (bool) {
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessTip, str + "-炮-将军");
+            return bool;
+        }
+
+        /* 马 */
+        bool = this.checkMaJiangju(type);
+        if (bool) {
+            EventManager.Inst.dispatchEvent(EventManager.EVT_chessTip, str + "-马-将军");
+            return bool;
+        }
+
+        return bool;
+    }
+
+    /**
+     * 检查马将军
+     * @param type 
+     */
+    checkMaJiangju(type: number): boolean {
+        let maArr: ChessPiece[] = this.getChessPieceByRoleType(ChessRole.ma, type);
+        let boss: ChessPiece = this.getBossByType(type);//对方boss
+        let bool: boolean = false;
+        if (!boss) return bool;
+        for (let i = 0; i < maArr.length; i++) {
+            let cp: ChessPiece = maArr[i];
+            let grid = this.gridArr[cp.x][cp.z];
+            let v3: Vec3 = new Vec3(0, cp.y, 0);
+            /* 马心 */
+            let center: Vec3 = new Vec3(0, cp.y, 0);
+            /* 左上 */
+            if (cp.x > 0 && cp.z <= this.ver - 3) {
+                v3.x = grid.x - this.offsetX;
+                v3.z = grid.z - this.offsetZ * 2;
+                center.x = grid.x;
+                center.z = grid.z - this.offsetZ;
+                /* 判断马心是否有棋子 */
+                if (!this.checkExisted(center)) {
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+            }
+            if (cp.x > 1 && cp.z <= this.ver - 2) {
+                v3.x = grid.x - this.offsetX * 2;
+                v3.z = grid.z - this.offsetZ;
+                center.x = grid.x - this.offsetX;
+                center.z = grid.z;
+                if (!this.checkExisted(center)) {
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+            }
+            /* 左下 */
+            if (cp.x > 0 && cp.z >= 2) {
+                v3.x = grid.x - this.offsetX;
+                v3.z = grid.z + this.offsetZ * 2;
+                center.x = grid.x;
+                center.z = grid.z + this.offsetZ;
+                if (!this.checkExisted(center)) {
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+            }
+            if (cp.x > 1 && cp.z >= 1) {
+                v3.x = grid.x - this.offsetX * 2;
+                v3.z = grid.z + this.offsetZ;
+                center.x = grid.x - this.offsetX;
+                center.z = grid.z;
+                if (!this.checkExisted(center)) {
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+            }
+            /* 右上 */
+            if (cp.x < this.hor - 1 && cp.z <= this.ver - 3) {
+                v3.x = grid.x + this.offsetX;
+                v3.z = grid.z - this.offsetZ * 2;
+                center.x = grid.x;
+                center.z = grid.z - this.offsetZ;
+                if (!this.checkExisted(center)) {
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+            }
+            if (cp.x < this.hor - 2 && cp.z <= this.ver - 2) {
+                v3.x = grid.x + this.offsetX * 2;
+                v3.z = grid.z - this.offsetZ;
+                center.x = grid.x + this.offsetX;
+                center.z = grid.z;
+                if (!this.checkExisted(center)) {
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+            }
+            /* 右下 */
+            if (cp.x < this.hor - 1 && cp.z >= 2) {
+                v3.x = grid.x + this.offsetX;
+                v3.z = grid.z + this.offsetZ * 2;
+                center.x = grid.x;
+                center.z = grid.z + this.offsetZ;
+                if (!this.checkExisted(center)) {
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+            }
+            if (cp.x < this.hor - 2 && cp.z >= 1) {
+                v3.x = grid.x + this.offsetX * 2;
+                v3.z = grid.z + this.offsetZ;
+                center.x = grid.x + this.offsetX;
+                center.z = grid.z;
+                if (!this.checkExisted(center)) {
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+            }
+        }
+
+        return bool;
+    }
+
+    /**
+     * 检查炮将军
+     * @param type 
+     */
+    checkPaoJiangju(type: number): boolean {
+        let paoArr: ChessPiece[] = this.getChessPieceByRoleType(ChessRole.pao, type);
+        let boss: ChessPiece = this.getBossByType(type);//对方boss
+        let bool: boolean = false;
+        if (!boss) return bool;
+        for (let i = 0; i < paoArr.length; i++) {
+            let cp: ChessPiece = paoArr[i];
+            let grid = this.gridArr[cp.x][cp.z];
+            let v3: Vec3 = new Vec3();
+            /* 记录直线上的棋子数量,炮打翻三 */
+            let count: number = 0;
+            /* 前 */
+            for (let i = cp.z + 1; i < this.ver; i++) {
+                v3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ * (i - cp.z));
+                let chess = this.checkExisted(v3);
+                if (chess) {
+                    if (!this.paoBridgeChess) {
+                        this.paoBridgeChess = chess;
+                    }
+                    count++;
+                    if (count == 2) {//翻山有子,可打
+                        if (chess.type != cp.type) {
+                            bool = this.checkNextStepBoss(boss, v3);
+                            if (bool) return bool;
+                        }
+                        break;
+                    }
+                    continue;
+                }
+            }
+            /* 后 */
+            count = 0;
+            for (let i = cp.z - 1; i >= 0; i--) {
+                v3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ * (i - cp.z));
+                let chess = this.checkExisted(v3);
+                if (chess) {
+                    if (!this.paoBridgeChess) {
+                        this.paoBridgeChess = chess;
+                    }
+                    count++;
+                    if (count == 2) {//翻山有子,可打
+                        if (chess.type != cp.type) {
+                            bool = this.checkNextStepBoss(boss, v3);
+                            if (bool) return bool;
+                        }
+                        break;
+                    }
+                    continue;
+                }
+            }
+            /* 左 */
+            count = 0;
+            for (let i = cp.x - 1; i >= 0; i--) {
+                v3 = new Vec3(grid.x - this.offsetX * (cp.x - i), cp.y, grid.z);
+                let chess = this.checkExisted(v3);
+                if (chess) {
+                    if (!this.paoBridgeChess) {
+                        this.paoBridgeChess = chess;
+                    }
+                    count++;
+                    if (count == 2) {//翻山有子,可打
+                        if (chess.type != cp.type) {
+                            bool = this.checkNextStepBoss(boss, v3);
+                            if (bool) return bool;
+                        }
+                        break;
+                    }
+                    continue;
+                }
+            }
+            /* 右 */
+            count = 0;
+            for (let i = cp.x + 1; i < this.hor; i++) {
+                v3 = new Vec3(grid.x + this.offsetX * (i - cp.x), cp.y, grid.z);
+                let chess = this.checkExisted(v3);
+                if (chess) {
+                    if (!this.paoBridgeChess) {
+                        this.paoBridgeChess = chess;
+                    }
+                    count++;
+                    if (count == 2) {//翻山有子,可打
+                        if (chess.type != cp.type) {
+                            bool = this.checkNextStepBoss(boss, v3);
+                            if (bool) return bool;
+                        }
+                        break;
+                    }
+                    continue;
+                }
+            }
+        }
+
+        return bool;
+    }
+
+    /**
+     * 检查车将军
+     * @param type 
+     */
+    checkJuJiangju(type: number): boolean {
+        let juArr: ChessPiece[] = this.getChessPieceByRoleType(ChessRole.ju, type);
+        let boss: ChessPiece = this.getBossByType(type);//对方boss
+        let bool: boolean = false;
+        if (!boss) return bool;
+        for (let i = 0; i < juArr.length; i++) {
+            let cp: ChessPiece = juArr[i];
+            let grid = this.gridArr[cp.x][cp.z];
+            let v3: Vec3 = new Vec3();
+            /* 前 */
+            for (let i = cp.z + 1; i < this.ver; i++) {
+                v3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ * (i - cp.z));
+                let chess = this.checkExisted(v3);
+                if (chess) {
+                    if (chess.type != cp.type) {
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) return bool;
+                    }
+                    break;
+                }
+            }
+            /* 后 */
+            for (let i = cp.z - 1; i >= 0; i--) {
+                v3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ * (i - cp.z));
+                let chess = this.checkExisted(v3);
+                if (chess) {
+                    if (chess.type != cp.type) {
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) return bool;
+                    }
+                    break;
+                }
+            }
+            /* 左 */
+            for (let i = cp.x - 1; i >= 0; i--) {
+                v3 = new Vec3(grid.x - this.offsetX * (cp.x - i), cp.y, grid.z);
+                let chess = this.checkExisted(v3);
+                if (chess) {
+                    if (chess.type != cp.type) {
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) return bool;
+                    }
+                    break;
+                }
+            }
+            /* 右 */
+            for (let i = cp.x + 1; i < this.hor; i++) {
+                v3 = new Vec3(grid.x + this.offsetX * (i - cp.x), cp.y, grid.z);
+                let chess = this.checkExisted(v3);
+                if (chess) {
+                    if (chess.type != cp.type) {
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) return bool;
+                    }
+                    break;
+                }
+            }
+        }
+
+        return bool;
+    }
+
+    /**
+     * 检查兵将军
+     * @param type 
+     */
+    checkBingJiangju(type: number): boolean {
+        let bingArr: ChessPiece[] = this.getChessPieceByRoleType(ChessRole.bing, type);
+        let boss: ChessPiece = this.getBossByType(type);//对方boss
+        let bool: boolean = false;
+        if (!boss) return bool;
+        for (let i = 0; i < bingArr.length; i++) {
+            let cp: ChessPiece = bingArr[i];
+            let grid = this.gridArr[cp.x][cp.z];
+            /* 红方 */
+            if (type == ChessType.red) {
+                if (cp.z <= 4) {//河内
+                    /* 前 */
+                    let v3: Vec3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ);
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+                else {//河外
+                    /* 前 */
+                    let v3: Vec3 = new Vec3(grid.x, cp.y, grid.z - this.offsetZ);
+                    if (cp.z < this.ver - 1) {
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) break;
+                    }
+                    if (cp.x > 0 && cp.x < this.hor - 1) {
+                        /* 左 */
+                        v3 = new Vec3(grid.x - this.offsetX, cp.y, grid.z);
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) break;
+                        /* 右 */
+                        v3 = new Vec3(grid.x + this.offsetX, cp.y, grid.z);
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) break;
+                    }
+                }
+            }
+            else if (type == ChessType.black) {
+                if (cp.z >= 5) {//河内
+                    /* 前 */
+                    let v3: Vec3 = new Vec3(grid.x, cp.y, grid.z + this.offsetZ);
+                    bool = this.checkNextStepBoss(boss, v3);
+                    if (bool) break;
+                }
+                else {//河外
+                    /* 前 */
+                    let v3: Vec3 = new Vec3(grid.x, cp.y, grid.z + this.offsetZ);
+                    if (cp.z > 0) {
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) break;
+                    }
+                    if (cp.x > 0 && cp.x < this.hor - 1) {
+                        /* 左 */
+                        v3 = new Vec3(grid.x - this.offsetX, cp.y, grid.z);
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) break;
+                        /* 右 */
+                        v3 = new Vec3(grid.x + this.offsetX, cp.y, grid.z);
+                        bool = this.checkNextStepBoss(boss, v3);
+                        if (bool) break;
+                    }
+                }
+            }
+        }
+
+        return bool;
     }
 
 }
