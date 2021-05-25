@@ -1,0 +1,38 @@
+{
+  "name": "testts",
+  "version": "1.0.0",
+  "description": "{\\rtf1\\ansi\\ansicpg936\\cocoartf2509 \\cocoatextscaling0\\cocoaplatform0{\\fonttbl\\f0\\froman\\fcharset0 Times-Roman;\\f1\\fswiss\\fcharset0 Helvetica;\\f2\\fnil\\fcharset134 PingFangSC-Regular; } {\\colortbl;\\red255\\green255\\blue255;\\red0\\green0\\blue233;} {\\*\\expandedcolortbl;;\\cssrgb\\c0\\c0\\c93333;} \\paperw11900\\paperh16840\\margl1440\\margr1440\\vieww10800\\viewh8400\\viewkind0 \\deftab720 \\pard\\pardeftab720\\sl280\\partightenfactor0 {\\field{\\*\\fldinst{HYPERLINK \"https://segmentfault.com/a/1190000007574276\"}}{\\fldrslt  \\f0\\fs24 \\cf2 \\expnd0\\expndtw0\\kerning0 \\ul \\ulc2 \\outl0\\strokewidth0 \\strokec2 https://segmentfault.com/a/1190000007574276}} \\f1\\fs24 \\ \\pard\\tx566\\tx1133\\tx1700\\tx2267\\tx2834\\tx3401\\tx3968\\tx4535\\tx5102\\tx5669\\tx6236\\tx6803\\pardirnatural\\partightenfactor0 \\cf0 tsconfig.json  \\f2 \\'c9\\'e8\\'d6\\'c3 \\f1 ts \\f2 \\'b5\\'c4\\'b1\\'e0\\'d2\\'eb\\'d1\\'a1\\'cf\\'ee \\f1 \\ }",
+  "main": "server.js",
+  "scripts": {
+    "dev": "supervisor -w build ./build/server.js",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^12.12.7"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cluster": "^0.7.7",
+    "cookie-parser": "^1.4.4",
+    "es6-promise": "^4.2.8",
+    "express": "^4.17.1",
+    "gulp": "^4.0.2",
+    "gulp-typescript": "^5.0.1",
+    "http": "0.0.1-security",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "log4js": "^6.1.0",
+    "mongodb": "^3.5.5",
+    "mongoose": "^5.11.13",
+    "mongose": "0.0.2-security",
+    "multer": "^1.4.2",
+    "os": "^0.1.1",
+    "qrcode-terminal": "^0.12.0",
+    "silly-datetime": "^0.1.2",
+    "typescript": "^3.7.2",
+    "websocket": "^1.0.31",
+    "ws": "^7.2.1"
+  }
+}

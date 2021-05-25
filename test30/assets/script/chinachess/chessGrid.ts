@@ -358,6 +358,7 @@ export class ChessGrid extends Component {
         this.hideAllSelected();
         cp.setSelected(true);
         this.curSelectChess = cp;
+        console.log(cp.role);
         switch (cp.role) {
             case ChessRole.bing:
                 this.handleBingPath(cp.type);
