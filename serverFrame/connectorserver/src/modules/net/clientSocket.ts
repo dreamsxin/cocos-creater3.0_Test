@@ -1,5 +1,5 @@
 import ClientManager from "../common/clientManager";
-import { createRoomReq, createRoomRes, eatChessReq, Head, ModelAny, moveReq, playChessReq, playerInfoRes, restartReq, upLineReq } from "../utils/globalUtils";
+import { createRoomReq, createRoomRes, eatChessReq, Head, ModelAny, moveReq, playChessReq, playerInfoRes, restartReq, upLineReq, User } from "../utils/globalUtils";
 import DataViewUtils from "../utils/dataviewUtils";
 import Logger from "../utils/logger";
 import { Router } from "../controller/routers";
@@ -16,7 +16,6 @@ export default class ClientSocket {
     public serverType: number = 0;
     private dataType: any;
     public roomId: number = -1;
-    private isLogined: boolean = false;
 
     constructor(socket: any) {
         this.socket = socket;
@@ -97,12 +96,15 @@ export default class ClientSocket {
 
     private _clientClose(client: any): void {
         Logger.info("client_close " + client + "  id= " + this.id + " roomId= " + this.roomId);
-        this.isLogined = false;
-        /* 用户上线 */
+        /* 用户下线 */
         let data: upLineReq = { id: this.id };
         let router: string = Router.rut_downLine;
         this.sendMsgToServer(ServerType.userServer, router, data, data.id);
         EventManager.Instance.dispatchEvent(EventManager.EvtRemoveClientSocket, this);
+        /* 刷新房间列表信息 */
+        let user: User = { id: this.id, roomId: this.roomId };
+        this.sendMsgToServer(ServerType.gameServer, router, user, user.id);
+
     }
 
     private async _handleClientData(head: Head, data: any): Promise<any> {
@@ -113,6 +115,28 @@ export default class ClientSocket {
             case Router.rut_createRoom:
                 let dt: createRoomReq = data;
                 this.sendMsgToServer(ServerType.gameServer, head.router, dt, this.id);
+                break;
+
+            case Router.rut_leaveRoom:
+                let user: User = { id: this.id, roomId: this.roomId };
+                this.sendMsgToServer(ServerType.gameServer, head.router, user, user.id)
+                break;
+
+            case Router.rut_move:
+                ClientManager.Instance.pushMoveInfoToAllClient(data);
+                break;
+
+            case Router.rut_playChess:
+                let pcData: playChessReq = data;
+                this.sendMsgToServer(ServerType.gameServer, head.router, pcData, this.id);
+                break;
+
+            case Router.rut_eatChess:
+                this.sendMsgToServer(ServerType.gameServer, head.router, data, this.id);
+                break;
+
+            case Router.rut_restart:
+                this.sendMsgToServer(ServerType.gameServer, head.router, data, this.id);
                 break;
 
             default: break;
@@ -171,6 +195,26 @@ export default class ClientSocket {
         let reData: ModelAny = { code: ErrEnum.OK };
         reData.msg = { id: id };
         this.sendMsg(Router.rut_joinRoom, reData, id);
+    }
+
+    /**
+     * 离开房间
+     * @id:玩家id
+     */
+    pushLeaveRoomToClient(id: number) {
+        let reData: ModelAny = { code: ErrEnum.OK };
+        reData.msg = { id: id };
+        this.sendMsg(Router.rut_leaveRoom, reData, ServerType.gameServer);
+    }
+
+    /**
+     * 推送移动数据
+     * @param data 
+     */
+    pushMoveInfoToClient(data: moveReq) {
+        let reData: ModelAny = { code: ErrEnum.OK };
+        reData.msg = data;
+        this.sendMsg(Router.rut_move, reData, ServerType.connectorServer);
     }
 
 }

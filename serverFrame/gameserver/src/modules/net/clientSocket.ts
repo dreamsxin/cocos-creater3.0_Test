@@ -1,5 +1,5 @@
 import ClientManager from "../common/clientManager";
-import { createRoomReq, createRoomRes, eatChessReq, Head, ModelAny, moveReq, playChessReq, playerInfoRes, restartReq, upLineReq } from "../utils/globalUtils";
+import { createRoomReq, createRoomRes, eatChessReq, Head, ModelAny, moveReq, playChessReq, playerInfoRes, restartReq, upLineReq, User } from "../utils/globalUtils";
 import DataViewUtils from "../utils/dataviewUtils";
 import Logger from "../utils/logger";
 import { Router } from "../controller/routers";
@@ -26,8 +26,6 @@ export default class ClientSocket {
     private _init(): void {
         this.socket.on('message', this._resaveMassage.bind(this));
         this.socket.on('close', this._clientClose.bind(this));
-        // this.initRoomListToClient();
-        // this.pushPlayerListToClient();
     }
 
     /**
@@ -68,7 +66,7 @@ export default class ClientSocket {
     }
 
     private _clientClose(client: any): void {
-        Logger.info("client_close " + client + "  id= " + this.id + " roomId= " + this.roomId);
+        Logger.info("网关断开");
         this.isLogined = false;
         EventManager.Instance.dispatchEvent(EventManager.EvtRemoveClientSocket, this);
     }
@@ -86,25 +84,29 @@ export default class ClientSocket {
                 this.handleCreateJoinRoom(head, data);
                 break;
 
-            // case Router.rut_playChess:
-            //     this.handlePlayChess(data);
-            //     break;
+            case Router.rut_downLine:
+                this.handleDownLine(head, data);
+                break;
 
-            // case Router.rut_eatChess:
-            //     this.handleEatChess(data);
-            //     break;
+            case Router.rut_leaveRoom:
+                let reDate: ModelAny = { code: ErrEnum.OK };
+                let user: User = data;
+                reDate.msg = user;
+                this.sendMsg(router, reDate, user.id);
+                this.handleDownLine(head, data);
+                break;
 
-            // case Router.rut_restart:
-            //     this.handleRestart(data);
-            //     break;
+            case Router.rut_playChess:
+                this.handlePlayChess(head, data);
+                break;
 
-            // case Router.rut_leaveRoom:
-            //     this.handleLeaveRoom(data);
-            //     break;
+            case Router.rut_eatChess:
+                this.handleEatChess(head, data);
+                break;
 
-            // case Router.rut_move:
-            //     this.handleMove(data);
-            //     break;
+            case Router.rut_restart:
+                this.handleRestart(head, data);
+                break;
 
             default: break;
         }
@@ -132,45 +134,68 @@ export default class ClientSocket {
             return;
         }
         rm.updateInfo(head.id);
-        let roomData: createRoomRes = { roomId: rm.id, count: rm.count };
+        let roomData: createRoomRes = { roomId: rm.id, count: rm.count, userList: rm.userList };
         reData.msg = roomData;
         this.sendMsg(head.router, reData, head.id);
         this.pushRoomListToClient(head);
     }
+    /**
+     * 玩家离线,更新房间数据/推送房间数据
+     * @param data 
+     */
+    private async handleDownLine(head: Head, data: User) {
+        let isExist = ClientManager.Instance.checkExistInRoom(head.id);
+        if (!isExist) {
+            return;
+        }
 
-    // /**
-    //  * 走棋/落子
-    //  * @param data 
-    //  */
-    // private async handlePlayChess(data: playChessReq) {
-    //     let room: Room = ClientManager.Instance.getRoomById(data.roomId);
-    //     room.playChess(this, data);
-    // }
+        let rm: Room = ClientManager.Instance.getRoomById(data.roomId);
+        rm.removeUser(data.id);
+        this.pushRoomListToClient(head);
+    }
 
-    // /**
-    //  * 吃棋
-    //  */
-    // private async handleEatChess(data: eatChessReq) {
-    //     let room: Room = ClientManager.Instance.getRoomById(data.roomId);
-    //     room.eatChess(this, data);
-    // }
+    /**
+     * 走棋/落子
+     * @param data 
+     */
+    private async handlePlayChess(head: Head, data: playChessReq) {
+        let room: Room = ClientManager.Instance.getRoomById(data.roomId);
+        let otherUserId = room.getOtherUserId(head.id);
+        let reData: ModelAny = { code: ErrEnum.OK };
+        reData.msg = data;
+        this.sendMsg(head.router, reData, otherUserId);
+    }
+
+    /**
+     * 吃棋
+     */
+    private async handleEatChess(head: Head, data: eatChessReq) {
+        let room: Room = ClientManager.Instance.getRoomById(data.roomId);
+        data.userlist = room.userList;
+        let reData: ModelAny = { code: ErrEnum.OK };
+        reData.msg = data;
+        this.sendMsg(head.router, reData, head.id);
+    }
 
     /**
      * 重新开始,清理房间和房间Id
      */
-    private async handleRestart(data: restartReq) {
-        ClientManager.Instance.pushLeaveRoomToAllClient(this.id);
-        ClientManager.Instance.removeFromRoom(this, data);
-        // ClientManager.Instance.pushUpdateRoomToAllClient();
-    }
+    private async handleRestart(head: Head, data: restartReq) {
+        let reData: ModelAny = { code: ErrEnum.OK }
+        let room = ClientManager.Instance.checkExistInRoom(head.id);
+        data.userList = room.userList;
+        reData.msg = data;
+        this.sendMsg(head.router, reData, head.id);
 
-    /**
-     * 离开房间
-     */
-    private async handleLeaveRoom(data: restartReq) {
-        ClientManager.Instance.pushLeaveRoomToAllClient(this.id);
-        ClientManager.Instance.removeFromRoom(this);
-        // ClientManager.Instance.pushUpdateRoomToAllClient();
+        /* 从房间中移除玩家,刷新房间列表 */
+        room.removeUser(head.id);
+        this.pushRoomListToClient(head);
+
+        /* 推送玩家离开消息 */
+        let reDate: ModelAny = { code: ErrEnum.OK };
+        let user: User = { id: head.id, roomId: room.id }
+        reDate.msg = user;
+        this.sendMsg(Router.rut_leaveRoom, reDate, user.id);
     }
 
     /**
@@ -201,63 +226,5 @@ export default class ClientSocket {
         reData.msg = dt;
         this.sendMsg(Router.rut_roomListPush, reData, head.id);
     }
-
-    // /**
-    //  * 角色移动
-    //  * @param data 
-    //  */
-    // handleMove(data: moveReq) {
-    //     ClientManager.Instance.pushMoveInfoToAllClient(data);
-    // }
-
-    // /**
-    //  * 推送移动数据
-    //  * @param data 
-    //  */
-    // pushMoveInfoToClient(data: moveReq) {
-    //     let reData: ModelAny = { code: ErrEnum.OK };
-    //     reData.msg = data;
-    //     this.sendMsg(Router.rut_move, reData);
-    // }
-
-    // /**
-    //  * 用户上线
-    //  * @id:玩家id
-    //  */
-    // pushUplineToClient(id: number) {
-    //     let reData: ModelAny = { code: ErrEnum.OK };
-    //     reData.msg = { id: id };
-    //     this.sendMsg(Router.rut_upLine, reData);
-    // }
-
-    // /**
-    //  * 用户下线
-    //  * @id:玩家id
-    //  */
-    // pushDownlineToClient(id: number) {
-    //     let reData: ModelAny = { code: ErrEnum.OK };
-    //     reData.msg = { id: id };
-    //     this.sendMsg(Router.rut_downLine, reData);
-    // }
-
-    /**
-     * 进入房间
-     * @id:玩家id
-     */
-    // pushJoinRoomToClient(head: Head) {
-    //     let reData: ModelAny = { code: ErrEnum.OK };
-    //     reData.msg = { id: head.id };
-    //     this.sendMsg(Router.rut_joinRoom, reData, head.id);
-    // }
-
-    /**
-     * 离开房间
-     * @id:玩家id
-     */
-    // pushLeaveRoomToClient(id: number) {
-    //     let reData: ModelAny = { code: ErrEnum.OK };
-    //     reData.msg = { id: id };
-    //     this.sendMsg(Router.rut_leaveRoom, reData);
-    // }
 }
 

@@ -5,6 +5,7 @@ export interface Ip {
 }
 
 export enum ServerType {
+    connectorServer = 100,
     gameServer = 101,
     userServer = 102,
 }
@@ -19,7 +20,7 @@ export default class ServerConfig {
     /* 网关端口 */
     public static port = 8999;
     /* 网关ip */
-    public static ip = "192.168.0.131";
+    public static ip = "192.168.0.192";
     public static remoteIp = "172.16.0.14";//"139.199.80.239";
     public static dbName = "undefine";
     public static dbPort = 27017;
@@ -45,8 +46,8 @@ export default class ServerConfig {
      */
     public static getServerIpList(): Ip[] {
         let list: Ip[] = [
-            { ip: "192.168.0.131", port: 9000, serverType: 101 },//游戏服务器
-            { ip: "192.168.0.131", port: 9001, serverType: 102 },//用户服务器
+            { ip: "192.168.0.192", port: 9000, serverType: 101 },//游戏服务器
+            { ip: "192.168.0.192", port: 9001, serverType: 102 },//用户服务器
         ];
         return list;
     }

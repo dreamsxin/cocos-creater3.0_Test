@@ -1,5 +1,5 @@
 import ClientManager from "../common/clientManager";
-import { Head, ModelAny } from "../utils/globalUtils";
+import { createRoomReq, createRoomRes, eatChessReq, Head, ModelAny, restartReq, User } from "../utils/globalUtils";
 import DataViewUtils from "../utils/dataviewUtils";
 import Logger from "../utils/logger";
 import { Router } from "../controller/routers";
@@ -96,11 +96,54 @@ export default class ServerClientSocket {
             case Router.rut_createRoom://进入房间
                 let dt: ModelAny = data;
                 if (dt.code == ErrEnum.OK) {
-                    let cl: ClientSocket = ClientManager.Instance.getClientSocketById(head.id);
-                    if (cl) {
-                        cl.sendMsg(head.router, dt, ServerType.gameServer);
+                    let crr: createRoomRes = dt.msg;
+                    for (let i = 0; i < crr.userList.length; i++) {
+                        let userId = crr.userList[i];
+                        let cl: ClientSocket = ClientManager.Instance.getClientSocketById(userId);
+                        if (cl) {
+                            cl.roomId = dt.msg.roomId;
+                            cl.sendMsg(head.router, dt, ServerType.gameServer);
+                        }
                     }
                     ClientManager.Instance.pushJoinRoomToAllClient(head.id);
+                }
+                break;
+
+            case Router.rut_leaveRoom://离开房间
+                let user: User = data.msg;
+                let uLeave: ClientSocket = ClientManager.Instance.getClientSocketById(user.id);
+                uLeave.roomId = -1;
+                ClientManager.Instance.pushLeaveRoomToAllClient(user.id);
+                break;
+
+            case Router.rut_playChess://走棋/落子
+                let cl: ClientSocket = ClientManager.Instance.getClientSocketById(head.id);
+                if (cl) {
+                    cl.sendMsg(head.router, data, ServerType.gameServer);
+                }
+                break;
+
+            case Router.rut_eatChess://吃棋
+                let crr: eatChessReq = data.msg;
+                for (let i = 0; i < crr.userlist.length; i++) {
+                    let userId = crr.userlist[i];
+                    let cl: ClientSocket = ClientManager.Instance.getClientSocketById(userId);
+                    if (cl) {
+                        cl.sendMsg(head.router, data, ServerType.gameServer);
+                    }
+                }
+                break;
+            case Router.rut_restart://重新开始,清理房间和房间Id
+                let rsData: restartReq = data.msg;
+                for (let i = 0; i < rsData.userList.length; i++) {
+                    let userId = rsData.userList[i];
+                    let cl: ClientSocket = ClientManager.Instance.getClientSocketById(userId);
+                    if (cl) {
+                        if (cl.id == head.id) {
+                            cl.roomId = -1;
+                        }
+                        cl.sendMsg(head.router, data, ServerType.gameServer);
+                    }
                 }
                 break;
 

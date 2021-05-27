@@ -111,6 +111,7 @@ export class ChessUI extends Component {
         else {
             EventManager.Inst.dispatchEvent(EventManager.EVT_chessTip, "对家离开");
         }
+        ChessPlayer.Inst.isCanPlay = true;
     }
 
 

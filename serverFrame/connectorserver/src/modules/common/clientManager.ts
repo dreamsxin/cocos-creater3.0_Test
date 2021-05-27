@@ -1,7 +1,7 @@
 import EventManager from "./EventManager";
 import ServerClientSocket from "../net/serverClientSocket";
 import ClientSocket from "../net/clientSocket";
-import { ModelAny } from "../utils/globalUtils";
+import { ModelAny, moveReq } from "../utils/globalUtils";
 
 /* 客户端 socket 连接管理 */
 export default class ClientManager {
@@ -126,6 +126,29 @@ export default class ClientManager {
         for (let i = 0; i < list.length; i++) {
             if (list[i].id == id) continue;
             list[i].pushJoinRoomToClient(id);
+        }
+    }
+
+    /**
+     * 推送玩家离开房间给所有客户端
+     * @param id 
+     */
+    pushLeaveRoomToAllClient(id: number) {
+        let list = this._clientSockets;
+        for (let i = 0; i < list.length; i++) {
+            list[i].pushLeaveRoomToClient(id);
+        }
+    }
+
+    /**
+     * 推送移动数据,出了自己以外的所有客户端
+     * @param data 
+     */
+    pushMoveInfoToAllClient(data: moveReq) {
+        let list = this._clientSockets;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].id == data.id) continue;
+            list[i].pushMoveInfoToClient(data);
         }
     }
 

@@ -44,6 +44,7 @@ export interface createRoomRes {
     roomId: number,
     /* 房间人数 */
     count: number,
+    userList?: number[],
 }
 
 /**
@@ -68,6 +69,7 @@ export interface eatChessReq {
     role: number,//角色马/炮/军/兵/士
     ox: number,//原始坐标
     oz: number,
+    userlist?: number[],
 }
 
 /**
@@ -75,6 +77,7 @@ export interface eatChessReq {
  */
 export interface restartReq {
     type: number,//红/黑方
+    userList?: number[],
 }
 
 /**
@@ -106,4 +109,12 @@ export interface playerInfoRes {
  */
 export interface joinRoomRes {
     id: number,
+}
+
+/**
+ * 玩家信息
+ */
+export interface User {
+    id: number
+    roomId: number,
 }
