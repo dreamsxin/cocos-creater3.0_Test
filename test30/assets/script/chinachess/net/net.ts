@@ -10,7 +10,7 @@ export default class ChessNet {
     private serverType: number = 0;
     public isConnected: boolean = false;
     init(cb?: any) {
-        let ip = getIp(IpType.local);
+        let ip = getIp(IpType.remote);
         console.log(ip)
         this.socket = new WebSocket(ip);
         this.socket.binaryType = "arraybuffer";
@@ -19,7 +19,7 @@ export default class ChessNet {
             console.log("--------connect success---------");
             if (cb) { cb(); }
         };
-        this.socket.close = () => { console.log("close"); this.isConnected = false; };
+        this.socket.onclose = () => { console.log("close"); this.isConnected = false; };
         this.socket.onerror = () => { console.log("onerror") };
         this.socket.onmessage = (req) => {
             let message = req.data;
@@ -32,6 +32,13 @@ export default class ChessNet {
             console.log("router:" + head.router + " body:" + JSON.stringify(body));
             this.handleRecvdate(head, body);
         };
+    }
+
+    /**
+     * 主动断开与服务器间的链接
+     */
+    breakConnect() {
+        this.socket.close();
     }
 
     handleRecvdate(head: Head, body: ModelAny) {

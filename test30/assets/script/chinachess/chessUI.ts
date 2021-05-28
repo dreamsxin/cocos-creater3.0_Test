@@ -1,11 +1,13 @@
 
 import { _decorator, Component, Node, tween, Vec3, Label } from 'cc';
+import { PoolManager } from '../infinitymap/poolManager';
 import EventManager from '../shooting/eventManager';
 import { ChessType } from './chessEnum';
 import { ChessPiece } from './chessPiece';
 import { ChessPlayer } from './chessPlayer';
 import Room from './chessRoom';
 import RoomtManager from './chessRoomMgr';
+import { ChessRoomNode } from './chessRoomNode';
 import { ChessTip } from './chessTip';
 import { ChinaChessMain } from './chinaChessMain';
 import { createRoomRes, ModelAny, restartReq, upLineReq } from './net/globalUtils';
@@ -26,6 +28,9 @@ export class ChessUI extends Component {
 
     @property(Node)
     roomNode: Node = null as unknown as Node;
+
+    @property(Node)
+    backToMain: Node = null as unknown as Node;
 
     @property(Node)
     gameNode: Node = null as unknown as Node;
@@ -68,6 +73,13 @@ export class ChessUI extends Component {
             Net.init();
         }
     }
+    onDisable() {
+        console.log("111onDisable1111");
+        Net.breakConnect();
+        RoomtManager.Instance.clearRoomList();
+        ChessPlayer.Inst.playerId = -1;
+
+    }
 
     handleGameStart() {
         if (Net.isConnected) {
@@ -106,6 +118,7 @@ export class ChessUI extends Component {
             this.startTag.active = false;
             this.gameNode.active = false;
             this.roomNode.active = true;
+            this.backToMain.active = true;
             EventManager.Inst.dispatchEvent(EventManager.EVT_chessRestart, data);
         }
         else {
@@ -129,6 +142,7 @@ export class ChessUI extends Component {
         this.startTag.active = false;
         this.roomNode.active = true;
         this.gameNode.active = false;
+        this.backToMain.active = true;
     }
 
     /* 接收到服务器其他玩家消息 */

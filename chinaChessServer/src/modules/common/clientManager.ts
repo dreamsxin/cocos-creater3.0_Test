@@ -1,4 +1,3 @@
-import Logger from "../utils/logger";
 import EventManager from "./EventManager";
 import ClientSocket from "../net/clientSocket";
 import Room from "../controller/room";

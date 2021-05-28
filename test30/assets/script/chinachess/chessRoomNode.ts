@@ -21,6 +21,9 @@ export class ChessRoomNode extends Component {
     leaveBtn: Node = null as unknown as Node;
 
     @property(Node)
+    backToMain: Node = null as unknown as Node;
+
+    @property(Node)
     role: Node = null as unknown as Node;
 
     @property(Prefab)
@@ -40,7 +43,7 @@ export class ChessRoomNode extends Component {
 
     private isJoinRoom: boolean = false;
 
-    private crArr: ChessRole[] = [];
+    public crArr: ChessRole[] = [];
     private isTouchMove: boolean = false;
 
     onLoad() {
@@ -64,6 +67,7 @@ export class ChessRoomNode extends Component {
     onDisable() {
         this.gameNode.active = false;
         this.leaveBtn.active = false;
+        this.backToMain.active = true;
     }
 
     touchMove(event: any) {
@@ -318,6 +322,7 @@ export class ChessRoomNode extends Component {
         if (room.count == 2) {
             this.node.active = false;
             this.gameNode.active = true;
+            this.backToMain.active = false;
         }
     }
 

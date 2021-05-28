@@ -1,4 +1,5 @@
 import { _decorator, Node, Label } from 'cc';
+import { PoolManager } from '../infinitymap/poolManager';
 import EventManager from "../shooting/eventManager";
 import Room from "./chessRoom";
 import { createRoomRes, ModelAny, playerInfoRes, upLineReq } from "./net/globalUtils";
@@ -35,6 +36,14 @@ export default class RoomtManager {
         if (this.roomList.length > 0) {
             this.updateRoomList();
         }
+    }
+
+    public clearRoomList() {
+        for (let i = 0; i < this.roomList.length; i++) {
+            PoolManager.setNode(this.roomList[i].node);
+        }
+        this.roomList.splice(0);
+        this.playerList.splice(0);
     }
 
     /**

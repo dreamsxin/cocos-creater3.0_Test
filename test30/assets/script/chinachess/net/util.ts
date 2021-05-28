@@ -4,6 +4,7 @@ export enum IpType {
 }
 
 export enum ServerType {
+    connectorServer = 100,
     gameServer = 101,
     userServer = 102,
 }
@@ -16,11 +17,12 @@ export enum ServerPort {
 
 export function getIp(type: number): string {
     if (type == IpType.local) {
-        return "ws://192.168.0.131:8999/ws";
-        // return "ws://192.168.0.197:8089/ws";
+        return "ws://192.168.0.192:9000/ws";
+        // return "ws://192.168.0.192:8999/ws";
+        // return "ws://192.168.0.192:8089/ws";
     }
     else if (type == IpType.remote) {
-        return "ws://139.199.80.239:8999/ws"
+        return "ws://139.199.80.239:9000/ws"
     }
     return "";
 }
