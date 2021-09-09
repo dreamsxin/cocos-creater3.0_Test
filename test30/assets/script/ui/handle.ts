@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec3, Vec2, UITransform } from 'cc';
+import { _decorator, Component, Node, Vec3, Vec2, UITransform, EventTouch, UITransformComponent } from 'cc';
 import { Role } from '../Role';
 import { ILand } from './iLand';
 const { ccclass, property } = _decorator;
@@ -7,16 +7,16 @@ const { ccclass, property } = _decorator;
 @ccclass('Handle')
 export class Handle extends Component {
     @property({ type: Node })
-    center: Node = null;
+    center: Node = null as unknown as Node;
 
     @property({ type: Node })
-    iland: Node = null;
+    iland: Node = null as unknown as Node;
 
     @property(Node)
-    bg: Node = null;
+    bg: Node = null as unknown as Node;
 
     @property(Node)
-    role: Node = null;
+    role: Node = null as unknown as Node;
 
     private circleR: number = 90;
     private radian: number = 0;
@@ -30,18 +30,20 @@ export class Handle extends Component {
         this.bg.on(Node.EventType.TOUCH_CANCEL, this.touchEnd.bind(this));
     }
 
-    touchStart(event: Touch) {
+    touchStart(event: EventTouch) {
         this.isMoving = true;
-        let pos = event.getLocation();
-        let poss: Vec3 = new Vec3(pos.x - this.node.getWorldPosition().x, pos.y - this.node.getWorldPosition().y, 0);
+        let pos = event.getUILocation();
+        let touchStartLocation = new Vec3(pos.x, pos.y, 0);
+        let poss = this.bg.getComponent(UITransformComponent)?.convertToNodeSpaceAR(touchStartLocation) as Vec3;
         this.center.setPosition(poss);
         this.role.getComponent(Role)?.handleStart();
         this.iland.getComponent(ILand)?.setMoving(false);
     }
 
-    touchMove(event: Touch) {
-        let pos = event.getLocation();
-        let poss: Vec3 = new Vec3(pos.x - this.node.getWorldPosition().x, pos.y - this.node.getWorldPosition().y, 0);
+    touchMove(event: EventTouch) {
+        let pos = event.getUILocation();
+        let touchMoveLocation = new Vec3(pos.x, pos.y, 0);
+        let poss: Vec3 = this.bg.getComponent(UITransformComponent)?.convertToNodeSpaceAR(touchMoveLocation) as Vec3;
         this.center.setPosition(poss);
         let radian = Math.atan2(this.center.getPosition().y, this.center.getPosition().x);
         let distance = Vec3.len(this.center.getPosition());
