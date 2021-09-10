@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, SystemEventType, systemEvent, Quat, v3, Vec3 } from 'cc';
+import { _decorator, Component, Node, systemEvent, Quat, v3, Vec3, SystemEvent } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Rotate')
@@ -21,7 +21,7 @@ export class Rotate extends Component {
 
 
     onLoad() {
-        systemEvent.on(SystemEventType.TOUCH_MOVE, this._onTouchMove, this);
+        systemEvent.on(SystemEvent.EventType.TOUCH_MOVE, this._onTouchMove, this);
     }
 
     private _onTouchMove(touch: any) {
