@@ -24,7 +24,7 @@
         "isRGBE": false,
         "imageDatabaseUri": "db://assets/skybox/sunnySkyBox.jpg"
       },
-      "ver": "1.0.9",
+      "ver": "1.0.10",
       "imported": true,
       "files": [
         ".json"

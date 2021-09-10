@@ -1,5 +1,5 @@
 {
-  "ver": "2.0.10",
+  "ver": "2.1.4",
   "importer": "fbx",
   "imported": true,
   "uuid": "c702cdc7-c0fa-4dcf-9486-36d944625294",
@@ -159,7 +159,7 @@
       }
     },
     "a4d9b": {
-      "ver": "1.0.20",
+      "ver": "1.0.21",
       "importer": "texture",
       "name": "贴图 #21.texture",
       "id": "a4d9b",
@@ -177,13 +177,13 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "premultiplyAlpha": false,
-        "anisotropy": 1,
+        "anisotropy": 0,
         "isUuid": true,
         "imageUuidOrDatabaseUri": "c702cdc7-c0fa-4dcf-9486-36d944625294@98ee4"
       }
     },
     "cb93c": {
-      "ver": "1.0.20",
+      "ver": "1.0.21",
       "importer": "texture",
       "name": "贴图 #20.texture",
       "id": "cb93c",
@@ -201,13 +201,13 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "premultiplyAlpha": false,
-        "anisotropy": 1,
+        "anisotropy": 0,
         "isUuid": true,
         "imageUuidOrDatabaseUri": "c702cdc7-c0fa-4dcf-9486-36d944625294@1a057"
       }
     },
     "7c0f3": {
-      "ver": "1.0.20",
+      "ver": "1.0.21",
       "importer": "texture",
       "name": "贴图 #19.texture",
       "id": "7c0f3",
@@ -225,7 +225,7 @@
         "magfilter": "linear",
         "mipfilter": "none",
         "premultiplyAlpha": false,
-        "anisotropy": 1,
+        "anisotropy": 0,
         "isUuid": true,
         "imageUuidOrDatabaseUri": "c702cdc7-c0fa-4dcf-9486-36d944625294@7d8de"
       }

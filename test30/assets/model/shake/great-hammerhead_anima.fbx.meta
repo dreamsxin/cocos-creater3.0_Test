@@ -1,9 +1,11 @@
 {
-  "ver": "2.0.10",
+  "ver": "2.1.4",
   "importer": "fbx",
   "imported": true,
   "uuid": "6a271bba-797e-43ec-980f-f8549908a1b6",
-  "files": [],
+  "files": [
+    "__original-animation-0.cconb"
+  ],
   "subMetas": {
     "85619": {
       "importer": "gltf-animation",
@@ -21,11 +23,10 @@
         },
         "events": []
       },
-      "ver": "1.0.14",
+      "ver": "1.0.16",
       "imported": true,
       "files": [
-        ".bin",
-        ".json"
+        ".cconb"
       ],
       "subMetas": {}
     },
@@ -62,11 +63,10 @@
         },
         "events": []
       },
-      "ver": "1.0.14",
+      "ver": "1.0.16",
       "imported": true,
       "files": [
-        ".bin",
-        ".json"
+        ".cconb"
       ],
       "subMetas": {}
     },

@@ -1,5 +1,5 @@
 {
-  "ver": "2.0.10",
+  "ver": "2.1.4",
   "importer": "fbx",
   "imported": true,
   "uuid": "8c42f0be-50d8-43bc-8888-1830e741e129",
@@ -73,23 +73,6 @@
       ],
       "subMetas": {}
     },
-    "ef396": {
-      "importer": "gltf-embeded-image",
-      "uuid": "8c42f0be-50d8-43bc-8888-1830e741e129@ef396",
-      "displayName": "",
-      "id": "ef396",
-      "name": "base_color_texture-1.image",
-      "userData": {
-        "gltfIndex": 1
-      },
-      "ver": "1.0.3",
-      "imported": true,
-      "files": [
-        ".png",
-        ".json"
-      ],
-      "subMetas": {}
-    },
     "0a1ef": {
       "importer": "texture",
       "uuid": "8c42f0be-50d8-43bc-8888-1830e741e129@0a1ef",
@@ -102,11 +85,11 @@
         "minfilter": "linear",
         "magfilter": "linear",
         "mipfilter": "none",
-        "anisotropy": 1,
+        "anisotropy": 0,
         "isUuid": true,
         "imageUuidOrDatabaseUri": "8c42f0be-50d8-43bc-8888-1830e741e129@5e49e"
       },
-      "ver": "1.0.20",
+      "ver": "1.0.21",
       "imported": true,
       "files": [
         ".json"
@@ -125,11 +108,11 @@
         "minfilter": "linear",
         "magfilter": "linear",
         "mipfilter": "none",
-        "anisotropy": 1,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "8c42f0be-50d8-43bc-8888-1830e741e129@ef396"
+        "anisotropy": 0,
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/model/blender"
       },
-      "ver": "1.0.20",
+      "ver": "1.0.21",
       "imported": true,
       "files": [
         ".json"
@@ -209,7 +192,7 @@
       },
       {
         "name": "base_color_texture",
-        "uri": "8c42f0be-50d8-43bc-8888-1830e741e129@ef396"
+        "uri": "db://assets/model/blender"
       }
     ],
     "legacyFbxImporter": false,

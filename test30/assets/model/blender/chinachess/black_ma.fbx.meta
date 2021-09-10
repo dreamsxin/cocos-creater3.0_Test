@@ -1,5 +1,5 @@
 {
-  "ver": "2.0.10",
+  "ver": "2.1.4",
   "importer": "fbx",
   "imported": true,
   "uuid": "763fabc4-4fc1-46bf-ba11-355da650823f",
@@ -51,11 +51,11 @@
         "minfilter": "linear",
         "magfilter": "linear",
         "mipfilter": "none",
-        "anisotropy": 1,
+        "anisotropy": 0,
         "isUuid": true,
         "imageUuidOrDatabaseUri": "763fabc4-4fc1-46bf-ba11-355da650823f@48b02"
       },
-      "ver": "1.0.20",
+      "ver": "1.0.21",
       "imported": true,
       "files": [
         ".json"

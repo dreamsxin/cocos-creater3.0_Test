@@ -1,5 +1,5 @@
 {
-  "ver": "4.0.21",
+  "ver": "4.0.22",
   "importer": "typescript",
   "imported": true,
   "uuid": "ca5b99ad-2022-44e1-8304-a90b8a0f140d",
@@ -8,6 +8,7 @@
   "userData": {
     "importAsPlugin": false,
     "moduleId": "project:///assets/script/Role.js",
-    "importerSettings": 4
+    "importerSettings": 4,
+    "simulateGlobals": []
   }
 }

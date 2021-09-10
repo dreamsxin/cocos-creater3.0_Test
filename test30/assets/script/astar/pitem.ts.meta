@@ -1,5 +1,5 @@
 {
-  "ver": "4.0.21",
+  "ver": "4.0.22",
   "importer": "typescript",
   "imported": true,
   "uuid": "e61da78d-71b2-4386-aa9a-cf1114abc66b",
@@ -8,6 +8,7 @@
   "userData": {
     "importAsPlugin": false,
     "moduleId": "project:///assets/script/astar/pitem.js",
-    "importerSettings": 4
+    "importerSettings": 4,
+    "simulateGlobals": []
   }
 }

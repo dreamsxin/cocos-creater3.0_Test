@@ -1,5 +1,5 @@
 {
-  "ver": "4.0.21",
+  "ver": "4.0.22",
   "importer": "typescript",
   "imported": true,
   "uuid": "0e6c5d30-60b0-4c63-947c-61e3c18c9845",
@@ -8,6 +8,7 @@
   "userData": {
     "importAsPlugin": false,
     "moduleId": "project:///assets/script/ui/ControlBtn.js",
-    "importerSettings": 4
+    "importerSettings": 4,
+    "simulateGlobals": []
   }
 }
