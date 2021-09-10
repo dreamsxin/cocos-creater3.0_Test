@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec3, SkeletalAnimationComponent, Enum } from 'cc';
+import { _decorator, Component, Node, Vec3, SkeletalAnimationComponent, Enum, AnimationState } from 'cc';
 import { clientEvent } from '../framwork/clientEvent';
 import { Constant } from '../framwork/constant';
 const { ccclass, property } = _decorator;
@@ -25,6 +25,10 @@ const AnimClip = Enum({
 
 @ccclass('Archery')
 export class Archery extends Component {
+
+    @property(Node)
+    arrowNormal: Node = null as unknown as Node;
+
     @property(SkeletalAnimationComponent)
     anim: SkeletalAnimationComponent = undefined as unknown as SkeletalAnimationComponent;
     private _speed: number = 0.1;
@@ -33,12 +37,20 @@ export class Archery extends Component {
     onLoad() {
         clientEvent.on(Constant.EVENT_TYPE.StartMoving, this._startMoving, this);
         clientEvent.on(Constant.EVENT_TYPE.MoveEnd, this._moveEnd, this);
+        clientEvent.on(Constant.EVENT_TYPE.Shoot, this._shooting, this);
         clientEvent.dispatchEvent(Constant.EVENT_TYPE.CarmeraRole, this.node);
         this._originPos = this.node.getPosition();
     }
+
+    start() {
+        //只播放一次
+        this.anim.getState("attack").repeatCount = 1;
+    }
+
     onDestroy() {
         clientEvent.off(Constant.EVENT_TYPE.StartMoving, this._startMoving, this);
         clientEvent.off(Constant.EVENT_TYPE.MoveEnd, this._moveEnd, this);
+        clientEvent.off(Constant.EVENT_TYPE.Shoot, this._shooting, this);
     }
 
     private _startMoving(angle: number, radius: number) {
@@ -55,16 +67,41 @@ export class Archery extends Component {
         this._originPos.add(new Vec3(xx, 0, zz));
 
         this.node.setPosition(this._originPos);
+
+        this.arrowNormal.active = true;
     }
 
     private _moveEnd() {
         this._isMoving = false;
         this._playActions(AnimClip.idle);
+        // this._playActions(AnimClip.attack);
     }
 
     private _playActions(index: number) {
         this.anim.play(this.anim.clips[index]?.name);
+        if (index == AnimClip.attack) {
+        }
+        else {
+            this.arrowNormal.active = true;
+        }
     }
+
+    /**
+     * 射击
+     */
+    private _shooting() {
+        this._playActions(AnimClip.attack);
+        this.arrowNormal.active = true;
+        this.scheduleOnce(() => {
+            this.arrowNormal.active = false;
+        }, 0.8);
+        this.anim.on("finished", () => {
+            this.arrowNormal.active = true;
+            this.anim.off("finished");
+        }, this);
+    }
+
+
 }
 
 

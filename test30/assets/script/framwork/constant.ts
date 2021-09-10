@@ -4,5 +4,6 @@ export class Constant {
         StartMoving: "start_moving",
         MoveEnd: "move_end",
         CarmeraRole: "camera_role",
+        Shoot: "shoot"
     }
 }
