@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec3, SkeletalAnimationComponent, Enum, AnimationState } from 'cc';
+import { _decorator, Component, Node, Vec3, SkeletalAnimationComponent, Enum, AnimationState, Prefab, instantiate, find } from 'cc';
 import { clientEvent } from '../framwork/clientEvent';
 import { Constant } from '../framwork/constant';
 const { ccclass, property } = _decorator;
@@ -25,6 +25,8 @@ const AnimClip = Enum({
 
 @ccclass('Archery')
 export class Archery extends Component {
+    @property(Prefab)
+    launchArrow: Prefab = null as unknown as Prefab;
 
     @property(Node)
     arrowNormal: Node = null as unknown as Node;
@@ -94,6 +96,7 @@ export class Archery extends Component {
         this.arrowNormal.active = true;
         this.scheduleOnce(() => {
             this.arrowNormal.active = false;
+            this._launchArrow();
         }, 0.8);
         this.anim.on("finished", () => {
             this.arrowNormal.active = true;
@@ -101,6 +104,17 @@ export class Archery extends Component {
         }, this);
     }
 
+
+    private _launchArrow() {
+        let pos = this.arrowNormal.getWorldPosition();
+        let angle = this.node.eulerAngles;
+        angle = new Vec3(angle.y - 90, 0, 90);
+        let arrow: Node = instantiate(this.launchArrow) as unknown as Node;
+        let parent = this.node.parent;
+        arrow.parent = parent;
+        arrow.setWorldPosition(pos);
+        arrow.eulerAngles = angle;
+    }
 
 }
 

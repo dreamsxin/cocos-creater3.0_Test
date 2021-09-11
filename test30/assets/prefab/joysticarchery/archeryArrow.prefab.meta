@@ -1,0 +1,13 @@
+{
+  "ver": "1.1.30",
+  "importer": "prefab",
+  "imported": true,
+  "uuid": "bec64f44-88a2-4151-a897-40d9b59e6aa9",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "syncNodeName": "archeryArrow"
+  }
+}
