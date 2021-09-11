@@ -59,6 +59,11 @@ export class Archery extends Component {
         clientEvent.off(Constant.EVENT_TYPE.AddMonsterToPlayerCheck, this._addMonsterList, this);
     }
 
+    /**
+     * 角色移动,通过事件驱动(摇杆中触发)
+     * @param angle 
+     * @param radius 
+     */
     private _startMoving(angle: number, radius: number) {
         if (!this._isMoving) {
             this._isMoving = true;
@@ -77,10 +82,17 @@ export class Archery extends Component {
         this.arrowNormal.active = true;
     }
 
+    /**
+     * 获取当前角色行走状态
+     * @returns 
+     */
+    public getMoveState() {
+        return this._isMoving;
+    }
+
     private _moveEnd() {
         this._isMoving = false;
         this._playActions(AnimClip.idle);
-        // this._playActions(AnimClip.attack);
     }
 
     private _playActions(index: number) {
