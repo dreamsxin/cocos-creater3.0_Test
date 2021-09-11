@@ -4,6 +4,7 @@ export class Constant {
         StartMoving: "start_moving",
         MoveEnd: "move_end",
         CarmeraRole: "camera_role",
-        Shoot: "shoot"
+        Shoot: "shoot",
+        AddMonsterToPlayerCheck: "add_monster_to_player_check",
     }
 }

@@ -1,7 +1,8 @@
 
-import { _decorator, Component, Node, Vec3, SkeletalAnimationComponent, Enum, AnimationState, Prefab, instantiate, find } from 'cc';
+import { _decorator, Component, Node, Vec3, SkeletalAnimationComponent, Enum, AnimationState, Prefab, instantiate, find, tween } from 'cc';
 import { clientEvent } from '../framwork/clientEvent';
 import { Constant } from '../framwork/constant';
+import { PoolManager } from '../infinitymap/poolManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -36,10 +37,12 @@ export class Archery extends Component {
     private _speed: number = 0.1;
     private _isMoving: boolean = false;
     private _originPos: Vec3 = new Vec3();
+    private _monsterList: Node[] = [];
     onLoad() {
         clientEvent.on(Constant.EVENT_TYPE.StartMoving, this._startMoving, this);
         clientEvent.on(Constant.EVENT_TYPE.MoveEnd, this._moveEnd, this);
         clientEvent.on(Constant.EVENT_TYPE.Shoot, this._shooting, this);
+        clientEvent.on(Constant.EVENT_TYPE.AddMonsterToPlayerCheck, this._addMonsterList, this);
         clientEvent.dispatchEvent(Constant.EVENT_TYPE.CarmeraRole, this.node);
         this._originPos = this.node.getPosition();
     }
@@ -53,6 +56,7 @@ export class Archery extends Component {
         clientEvent.off(Constant.EVENT_TYPE.StartMoving, this._startMoving, this);
         clientEvent.off(Constant.EVENT_TYPE.MoveEnd, this._moveEnd, this);
         clientEvent.off(Constant.EVENT_TYPE.Shoot, this._shooting, this);
+        clientEvent.off(Constant.EVENT_TYPE.AddMonsterToPlayerCheck, this._addMonsterList, this);
     }
 
     private _startMoving(angle: number, radius: number) {
@@ -92,6 +96,7 @@ export class Archery extends Component {
      * 射击
      */
     private _shooting() {
+        this._checkMonster();
         this._playActions(AnimClip.attack);
         this.arrowNormal.active = true;
         this.scheduleOnce(() => {
@@ -104,16 +109,64 @@ export class Archery extends Component {
         }, this);
     }
 
-
+    /**
+     * 射击
+     */
     private _launchArrow() {
         let pos = this.arrowNormal.getWorldPosition();
         let angle = this.node.eulerAngles;
         angle = new Vec3(angle.y - 90, 0, 90);
-        let arrow: Node = instantiate(this.launchArrow) as unknown as Node;
+        let arrow: Node = PoolManager.getNode(this.launchArrow);
         let parent = this.node.parent;
         arrow.parent = parent;
         arrow.setWorldPosition(pos);
         arrow.eulerAngles = angle;
+    }
+
+    /**
+     * 将场景中的monster添加到列表
+     * @param monster 
+     */
+    private _addMonsterList(monster: Node) {
+        this._monsterList.push(monster);
+    }
+
+    /**
+     * 查看是否有怪物在射击范围内,在就转向怪物
+     */
+    private _checkMonster() {
+        let monster: Node = null as unknown as Node;
+        let distance = 10;
+        let pos = this.node.worldPosition;
+        let mPos: Vec3 = new Vec3();
+        //找最近的mongster
+        for (let i = 0; i < this._monsterList.length; i++) {
+            mPos.set(this._monsterList[i].worldPosition);
+            let out = new Vec3();
+            Vec3.subtract(out, pos, mPos);
+            let tempLen = out.length();
+            if (tempLen <= distance) {
+                monster = this._monsterList[i];
+                break;
+            }
+        }
+        if (!monster) return;
+
+        let radius = Math.atan2(pos.x - mPos.x, pos.z - mPos.z);
+        let angle = radius * 180 / Math.PI;
+        let euler = this.node.eulerAngles;
+        let yy = angle - 180;
+        //转到同正负,播放转向动画好看一点
+        if (yy * euler.y < 0) {
+            if (euler.y > 0) {
+                yy += 360;
+            }
+            else {
+                yy -= 360;
+            }
+        }
+        let v3 = new Vec3(euler.x, yy, euler.z);
+        tween(this.node).to(0.3, { eulerAngles: v3 }).start();
     }
 
 }

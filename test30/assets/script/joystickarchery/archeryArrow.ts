@@ -1,5 +1,6 @@
 
-import { _decorator, Component, Node, RigidBody, Vec3 } from 'cc';
+import { _decorator, Component, Node, RigidBody, Vec3, ICollisionEvent, BoxColliderComponent } from 'cc';
+import { PoolManager } from '../infinitymap/poolManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -16,11 +17,30 @@ const { ccclass, property } = _decorator;
 
 @ccclass('ArcheryArrow')
 export class ArcheryArrow extends Component {
+
     private _isMoving: boolean = false;
     private _angle: Vec3 = new Vec3();
+
+    onLoad() {
+        const collider = this.node?.getComponent(BoxColliderComponent);
+        if (collider) {
+            collider?.on("onCollisionEnter", this._onCollisionEnter, this);
+        }
+    }
+
+    /**
+    * 碰撞检测
+    * @param event 
+    */
+    _onCollisionEnter(event: ICollisionEvent) {
+        const otherCollider = event.otherCollider;
+        let name = otherCollider.node.name;
+        PoolManager.setNode(this.node);
+    }
+
     start() {
         this.scheduleOnce(() => {
-            this.node.destroy();
+            PoolManager.setNode(this.node);
         }, 2);
         // this.moveByApplyForce();
         this._angle = this.node.eulerAngles;
@@ -38,6 +58,9 @@ export class ArcheryArrow extends Component {
         }
     }
 
+    /**
+     * 通过方向力发出去
+     */
     moveByApplyForce() {
         var speed = 200;
         let angle = this.node.eulerAngles;
