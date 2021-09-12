@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec3, PhysicsSystem, director, RigidBodyComponent, systemEvent, SystemEvent, EventTouch } from 'cc';
+import { _decorator, Component, Node, Vec3, PhysicsSystem, director, RigidBodyComponent, systemEvent, SystemEvent, EventTouch, CameraComponent } from 'cc';
 import { unitVec3 } from '../chinachess/net/util';
 import { clientEvent } from '../framwork/clientEvent';
 import { Constant } from '../framwork/constant';
@@ -20,6 +20,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('ArcheryCamera')
 export class ArcheryCamera extends Component {
+    public static mainCamera: CameraComponent | null = null;//相机组件
     private _followRole: Node = null as unknown as Node;//相机跟随对象
     private _oriCameraWorPos: Vec3 = new Vec3();//相机初始位置
     private _oriCameraEuler: Vec3 = new Vec3();//相机初始欧拉角
@@ -35,6 +36,7 @@ export class ArcheryCamera extends Component {
         clientEvent.on(Constant.EVENT_TYPE.StartMoving, this._startMoving, this);
         this._oriCameraWorPos = this.node.getPosition().clone();
         this._oriCameraEuler = this.node.eulerAngles.clone();
+        ArcheryCamera.mainCamera = this.node.getComponent(CameraComponent);
         this._test();
 
     }
