@@ -189,7 +189,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "066f692b-3ae0-406c-9c64-038903055c39"
+        "__uuid__": "066f692b-3ae0-406c-9c64-038903055c39",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -197,7 +198,8 @@
       "__id__": 6
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@3dd0b"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@3dd0b",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -292,7 +294,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a"
+        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -300,7 +303,8 @@
       "__id__": 11
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@386f1"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@386f1",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -443,7 +447,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a"
+        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -451,7 +456,8 @@
       "__id__": 17
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -491,13 +497,9 @@
     },
     "playOnLoad": true,
     "_clips": [
-      {
-        "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-      }
+      null
     ],
-    "_defaultClip": {
-      "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-    },
+    "_defaultClip": null,
     "_id": ""
   },
   {
@@ -630,7 +632,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a"
+        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -638,7 +641,8 @@
       "__id__": 26
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -678,13 +682,9 @@
     },
     "playOnLoad": true,
     "_clips": [
-      {
-        "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-      }
+      null
     ],
-    "_defaultClip": {
-      "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-    },
+    "_defaultClip": null,
     "_id": ""
   },
   {
@@ -817,7 +817,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a"
+        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -825,7 +826,8 @@
       "__id__": 35
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -865,13 +867,9 @@
     },
     "playOnLoad": true,
     "_clips": [
-      {
-        "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-      }
+      null
     ],
-    "_defaultClip": {
-      "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-    },
+    "_defaultClip": null,
     "_id": ""
   },
   {
@@ -1004,7 +1002,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a"
+        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -1012,7 +1011,8 @@
       "__id__": 44
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -1052,13 +1052,9 @@
     },
     "playOnLoad": true,
     "_clips": [
-      {
-        "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-      }
+      null
     ],
-    "_defaultClip": {
-      "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-    },
+    "_defaultClip": null,
     "_id": ""
   },
   {
@@ -1191,7 +1187,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a"
+        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -1199,7 +1196,8 @@
       "__id__": 53
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -1239,13 +1237,9 @@
     },
     "playOnLoad": true,
     "_clips": [
-      {
-        "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-      }
+      null
     ],
-    "_defaultClip": {
-      "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-    },
+    "_defaultClip": null,
     "_id": ""
   },
   {
@@ -1378,7 +1372,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a"
+        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -1386,7 +1381,8 @@
       "__id__": 62
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -1426,13 +1422,9 @@
     },
     "playOnLoad": true,
     "_clips": [
-      {
-        "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-      }
+      null
     ],
-    "_defaultClip": {
-      "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-    },
+    "_defaultClip": null,
     "_id": ""
   },
   {
@@ -1565,7 +1557,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a"
+        "__uuid__": "db177b3a-8c75-4fc7-8f60-d6edc3efd24a",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -1573,7 +1566,8 @@
       "__id__": 71
     },
     "_mesh": {
-      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d"
+      "__uuid__": "a01bd6de-537f-46e2-b381-4e133073b368@ad41d",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -1613,13 +1607,9 @@
     },
     "playOnLoad": true,
     "_clips": [
-      {
-        "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-      }
+      null
     ],
-    "_defaultClip": {
-      "__uuid__": "53ec5750-99e1-4383-9697-2e30189515b8"
-    },
+    "_defaultClip": null,
     "_id": ""
   },
   {
@@ -1785,9 +1775,7 @@
       "__id__": 80
     },
     "_materials": [
-      {
-        "__uuid__": "323e004f-ab7a-4891-9f9b-ceb17685aa81"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -2103,10 +2091,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 104
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -2120,9 +2108,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -2131,9 +2119,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0,
-        "leftTangent": -2.31,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": -2.31,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -2407,9 +2395,7 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "41089c88-9060-4395-a959-321f2b5aa96f@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -2479,9 +2465,7 @@
       "__id__": 138
     },
     "_materials": [
-      {
-        "__uuid__": "323e004f-ab7a-4891-9f9b-ceb17685aa81"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -2797,10 +2781,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 104
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.CurveRange",
@@ -3068,9 +3052,7 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "41089c88-9060-4395-a959-321f2b5aa96f@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -3140,9 +3122,7 @@
       "__id__": 195
     },
     "_materials": [
-      {
-        "__uuid__": "323e004f-ab7a-4891-9f9b-ceb17685aa81"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -3458,10 +3438,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 104
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.CurveRange",
@@ -3729,9 +3709,7 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "41089c88-9060-4395-a959-321f2b5aa96f@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -3801,9 +3779,7 @@
       "__id__": 252
     },
     "_materials": [
-      {
-        "__uuid__": "323e004f-ab7a-4891-9f9b-ceb17685aa81"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -4119,10 +4095,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 104
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.CurveRange",
@@ -4390,9 +4366,7 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "41089c88-9060-4395-a959-321f2b5aa96f@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -4462,9 +4436,7 @@
       "__id__": 309
     },
     "_materials": [
-      {
-        "__uuid__": "323e004f-ab7a-4891-9f9b-ceb17685aa81"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -4780,10 +4752,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 104
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.CurveRange",
@@ -5051,9 +5023,7 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "41089c88-9060-4395-a959-321f2b5aa96f@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -5123,9 +5093,7 @@
       "__id__": 366
     },
     "_materials": [
-      {
-        "__uuid__": "73bba259-4391-4643-8c51-ba9e48c517bc"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -5422,10 +5390,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 390
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -5439,9 +5407,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.64,
-        "leftTangent": 2,
         "rightTangent": 0.63,
         "rightTangentWeight": 0,
+        "leftTangent": 2,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -5450,9 +5418,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -5726,9 +5694,7 @@
     "_velocityScale": 1,
     "_lengthScale": -3.5,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "19761300-a118-4a2a-b42a-a816435c51ce@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -5798,9 +5764,7 @@
       "__id__": 424
     },
     "_materials": [
-      {
-        "__uuid__": "73bba259-4391-4643-8c51-ba9e48c517bc"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -6097,10 +6061,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 390
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.CurveRange",
@@ -6368,9 +6332,7 @@
     "_velocityScale": 1,
     "_lengthScale": -3.5,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "19761300-a118-4a2a-b42a-a816435c51ce@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -6440,9 +6402,7 @@
       "__id__": 481
     },
     "_materials": [
-      {
-        "__uuid__": "73bba259-4391-4643-8c51-ba9e48c517bc"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -6739,10 +6699,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 390
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.CurveRange",
@@ -7010,9 +6970,7 @@
     "_velocityScale": 1,
     "_lengthScale": -3.5,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "19761300-a118-4a2a-b42a-a816435c51ce@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -7082,9 +7040,7 @@
       "__id__": 538
     },
     "_materials": [
-      {
-        "__uuid__": "73bba259-4391-4643-8c51-ba9e48c517bc"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -7381,10 +7337,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 390
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.CurveRange",
@@ -7652,9 +7608,7 @@
     "_velocityScale": 1,
     "_lengthScale": -3.5,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "19761300-a118-4a2a-b42a-a816435c51ce@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -7724,9 +7678,7 @@
       "__id__": 595
     },
     "_materials": [
-      {
-        "__uuid__": "73bba259-4391-4643-8c51-ba9e48c517bc"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -8023,10 +7975,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 390
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.CurveRange",
@@ -8294,9 +8246,7 @@
     "_velocityScale": 1,
     "_lengthScale": -3.5,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "19761300-a118-4a2a-b42a-a816435c51ce@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -8429,7 +8379,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "577ba711-4277-4fa1-9935-9bd388bee0f4"
+        "__uuid__": "577ba711-4277-4fa1-9935-9bd388bee0f4",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -8437,7 +8388,8 @@
       "__id__": 655
     },
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@2e76e"
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@2e76e",
+      "__expectedType__": "cc.Mesh"
     },
     "_shadowCastingMode": 0,
     "_shadowReceivingMode": 1,
@@ -8532,7 +8484,8 @@
     },
     "_materials": [
       {
-        "__uuid__": "f3cf95ec-8b77-4444-b8f2-2354fb405332"
+        "__uuid__": "f3cf95ec-8b77-4444-b8f2-2354fb405332",
+        "__expectedType__": "cc.Material"
       }
     ],
     "_visFlags": 0,
@@ -9103,7 +9056,8 @@
     "_lengthScale": 1,
     "_mesh": null,
     "_mainTexture": {
-      "__uuid__": "0fa77c39-a759-40aa-972e-00f178552b58@6c48a"
+      "__uuid__": "0fa77c39-a759-40aa-972e-00f178552b58@6c48a",
+      "__expectedType__": "cc.Texture2D"
     },
     "_useGPU": false
   },
@@ -9131,11 +9085,13 @@
     "playOnLoad": true,
     "_clips": [
       {
-        "__uuid__": "596e10fb-f1b2-49c5-aa83-8f49a451dcda"
+        "__uuid__": "596e10fb-f1b2-49c5-aa83-8f49a451dcda",
+        "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {
-      "__uuid__": "596e10fb-f1b2-49c5-aa83-8f49a451dcda"
+      "__uuid__": "596e10fb-f1b2-49c5-aa83-8f49a451dcda",
+      "__expectedType__": "cc.AnimationClip"
     },
     "_id": ""
   },
@@ -9289,9 +9245,7 @@
       "__id__": 720
     },
     "_materials": [
-      {
-        "__uuid__": "0213bb46-1ffe-4926-8f5d-d1d121cb1395"
-      },
+      null,
       null
     ],
     "_visFlags": 0,
@@ -9588,10 +9542,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 744
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -9614,9 +9568,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9625,9 +9579,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9636,9 +9590,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.02,
         "rightTangent": 0.02,
         "rightTangentWeight": 0,
+        "leftTangent": 0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9647,9 +9601,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9658,9 +9612,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.03,
         "rightTangent": 0.03,
         "rightTangentWeight": 0,
+        "leftTangent": 0.03,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9669,9 +9623,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9680,9 +9634,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.05,
         "rightTangent": 0.05,
         "rightTangentWeight": 0,
+        "leftTangent": 0.05,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9691,9 +9645,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9702,9 +9656,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.08,
         "rightTangent": 0.08,
         "rightTangentWeight": 0,
+        "leftTangent": 0.08,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9713,9 +9667,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": -0.02,
         "rightTangent": -0.02,
         "rightTangentWeight": 0,
+        "leftTangent": -0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9724,9 +9678,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -9749,10 +9703,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 748
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -9775,9 +9729,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9786,9 +9740,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9797,9 +9751,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9808,9 +9762,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9819,9 +9773,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.03,
         "rightTangent": 0.03,
         "rightTangentWeight": 0,
+        "leftTangent": 0.03,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9830,9 +9784,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9841,9 +9795,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.04,
         "rightTangent": 0.04,
         "rightTangentWeight": 0,
+        "leftTangent": 0.04,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9852,9 +9806,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9863,9 +9817,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.1,
         "rightTangent": 0.1,
         "rightTangentWeight": 0,
+        "leftTangent": 0.1,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9874,9 +9828,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": -0.02,
         "rightTangent": -0.02,
         "rightTangentWeight": 0,
+        "leftTangent": -0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -9885,9 +9839,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -10142,12 +10096,8 @@
     "_renderMode": 4,
     "_velocityScale": 1,
     "_lengthScale": 1,
-    "_mesh": {
-      "__uuid__": "2961b396-3cee-45ed-9a9c-a39657e8fff4@95eda"
-    },
-    "_mainTexture": {
-      "__uuid__": "6b683ce5-ebc2-47f1-97de-0d67b253efc8@6c48a"
-    },
+    "_mesh": null,
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -10217,9 +10167,7 @@
       "__id__": 779
     },
     "_materials": [
-      {
-        "__uuid__": "0213bb46-1ffe-4926-8f5d-d1d121cb1395"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -10515,10 +10463,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 803
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -10541,9 +10489,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10552,9 +10500,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10563,9 +10511,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.02,
         "rightTangent": 0.02,
         "rightTangentWeight": 0,
+        "leftTangent": 0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10574,9 +10522,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10585,9 +10533,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.03,
         "rightTangent": 0.03,
         "rightTangentWeight": 0,
+        "leftTangent": 0.03,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10596,9 +10544,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10607,9 +10555,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.05,
         "rightTangent": 0.05,
         "rightTangentWeight": 0,
+        "leftTangent": 0.05,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10618,9 +10566,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10629,9 +10577,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.08,
         "rightTangent": 0.08,
         "rightTangentWeight": 0,
+        "leftTangent": 0.08,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10640,9 +10588,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": -0.02,
         "rightTangent": -0.02,
         "rightTangentWeight": 0,
+        "leftTangent": -0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10651,9 +10599,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -10676,10 +10624,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 807
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -10702,9 +10650,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10713,9 +10661,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10724,9 +10672,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10735,9 +10683,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10746,9 +10694,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.03,
         "rightTangent": 0.03,
         "rightTangentWeight": 0,
+        "leftTangent": 0.03,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10757,9 +10705,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10768,9 +10716,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.04,
         "rightTangent": 0.04,
         "rightTangentWeight": 0,
+        "leftTangent": 0.04,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10779,9 +10727,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10790,9 +10738,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.1,
         "rightTangent": 0.1,
         "rightTangentWeight": 0,
+        "leftTangent": 0.1,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10801,9 +10749,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": -0.02,
         "rightTangent": -0.02,
         "rightTangentWeight": 0,
+        "leftTangent": -0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -10812,9 +10760,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -11069,12 +11017,8 @@
     "_renderMode": 4,
     "_velocityScale": 1,
     "_lengthScale": 1,
-    "_mesh": {
-      "__uuid__": "2961b396-3cee-45ed-9a9c-a39657e8fff4@95eda"
-    },
-    "_mainTexture": {
-      "__uuid__": "6b683ce5-ebc2-47f1-97de-0d67b253efc8@6c48a"
-    },
+    "_mesh": null,
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -11144,9 +11088,7 @@
       "__id__": 838
     },
     "_materials": [
-      {
-        "__uuid__": "323e004f-ab7a-4891-9f9b-ceb17685aa81"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -11417,10 +11359,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 858
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -11434,9 +11376,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -11445,9 +11387,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0,
-        "leftTangent": -1.85,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": -1.85,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -11505,10 +11447,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 4,
     "spline": {
       "__id__": 866
-    }
+    },
+    "multiplier": 4
   },
   {
     "__type__": "cc.RealCurve",
@@ -11522,9 +11464,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.01,
-        "leftTangent": 0,
         "rightTangent": 1.13,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -11533,9 +11475,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -11756,9 +11698,7 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "41089c88-9060-4395-a959-321f2b5aa96f@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -11828,9 +11768,7 @@
       "__id__": 893
     },
     "_materials": [
-      {
-        "__uuid__": "73bba259-4391-4643-8c51-ba9e48c517bc"
-      },
+      null,
       null
     ],
     "_visFlags": 0,
@@ -12135,10 +12073,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 917
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -12152,9 +12090,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.64,
-        "leftTangent": 2,
         "rightTangent": 0.63,
         "rightTangentWeight": 0,
+        "leftTangent": 2,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -12163,9 +12101,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -12439,9 +12377,7 @@
     "_velocityScale": 1,
     "_lengthScale": -5,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "19761300-a118-4a2a-b42a-a816435c51ce@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -12511,9 +12447,7 @@
       "__id__": 951
     },
     "_materials": [
-      {
-        "__uuid__": "fae9ccc2-b46e-4f64-84fe-6890210621f8"
-      },
+      null,
       null
     ],
     "_visFlags": 0,
@@ -12828,10 +12762,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 977
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -12845,9 +12779,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.75,
-        "leftTangent": 2,
         "rightTangent": 0.61,
         "rightTangentWeight": 0,
+        "leftTangent": 2,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -12856,9 +12790,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -13133,11 +13067,10 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873"
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873",
+      "__expectedType__": "cc.Mesh"
     },
-    "_mainTexture": {
-      "__uuid__": "41089c88-9060-4395-a959-321f2b5aa96f@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -13207,9 +13140,7 @@
       "__id__": 1011
     },
     "_materials": [
-      {
-        "__uuid__": "fa4a0807-8607-419f-b46b-baa0c8410fd9"
-      },
+      null,
       null
     ],
     "_visFlags": 0,
@@ -13515,10 +13446,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 1035
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -13532,9 +13463,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.79,
-        "leftTangent": 2,
         "rightTangent": 0.57,
         "rightTangentWeight": 0,
+        "leftTangent": 2,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -13543,9 +13474,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -13820,11 +13751,10 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873"
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873",
+      "__expectedType__": "cc.Mesh"
     },
-    "_mainTexture": {
-      "__uuid__": "784ea5b6-6fbf-427e-a76d-5fe3464731af@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -13894,9 +13824,7 @@
       "__id__": 1069
     },
     "_materials": [
-      {
-        "__uuid__": "1261b077-dabd-4b38-a9e8-9b66d7fee66d"
-      },
+      null,
       null
     ],
     "_visFlags": 0,
@@ -14193,10 +14121,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 1093
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -14210,9 +14138,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.75,
-        "leftTangent": 2,
         "rightTangent": 0.61,
         "rightTangentWeight": 0,
+        "leftTangent": 2,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -14221,9 +14149,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -14498,11 +14426,10 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873"
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873",
+      "__expectedType__": "cc.Mesh"
     },
-    "_mainTexture": {
-      "__uuid__": "19c42cb0-b15e-4fb4-8da1-ae7772ecf732@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -14572,9 +14499,7 @@
       "__id__": 1127
     },
     "_materials": [
-      {
-        "__uuid__": "323e004f-ab7a-4891-9f9b-ceb17685aa81"
-      },
+      null,
       null
     ],
     "_visFlags": 0,
@@ -14846,10 +14771,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 1147
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -14863,9 +14788,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -14874,9 +14799,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0,
-        "leftTangent": -1.85,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": -1.85,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -14940,10 +14865,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 1156
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -14957,9 +14882,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -14968,9 +14893,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0,
-        "leftTangent": -1.06,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": -1.06,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -15185,9 +15110,7 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": null,
-    "_mainTexture": {
-      "__uuid__": "41089c88-9060-4395-a959-321f2b5aa96f@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -15257,9 +15180,7 @@
       "__id__": 1182
     },
     "_materials": [
-      {
-        "__uuid__": "b5e6c317-5fd9-42f6-a3e0-eeffd5307cdd"
-      },
+      null,
       null
     ],
     "_visFlags": 0,
@@ -15565,10 +15486,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 1206
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -15582,9 +15503,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.81,
-        "leftTangent": 2,
         "rightTangent": 0.86,
         "rightTangentWeight": 0,
+        "leftTangent": 2,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -15593,9 +15514,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -15870,11 +15791,10 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873"
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873",
+      "__expectedType__": "cc.Mesh"
     },
-    "_mainTexture": {
-      "__uuid__": "f7db6a83-cf31-481f-9938-34d5574a4f57@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -15944,9 +15864,7 @@
       "__id__": 1240
     },
     "_materials": [
-      {
-        "__uuid__": "28eca426-162c-4468-9977-c8fccf1c4f36"
-      }
+      null
     ],
     "_visFlags": 0,
     "startColor": {
@@ -16273,10 +16191,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 1266
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -16290,9 +16208,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -16301,9 +16219,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -16578,11 +16496,10 @@
     "_velocityScale": 1,
     "_lengthScale": 1,
     "_mesh": {
-      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873"
+      "__uuid__": "1263d74c-8167-4928-91a6-4e2672411f47@fc873",
+      "__expectedType__": "cc.Mesh"
     },
-    "_mainTexture": {
-      "__uuid__": "e5b6eabd-cdbd-4756-a6d0-0bcb6b7d4385@6c48a"
-    },
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -16652,9 +16569,7 @@
       "__id__": 1300
     },
     "_materials": [
-      {
-        "__uuid__": "0213bb46-1ffe-4926-8f5d-d1d121cb1395"
-      },
+      null,
       null
     ],
     "_visFlags": 0,
@@ -16950,10 +16865,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 1324
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -16976,9 +16891,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -16987,9 +16902,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -16998,9 +16913,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.02,
         "rightTangent": 0.02,
         "rightTangentWeight": 0,
+        "leftTangent": 0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17009,9 +16924,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17020,9 +16935,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.03,
         "rightTangent": 0.03,
         "rightTangentWeight": 0,
+        "leftTangent": 0.03,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17031,9 +16946,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17042,9 +16957,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.05,
         "rightTangent": 0.05,
         "rightTangentWeight": 0,
+        "leftTangent": 0.05,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17053,9 +16968,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.98,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17064,9 +16979,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.08,
         "rightTangent": 0.08,
         "rightTangentWeight": 0,
+        "leftTangent": 0.08,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17075,9 +16990,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.97,
-        "leftTangent": -0.02,
         "rightTangent": -0.02,
         "rightTangentWeight": 0,
+        "leftTangent": -0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17086,9 +17001,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -17111,10 +17026,10 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 1,
-    "multiplier": 1,
     "spline": {
       "__id__": 1328
-    }
+    },
+    "multiplier": 1
   },
   {
     "__type__": "cc.RealCurve",
@@ -17137,9 +17052,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17148,9 +17063,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.88,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17159,9 +17074,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17170,9 +17085,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.88,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17181,9 +17096,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.03,
         "rightTangent": 0.03,
         "rightTangentWeight": 0,
+        "leftTangent": 0.03,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17192,9 +17107,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.9,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17203,9 +17118,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.04,
         "rightTangent": 0.04,
         "rightTangentWeight": 0,
+        "leftTangent": 0.04,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17214,9 +17129,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.9,
-        "leftTangent": 0.01,
         "rightTangent": 0.01,
         "rightTangentWeight": 0,
+        "leftTangent": 0.01,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17225,9 +17140,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0.1,
         "rightTangent": 0.1,
         "rightTangentWeight": 0,
+        "leftTangent": 0.1,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17236,9 +17151,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 0.88,
-        "leftTangent": -0.02,
         "rightTangent": -0.02,
         "rightTangentWeight": 0,
+        "leftTangent": -0.02,
         "leftTangentWeight": 0,
         "easingMethod": 0
       },
@@ -17247,9 +17162,9 @@
         "interpolationMode": 2,
         "tangentWeightMode": 0,
         "value": 1,
-        "leftTangent": 0,
         "rightTangent": 0,
         "rightTangentWeight": 0,
+        "leftTangent": 0,
         "leftTangentWeight": 0,
         "easingMethod": 0
       }
@@ -17504,12 +17419,8 @@
     "_renderMode": 4,
     "_velocityScale": 1,
     "_lengthScale": 1,
-    "_mesh": {
-      "__uuid__": "82b1cb22-2441-4318-9c38-34f7d7f790f5@792d5"
-    },
-    "_mainTexture": {
-      "__uuid__": "6b683ce5-ebc2-47f1-97de-0d67b253efc8@6c48a"
-    },
+    "_mesh": null,
+    "_mainTexture": null,
     "_useGPU": false
   },
   {
@@ -17535,13 +17446,9 @@
     },
     "playOnLoad": true,
     "_clips": [
-      {
-        "__uuid__": "eae7f7e0-ce6e-4ef8-a8c0-11df1ba1ee18"
-      }
+      null
     ],
-    "_defaultClip": {
-      "__uuid__": "eae7f7e0-ce6e-4ef8-a8c0-11df1ba1ee18"
-    },
+    "_defaultClip": null,
     "_id": ""
   },
   {

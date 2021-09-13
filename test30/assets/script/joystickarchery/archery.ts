@@ -128,11 +128,16 @@ export class Archery extends Component {
         let pos = this.arrowNormal.getWorldPosition();
         let angle = this.node.eulerAngles;
         angle = new Vec3(angle.y - 90, 0, 90);
-        let arrow: Node = PoolManager.getNode(this.launchArrow);
-        let parent = this.node.parent;
-        arrow.parent = parent;
-        arrow.setWorldPosition(pos);
-        arrow.eulerAngles = angle;
+        for (let i = 0; i < 8; i++) {
+            let arrow: Node = PoolManager.getNode(this.launchArrow);
+            let parent = this.node.parent;
+            arrow.parent = parent;
+            arrow.setWorldPosition(pos);
+            let tempAngle = new Vec3(angle.x + (-40 + i * 10), angle.y, angle.z);
+            arrow.eulerAngles = tempAngle;
+        }
+
+
     }
 
     /**
