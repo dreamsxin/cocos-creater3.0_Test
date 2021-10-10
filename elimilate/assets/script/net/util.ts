@@ -1,5 +1,5 @@
-import { Vec3 } from "cc";
-
+import { director, Vec3, Node } from "cc";
+import { Element } from '../game/element/element';
 export enum IpType {
     local = 0,
     remote = 1
@@ -51,4 +51,40 @@ export function copyVec3Array(arr: any[]) {
         copy.push(v3);
     }
     return copy;
+}
+
+/**
+ * 判定两个数组是否一样
+ * @param arr1 
+ * @param arr2 
+ */
+export function checkSameArray(arr1: any[], arr2: any[]) {
+    if (arr1.length == arr2.length) {
+        let func = (item: Element) => {
+            for (let j = 0; j < arr2.length; j++) {
+                let item2: Element = arr2[j];
+                if (item.data.x == item2.data.x && item.data.y == item.data.y) {
+                    return true
+                }
+            }
+            return false;
+        }
+        for (let i = 0; i < arr1.length; i++) {
+            let item = arr1[i];
+            if (!func(item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * 将节点添加到elementLayer层
+ * @param node 
+ */
+export function addNodeToElementLayer(node: Node) {
+    director.getScene().getChildByPath('Canvas/elementLayer').addChild(node);
 }

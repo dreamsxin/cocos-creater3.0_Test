@@ -18,3 +18,8 @@ export interface Head {
     serverType: number,
     router: string,
 }
+
+export interface elementData {
+    x: number,//列
+    y: number,//行
+}

@@ -22,6 +22,20 @@ export class resourceUtil {
         })
     }
 
+    public static loadNormalRes(prePath: string): Promise<Prefab> {
+        return new Promise((resolve, reject) => {
+            this.loadRes(`prefab/${prePath}`, Prefab, (err: any, prefab: Prefab) => {
+                if (err) {
+                    console.error('effect load failed', prePath);
+                    reject && reject();
+                    return;
+                }
+
+                resolve && resolve(prefab);
+            })
+        })
+    }
+
     public static loadEffectRes(modulePath: string) {
         return new Promise((resolve, reject) => {
             this.loadRes(`prefab/effect/${modulePath}`, Prefab, (err: any, prefab: Prefab) => {
