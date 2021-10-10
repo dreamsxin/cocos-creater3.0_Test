@@ -160,10 +160,30 @@ export class ElementManager {
         return new Promise(resolve => {
             let samelist = [];//满足条件的列表
             let bool: boolean = true;
+
             for (let i = 0; i < this._hor; i++) {
                 for (let j = 0; j < this._ver; j++) {
                     let item = this.elements[i][j];
-                    if (!item || this._checkExist(item, samelist)) continue;
+                    if (!item) continue;
+                    if (this._checkExist(item, samelist)) continue;
+                    //优先查找基于该滑块的特殊排列阵型
+                    let hor: Element[] = this._checkHorizontal(item);
+                    let ver: Element[] = this._checkVertical(item);
+                    if (hor.length >= 3 && ver.length >= 3) {
+                        hor = hor.slice(1, hor.length);//将自己去掉一个（重复）
+                        hor = hor.concat(ver);
+                        samelist.push(hor);
+                    }
+
+                }
+            }
+
+            for (let i = 0; i < this._hor; i++) {
+                for (let j = 0; j < this._ver; j++) {
+                    let item = this.elements[i][j];
+                    if (!item) continue;
+                    //普通单排，同行/同列
+                    if (this._checkExist(item, samelist)) continue;
                     let hor: Element[] = this._checkHorizontal(item);
                     let ver: Element[] = this._checkVertical(item);
                     hor = hor.concat(ver);
@@ -172,8 +192,11 @@ export class ElementManager {
                     }
                 }
             }
+
+            console.log(samelist);
             console.log("length========> " + samelist.length);
             this._handleSamelist(samelist);
+            // bool = !!samelist.length;
             resolve(bool);
         })
     }
@@ -227,6 +250,7 @@ export class ElementManager {
                 break;
             }
         }
+        if (arr.length < 3) return [];
         return arr;
     }
 
@@ -235,7 +259,7 @@ export class ElementManager {
      * @param {Element} item 
      */
     private _checkVertical(item: Element): Element[] {
-        let arr: Element[] = [];
+        let arr: Element[] = [item];
         let startX = item.data.x;
         let startY = item.data.y;
         // 上边
@@ -261,6 +285,7 @@ export class ElementManager {
                 break;
             }
         }
+        if (arr.length < 3) return [];
         return arr;
     }
 
@@ -269,7 +294,7 @@ export class ElementManager {
      * @param samelist [Element[]]
      * @returns 
      */
-    private _handleSamelist(samelist: any[]) {
+    private async _handleSamelist(samelist: any[]) {
         if (samelist.length < 1) return;
         //0:去掉不合法的
         samelist = this._jugetLegitimate(samelist);
@@ -283,7 +308,27 @@ export class ElementManager {
                 this.elements[ele.data.x][ele.data.y] = null;
             }
         }
-        //2:补缺
+        //2:向下掉落,只需要检测竖直方向，计算出每个每个滑块的下面有多少个空位子，空位子的个数极为下落的位置
+        for (let i = 0; i < this._hor; i++) {
+            for (let j = 0; j < this._ver; j++) {
+                let item = this.elements[i][j];
+                if (item) {
+                    this._checkVerticalEmpty(item);
+                }
+            }
+        }
+        setTimeout(async () => {
+            await this._startCheck();
+        }, 600);
+        //3:刷新列表矩阵值
+        // for (let i = 0; i < this._hor; i++) {
+        //     for (let j = 0; j < this._ver; j++) {
+        //         let item = this.elements[i][j];
+        //         if (item) {
+        //             this._checkVerticalEmpty(item);
+        //         }
+        //     }
+        // }
     }
 
     /**
@@ -399,7 +444,30 @@ export class ElementManager {
         if (count < 3) return bool;
         return true;
     }
+
+
+    /**
+     * 检测滑块竖直方向下面的空滑块个数
+     * @param {Element} ele 
+     */
+    private _checkVerticalEmpty(ele: Element) {
+        let x: number = ele.data.x;
+        let y: number = ele.data.y;
+        let count: number = 0;
+        for (let i = y; i >= 0; i--) {
+            let item = this.elements[x][i];
+            if (!item) count++;
+        }
+        //1:位置交换
+        let x1 = ele.data.x;
+        let y1 = ele.data.y;
+        let x2 = ele.data.x;
+        let y2 = y - count;
+        let pTemp = this.elements[x1][y1];
+        this.elements[x1][y1] = this.elements[x2][y2]
+        this.elements[x2][y2] = pTemp;
+        //向下掉
+        ele.moveDown(count, async () => {
+        });
+    }
 }
-
-
-//todo  4个5个一组的还需要进一步处理，将满足条件的拆分出来

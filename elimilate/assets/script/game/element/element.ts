@@ -20,7 +20,7 @@ export class Element extends Component {
     }
 
     start() {
-        this.node.getChildByName('lbtp').getComponent(Label).string = this.data.x + `-${this.type}-` + this.data.y;
+        this._debugshow();
         let color = [
             Color.CYAN,
             Color.RED,
@@ -68,7 +68,7 @@ export class Element extends Component {
      */
     public moveTo(otherEle: Element, cb?: Function) {
         let pos = otherEle.node.getPosition();
-        this.node.getChildByName('lbtp').getComponent(Label).string = this.data.x + `-${this.type}-` + this.data.y;
+        this._debugshow();
         tween(this.node).to(0.5, { position: pos }, { easing: 'smooth' }).call(() => {
             if (cb) cb();
         }).start();
@@ -79,6 +79,25 @@ export class Element extends Component {
      */
     public destoryElement() {
         PoolManager.setNode(this.node);
+    }
+
+    /**
+     * 向下移动重新排列
+     * @param count 
+     */
+    public moveDown(count: number, cb?: Function) {
+        let pos = this.node.getPosition();
+        pos.y -= count * this._width;
+        this.data.y -= count;
+        this._debugshow();
+        tween(this.node).to(0.5, { position: pos }, { easing: 'smooth' }).call(() => {
+            if (cb) cb();
+        }).start();
+    }
+
+
+    private _debugshow() {
+        this.node.getChildByName('lbtp').getComponent(Label).string = this.data.x + `-${this.type}-` + this.data.y;
     }
 }
 
