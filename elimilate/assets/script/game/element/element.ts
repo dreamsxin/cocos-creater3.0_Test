@@ -24,8 +24,8 @@ export class Element extends Component {
         let color = [
             Color.CYAN,
             Color.RED,
-            Color.GREEN,
-            Color.YELLOW,
+            Color.BLUE,
+            Color.GRAY,
         ]
         this.node.getChildByName('bg').getComponent(Sprite).color = color[this.type];
     }

@@ -14,10 +14,12 @@ export class ElementManager {
     public elements: Element[][] = [];//所有element列表
 
     public twoChange: Element[] = [];//交换的两个element
+    private _elementPre: Prefab = null;
 
     private _isMoving: boolean = false;
     private _hor: number = 10;//行
     private _ver: number = 10;//列
+    private _countIdx: number = 0;//计数，下落次数，所有下落动作结束再次检测，直到没有满足条件的滑块为止
 
     public static get Inst() {
         if (this._instance) {
@@ -31,19 +33,32 @@ export class ElementManager {
 
     public async init() {
         clientEvent.on(Constant.EVENT_TYPE.SelectedElement, this._evtSelectedElement, this);
-        let element: Prefab = await resourceUtil.loadNormalRes('element')
-        this._layoutElement(element);
+        this._layoutElement();
+    }
+
+    /**
+     * 获取新滑块
+     * @returns 滑块
+     */
+    public async getNewElement(): Promise<Node> {
+        return new Promise(async resolve => {
+            if (!this._elementPre) {
+                this._elementPre = await resourceUtil.loadNormalRes('element');
+            }
+            let ele: Node = PoolManager.getNode(this._elementPre);
+            resolve(ele);
+        });
     }
 
     /**
      * 初始化，排列
      * @param {Prefab} element 
      */
-    private _layoutElement(element: Prefab) {
+    private async _layoutElement() {
         for (let i = 0; i < this._hor; i++) {
             this.elements.push([]);
             for (let j = 0; j < this._ver; j++) {
-                let ele: Node = PoolManager.getNode(element);
+                let ele = await this.getNewElement();
                 let w = ele.getComponent(UITransformComponent).width;
                 let pos = new Vec3(-750 / 2 + w / 2 + i * w, -1330 / 2 + w / 2 + j * w);
                 ele.setPosition(pos);
@@ -55,6 +70,7 @@ export class ElementManager {
                 this.elements[i][j] = script;
             }
         }
+        await this._startCheck();
     }
 
     /**
@@ -78,6 +94,7 @@ export class ElementManager {
     private _evtSelectedElement(element: Element) {
         let bool = this.twoChange.find((item: Element) => { return (element.getData().x == item.getData().x && element.getData().y == item.getData().y) });
         if (bool || this._isMoving || !this._jugementPushCondition(element)) return;
+        if (this._countIdx != 0) return;
         this.twoChange.push(element);
 
         if (this.twoChange.length == 2) {
@@ -128,7 +145,6 @@ export class ElementManager {
         }
         item1.moveTo(item2);
         item2.moveTo(item1, callFunc);
-
     }
 
     /**
@@ -174,7 +190,6 @@ export class ElementManager {
                         hor = hor.concat(ver);
                         samelist.push(hor);
                     }
-
                 }
             }
 
@@ -193,10 +208,9 @@ export class ElementManager {
                 }
             }
 
-            console.log(samelist);
             console.log("length========> " + samelist.length);
             this._handleSamelist(samelist);
-            // bool = !!samelist.length;
+            bool = !!samelist.length;
             resolve(bool);
         })
     }
@@ -290,7 +304,7 @@ export class ElementManager {
     }
 
     /**
-     * 去重后的数组，进一步判断每一组元素是否合法
+     * 结果列表，进一步判断每一组元素是否合法
      * @param samelist [Element[]]
      * @returns 
      */
@@ -317,18 +331,17 @@ export class ElementManager {
                 }
             }
         }
-        setTimeout(async () => {
-            await this._startCheck();
-        }, 600);
-        //3:刷新列表矩阵值
-        // for (let i = 0; i < this._hor; i++) {
-        //     for (let j = 0; j < this._ver; j++) {
-        //         let item = this.elements[i][j];
-        //         if (item) {
-        //             this._checkVerticalEmpty(item);
-        //         }
-        //     }
-        // }
+        //3:补差,每一列空多少个位置就不多少个滑块
+        for (let i = 0; i < this._hor; i++) {
+            let count: number = 0;//每一列的空位子
+            for (let j = 0; j < this._ver; j++) {
+                let item = this.elements[i][j];
+                if (!item) {
+                    count++;
+                }
+            }
+            this._fillVacancies(i, count);
+        }
     }
 
     /**
@@ -375,7 +388,7 @@ export class ElementManager {
                 break;
 
             default://全在行或者列
-                bool = this._atTheSameHorOrVer(list);
+                bool = this._atLeastThreeSameHorAndVer(list);
                 break;
 
         }
@@ -445,7 +458,6 @@ export class ElementManager {
         return true;
     }
 
-
     /**
      * 检测滑块竖直方向下面的空滑块个数
      * @param {Element} ele 
@@ -458,6 +470,8 @@ export class ElementManager {
             let item = this.elements[x][i];
             if (!item) count++;
         }
+        if (count == 0) return;
+        this._countIdx++;
         //1:位置交换
         let x1 = ele.data.x;
         let y1 = ele.data.y;
@@ -468,6 +482,34 @@ export class ElementManager {
         this.elements[x2][y2] = pTemp;
         //向下掉
         ele.moveDown(count, async () => {
+            this._countIdx--;
         });
+    }
+
+    /** 
+     * 填补空缺位置
+    */
+    private async _fillVacancies(hor: number, count: number) {
+        let sub = this._ver - count;
+        for (let i = 0; i < count; i++) {
+            let ele = await this.getNewElement();
+            let w = ele.getComponent(UITransformComponent).width;
+            let j = this._ver + i;
+            let pos = new Vec3(-750 / 2 + w / 2 + hor * w, -1330 / 2 + w / 2 + j * w);
+            ele.setPosition(pos);
+            clientEvent.dispatchEvent(Constant.EVENT_TYPE.AddElement, ele);
+            let dt = this._getData(hor, j);
+            let script = ele.getComponent(Element);
+            let type: number = Math.floor(Math.random() * 4);
+            script.init(dt, type);
+            this.elements[hor][sub + i] = script;
+            this._countIdx++;
+            script.moveDown(count, async () => {
+                this._countIdx--;
+                if (this._countIdx == 0) {
+                    await this._startCheck();
+                }
+            });
+        }
     }
 }
