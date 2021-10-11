@@ -46,7 +46,7 @@ export class Element extends Component {
     _evtTouchElement(pos: Vec3) {
         let lp = this.node.getWorldPosition();
         let distance = Vec3.distance(pos, lp);
-        if (distance < this._width * Constant.screenScale) {
+        if (distance < this._width * Constant.screenScale/2) {
             //选中将自己发送出去
             clientEvent.dispatchEvent(Constant.EVENT_TYPE.SelectedElement, this);
         }
