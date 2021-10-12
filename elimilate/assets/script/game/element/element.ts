@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Label, UITransformComponent, Vec3, v2, Vec2, tween, Sprite, Color, } from 'cc';
+import { _decorator, Component, Node, Label, UITransformComponent, Vec3, v2, Vec2, tween, Sprite, Color, color, } from 'cc';
 import { clientEvent } from '../../framework/clientEvent';
 import { Constant } from '../../framework/constant';
 import { PoolManager } from '../../framework/poolManager';
@@ -46,7 +46,7 @@ export class Element extends Component {
     _evtTouchElement(pos: Vec3) {
         let lp = this.node.getWorldPosition();
         let distance = Vec3.distance(pos, lp);
-        if (distance < this._width * Constant.screenScale) {
+        if (distance < this._width * Constant.screenScale / 2) {
             //选中将自己发送出去
             clientEvent.dispatchEvent(Constant.EVENT_TYPE.SelectedElement, this);
         }
@@ -98,6 +98,14 @@ export class Element extends Component {
 
     private _debugshow() {
         this.node.getChildByName('lbtp').getComponent(Label).string = this.data.x + `-${this.type}-` + this.data.y;
+    }
+
+    public showDebug() {
+        let bg = this.node.getChildByName('bg');
+        console.log("1111");
+        tween(bg).to(0.2, { scale: new Vec3(0.5, 0.5, 0.5) }).call(() => {
+            tween(bg).to(0.2, { scale: new Vec3(1, 1, 1) }).start();
+        }).start();
     }
 }
 

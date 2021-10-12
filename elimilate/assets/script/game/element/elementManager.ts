@@ -33,6 +33,7 @@ export class ElementManager {
 
     public async init() {
         clientEvent.on(Constant.EVENT_TYPE.SelectedElement, this._evtSelectedElement, this);
+        clientEvent.on(Constant.EVENT_TYPE.GetTips, this._evtGetTips, this);
         this._layoutElement();
     }
 
@@ -58,19 +59,25 @@ export class ElementManager {
         for (let i = 0; i < this._hor; i++) {
             this.elements.push([]);
             for (let j = 0; j < this._ver; j++) {
+                this._countIdx++;
                 let ele = await this.getNewElement();
                 let w = ele.getComponent(UITransformComponent).width;
-                let pos = new Vec3(-750 / 2 + w / 2 + i * w, -1330 / 2 + w / 2 + j * w);
+                let pos = new Vec3(-750 / 2 + w / 2 + i * w, -1330 / 2 + w / 2 + j * w + (this._ver - 1) * w);
                 ele.setPosition(pos);
                 clientEvent.dispatchEvent(Constant.EVENT_TYPE.AddElement, ele);
-                let dt = this._getData(i, j);
+                let dt = this._getData(i, j + 9);
                 let script = ele.getComponent(Element);
                 let type: number = Math.floor(Math.random() * 4);
                 script.init(dt, type);
                 this.elements[i][j] = script;
+                script.moveDown(9, async () => {
+                    this._countIdx--;
+                    if (this._countIdx == 0) {
+                        await this._startCheck();
+                    }
+                });
             }
         }
-        await this._startCheck();
     }
 
     /**
@@ -511,5 +518,162 @@ export class ElementManager {
                 }
             });
         }
+    }
+
+    /**
+     * 提示
+     * @returns 
+     */
+    private async _evtGetTips(): Promise<Element[]> {
+        return new Promise(resolve => {
+            let tipsList = [];
+            for (let i = 0; i < this._hor; i++) {
+                for (let j = 0; j < this._ver; j++) {
+                    let item = this.elements[i][j];
+                    if (!item) continue;
+                    if (this._checkExist(item, tipsList)) continue;
+                    //水平方向/竖直方向单独检测
+                    let hor: Element[] = this._checkTipsHorizontal(item);
+                    let ver: Element[] = this._checkTipVertical(item);
+                    if (hor.length >= 3) {
+                        tipsList.push(hor);
+                    }
+                    if (ver.length >= 3) {
+                        tipsList.push(ver);
+                    }
+                    //水平方向+竖直方向同时不为3个的情况下检测
+                    if (ver.length > 0 && ver.length < 3 && hor.length > 0 && hor.length < 3) {
+                        if (ver[0].type == hor[0].type) {
+                            hor = hor.concat(ver);
+                            if (hor.length >= 3) {
+                                tipsList.push(hor);
+                            }
+                        }
+                    }
+                }
+            }
+            //
+            if (tipsList.length > 0) {
+                tipsList.sort((a, b) => { return b.length - a.length });
+                let lt = tipsList[0];
+                for (let j = 0; j < lt.length; j++) {
+                    lt[j].showDebug();
+                }
+            }
+            else {
+                this._relayoutElement();
+            }
+            resolve(tipsList);
+        });
+    }
+
+    /**
+     * 水平方向检测，筛选出所有提示== =，= ==
+     * @param ele 
+     */
+    private _checkTipsHorizontal(ele: Element) {
+        //左边
+        let horArr: Element[] = [];
+        for (let i = ele.data.x - 1; i >= 0; i--) {
+            if (i < 0) break;
+            let item = this.elements[i][ele.data.y];
+            if (horArr.length < 1) {
+                if (ele.type != item.type) {
+                    horArr.push(item);
+                }
+                else {
+                    break;
+                }
+            }
+            else {
+                if (item.type == horArr[0].type && ele.type != item.type) {
+                    horArr.push(item);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        //右边
+        for (let j = ele.data.x + 1; j < this._hor; j++) {
+            if (j > this._hor - 1) break;
+            let item = this.elements[j][ele.data.y];
+            if (horArr.length < 1) {
+                break;
+            }
+            else {
+                if (item.type == horArr[0].type && ele.type != item.type) {
+                    horArr.push(item);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        return horArr;
+    }
+
+    /**
+     * 竖直方向检测，筛选出所有提示
+     *          +       +
+     *                  +
+     *          +       
+     *          +       +
+     * @param ele 
+     */
+    private _checkTipVertical(ele: Element) {
+        //下边
+        let verArr: Element[] = [];
+        for (let i = ele.data.y - 1; i >= 0; i--) {
+            if (i < 0) break;
+            let item = this.elements[ele.data.x][i];
+            if (verArr.length < 1) {
+                if (ele.type != item.type) {
+                    verArr.push(item);
+                }
+                else {
+                    break;
+                }
+            }
+            else {
+                if (item.type == verArr[0].type && ele.type != item.type) {
+                    verArr.push(item);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        //上边
+        for (let j = ele.data.y + 1; j < this._ver; j++) {
+            if (j > this._ver - 1) break;
+            let item = this.elements[ele.data.x][j];
+            if (verArr.length < 1) {
+                break;
+            }
+            else {
+                if (item.type == verArr[0].type && ele.type != item.type) {
+                    verArr.push(item);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        return verArr;
+    }
+
+
+    /**
+     * 没有可消除的对象了，重新向排列
+     */
+    private async _relayoutElement() {
+        for (let i = 0; i < this._hor; i++) {
+            for (let j = 0; j < this._ver; j++) {
+                let item = this.elements[i][j];
+                if (item) item.destoryElement();
+            }
+        }
+        await this._layoutElement()
     }
 }
