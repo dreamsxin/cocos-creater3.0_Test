@@ -67,7 +67,7 @@ export class ElementManager {
                 clientEvent.dispatchEvent(Constant.EVENT_TYPE.AddElement, ele);
                 let dt = this._getData(i, j + 9);
                 let script = ele.getComponent(Element);
-                let type: number = Math.floor(Math.random() * 4);
+                let type: number = Math.floor(Math.random() * Constant.ElementKinds);
                 script.init(dt, type);
                 this.elements[i][j] = script;
                 script.moveDown(9, async () => {
@@ -103,9 +103,8 @@ export class ElementManager {
         if (bool || this._isMoving || !this._jugementPushCondition(element)) return;
         if (this._countIdx != 0) return;
         this.twoChange.push(element);
-
         if (this.twoChange.length == 2) {
-            this._startMove();
+            this._startChangeMove();
         }
     }
 
@@ -133,7 +132,7 @@ export class ElementManager {
     /**
      * 移动滑块
      */
-    private _startMove() {
+    private _startChangeMove() {
         this._isMoving = true;
         let item1 = this.twoChange[0];
         let item2 = this.twoChange[1];
@@ -187,7 +186,7 @@ export class ElementManager {
             for (let i = 0; i < this._hor; i++) {
                 for (let j = 0; j < this._ver; j++) {
                     let item = this.elements[i][j];
-                    if (!item) continue;
+                    if (!item || item.getMoveState()) continue;
                     if (this._checkExist(item, samelist)) continue;
                     //优先查找基于该滑块的特殊排列阵型
                     let hor: Element[] = this._checkHorizontal(item);
@@ -203,7 +202,7 @@ export class ElementManager {
             for (let i = 0; i < this._hor; i++) {
                 for (let j = 0; j < this._ver; j++) {
                     let item = this.elements[i][j];
-                    if (!item) continue;
+                    if (!item || item.getMoveState()) continue;
                     //普通单排，同行/同列
                     if (this._checkExist(item, samelist)) continue;
                     let hor: Element[] = this._checkHorizontal(item);
@@ -215,7 +214,6 @@ export class ElementManager {
                 }
             }
 
-            console.log("length========> " + samelist.length);
             this._handleSamelist(samelist);
             bool = !!samelist.length;
             resolve(bool);
@@ -251,7 +249,7 @@ export class ElementManager {
         // 右边
         for (let i = startX + 1; i < this._hor; i++) {
             let ele = this.elements[i][startY];
-            if (!ele) break;
+            if (!ele || item.getMoveState()) break;
             if (ele.type == item.type) {
                 arr.push(ele);
             }
@@ -263,7 +261,7 @@ export class ElementManager {
         for (let i = startX - 1; i >= 0; i--) {
             if (i < 0) break;
             let ele = this.elements[i][startY];
-            if (!ele) break;
+            if (!ele || item.getMoveState()) break;
             if (ele.type == item.type) {
                 arr.push(ele);
             }
@@ -286,7 +284,7 @@ export class ElementManager {
         // 上边
         for (let i = startY + 1; i < this._ver; i++) {
             let ele = this.elements[startX][i];
-            if (!ele) break;
+            if (!ele || item.getMoveState()) break;
             if (ele.type == item.type) {
                 arr.push(ele);
             }
@@ -298,7 +296,7 @@ export class ElementManager {
         for (let i = startY - 1; i >= 0; i--) {
             if (i < 0) break;
             let ele = this.elements[startX][i];
-            if (!ele) break;
+            if (!ele || item.getMoveState()) break;
             if (ele.type == item.type) {
                 arr.push(ele);
             }
@@ -319,7 +317,6 @@ export class ElementManager {
         if (samelist.length < 1) return;
         //0:去掉不合法的
         samelist = this._jugetLegitimate(samelist);
-        console.log("length2=> " + samelist.length);
         //1:移除
         for (let i = 0; i < samelist.length; i++) {
             let item = samelist[i];
@@ -347,7 +344,7 @@ export class ElementManager {
                     count++;
                 }
             }
-            this._fillVacancies(i, count);
+            await this._fillVacancies(i, count);
         }
     }
 
@@ -497,27 +494,30 @@ export class ElementManager {
      * 填补空缺位置
     */
     private async _fillVacancies(hor: number, count: number) {
-        let sub = this._ver - count;
-        for (let i = 0; i < count; i++) {
-            let ele = await this.getNewElement();
-            let w = ele.getComponent(UITransformComponent).width;
-            let j = this._ver + i;
-            let pos = new Vec3(-750 / 2 + w / 2 + hor * w, -1330 / 2 + w / 2 + j * w);
-            ele.setPosition(pos);
-            clientEvent.dispatchEvent(Constant.EVENT_TYPE.AddElement, ele);
-            let dt = this._getData(hor, j);
-            let script = ele.getComponent(Element);
-            let type: number = Math.floor(Math.random() * 4);
-            script.init(dt, type);
-            this.elements[hor][sub + i] = script;
-            this._countIdx++;
-            script.moveDown(count, async () => {
-                this._countIdx--;
-                if (this._countIdx == 0) {
-                    await this._startCheck();
-                }
-            });
-        }
+        return new Promise(async resolve => {
+            let sub = this._ver - count;
+            for (let i = 0; i < count; i++) {
+                let ele = await this.getNewElement();
+                let w = ele.getComponent(UITransformComponent).width;
+                let j = this._ver + i;
+                let pos = new Vec3(-750 / 2 + w / 2 + hor * w, -1330 / 2 + w / 2 + j * w);
+                ele.setPosition(pos);
+                clientEvent.dispatchEvent(Constant.EVENT_TYPE.AddElement, ele);
+                let dt = this._getData(hor, j);
+                let script = ele.getComponent(Element);
+                let type: number = Math.floor(Math.random() * Constant.ElementKinds);
+                script.init(dt, type);
+                this.elements[hor][sub + i] = script;
+                this._countIdx++;
+                script.moveDown(count, async () => {
+                    this._countIdx--;
+                    if (this._countIdx == 0) {
+                        await this._startCheck();
+                    }
+                });
+            }
+            resolve(null);
+        });
     }
 
     /**
@@ -546,6 +546,7 @@ export class ElementManager {
                         if (ver[0].type == hor[0].type) {
                             hor = hor.concat(ver);
                             if (hor.length >= 3) {
+                                if (hor.length > 3) hor.splice(hor.length - 1, 1);
                                 tipsList.push(hor);
                             }
                         }
@@ -554,13 +555,15 @@ export class ElementManager {
             }
             //
             if (tipsList.length > 0) {
-                tipsList.sort((a, b) => { return b.length - a.length });
-                let lt = tipsList[0];
+                let rand = Math.floor(Math.random() * tipsList.length);
+                let lt = tipsList[rand];
+                lt = lt ? lt : tipsList[0];
                 for (let j = 0; j < lt.length; j++) {
                     lt[j].showDebug();
                 }
             }
             else {
+                //没有可以消除的组合了
                 this._relayoutElement();
             }
             resolve(tipsList);
@@ -610,6 +613,8 @@ export class ElementManager {
                 }
             }
         }
+        //只需要返回三个即可
+        if (horArr.length > 3) horArr.splice(horArr.length - 1, 1);
         return horArr;
     }
 
@@ -660,6 +665,7 @@ export class ElementManager {
                 }
             }
         }
+        if (verArr.length > 3) verArr.splice(verArr.length - 1, 1);
         return verArr;
     }
 

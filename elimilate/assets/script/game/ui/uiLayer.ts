@@ -1,12 +1,11 @@
 
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, tween } from 'cc';
 import { clientEvent } from '../../framework/clientEvent';
 import { Constant } from '../../framework/constant';
 const { ccclass, property } = _decorator;
 
 @ccclass('UiLayer')
 export class UiLayer extends Component {
-
     /**
      * 提示
      */
