@@ -28,4 +28,36 @@ export class Constant {
      * @memberof Constant
      */
     public static ElementKinds = 4;
+
+    /**
+     * 交换时间
+     *
+     * @static
+     * @memberof Constant
+     */
+    public static changeTime = 0.3;
+
+    /**
+     * 下落时间
+     *
+     * @static
+     * @memberof Constant
+     */
+    public static downTime = 0.5;
+
+    /**
+     * 无操作（消除时长
+     *
+     * @static
+     * @memberof Constant
+     */
+    public static tipsTime = 5;
+
+    /**
+     *  开始游戏
+     *
+     * @type {boolean}
+     * @memberof Constant
+     */
+    public static startGame: boolean = false;
 }

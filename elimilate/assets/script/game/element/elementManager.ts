@@ -20,6 +20,7 @@ export class ElementManager {
     private _hor: number = 10;//行
     private _ver: number = 10;//列
     private _countIdx: number = 0;//计数，下落次数，所有下落动作结束再次检测，直到没有满足条件的滑块为止
+    public tipsCount: number = 0;//玩家一定时间无操作即提示玩家，时间计数
 
     public static get Inst() {
         if (this._instance) {
@@ -34,6 +35,7 @@ export class ElementManager {
     public async init() {
         clientEvent.on(Constant.EVENT_TYPE.SelectedElement, this._evtSelectedElement, this);
         clientEvent.on(Constant.EVENT_TYPE.GetTips, this._evtGetTips, this);
+        Constant.startGame = true;
         this._layoutElement();
     }
 
@@ -315,6 +317,7 @@ export class ElementManager {
      */
     private async _handleSamelist(samelist: any[]) {
         if (samelist.length < 1) return;
+        this.tipsCount = 0;
         //0:去掉不合法的
         samelist = this._jugetLegitimate(samelist);
         //1:移除
@@ -524,7 +527,7 @@ export class ElementManager {
      * 提示
      * @returns 
      */
-    private async _evtGetTips(): Promise<Element[]> {
+    private async _evtGetTips(isShow: boolean): Promise<Element[]> {
         return new Promise(resolve => {
             let tipsList = [];
             for (let i = 0; i < this._hor; i++) {
@@ -555,11 +558,13 @@ export class ElementManager {
             }
             //
             if (tipsList.length > 0) {
-                let rand = Math.floor(Math.random() * tipsList.length);
-                let lt = tipsList[rand];
-                lt = lt ? lt : tipsList[0];
-                for (let j = 0; j < lt.length; j++) {
-                    lt[j].showDebug();
+                if (isShow) {
+                    let rand = Math.floor(Math.random() * tipsList.length);
+                    let lt = tipsList[rand];
+                    lt = lt ? lt : tipsList[0];
+                    for (let j = 0; j < lt.length; j++) {
+                        lt[j].showDebug();
+                    }
                 }
             }
             else {

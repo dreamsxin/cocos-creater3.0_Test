@@ -65,7 +65,7 @@ export class Element extends Component {
     }
 
     /**
-     * 滑动移动
+     * 滑动移动(交换)
      * @param otherEle
      * @param cb 
      */
@@ -75,7 +75,7 @@ export class Element extends Component {
         let pos = otherEle.node.getPosition();
         this._debugshow();
         this._isMoving = true;
-        tween(this.node).to(0.3, { position: pos }, { easing: 'smooth' }).call(() => {
+        tween(this.node).to(Constant.changeTime, { position: pos }, { easing: 'circOut' }).call(() => {
             this._isMoving = false;
             if (cb) cb();
         }).start();
@@ -100,7 +100,7 @@ export class Element extends Component {
         // pos.y -= count * this._width;
         pos.y = this.data.y * this._width - 1330 / 2 + this._width / 2
         this._debugshow();
-        tween(this.node).to(0.3, { position: pos }, { easing: 'smooth' }).call(() => {
+        tween(this.node).to(Constant.downTime, { position: pos }, { easing: 'backOut' }).call(() => {
             this._isMovingDown = false;
             if (cb) cb();
         }).start();
