@@ -47,6 +47,8 @@ export class Element extends Component {
      * @param {Vec3} pos 
      */
     _evtTouchElement(pos: Vec3) {
+        if (this._isMoving) return;
+        if (this._isMovingDown) return;
         let lp = this.node.getWorldPosition();
         let distance = Vec3.distance(pos, lp);
         if (distance < this._width * Constant.screenScale / 1.5) {
@@ -93,7 +95,7 @@ export class Element extends Component {
      * @param count 
      */
     public moveDown(count: number, cb?: Function) {//todo
-        if (this._isMovingDown) return;
+        // if (this._isMovingDown) return;
         this._isMovingDown = true;
         this.data.y -= count;
         let pos = this.node.getPosition();

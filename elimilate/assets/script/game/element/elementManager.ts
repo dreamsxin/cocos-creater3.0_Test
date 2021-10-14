@@ -103,7 +103,8 @@ export class ElementManager {
     private _evtSelectedElement(element: Element) {
         let bool = this.twoChange.find((item: Element) => { return (element.getData().x == item.getData().x && element.getData().y == item.getData().y) });
         if (bool || this._isMoving || !this._jugementPushCondition(element)) return;
-        if (this._countIdx != 0) return;
+        //所有下落结束后才能下一次交换
+        // if (this._countIdx != 0) return;
         this.twoChange.push(element);
         if (this.twoChange.length == 2) {
             this._startChangeMove();
@@ -120,6 +121,8 @@ export class ElementManager {
             if (item.data.x != element.data.x && item.data.y != element.data.y) {
                 return false;
             }
+            //正在下落的也不能滑动交换
+            if (item.getMoveState()) return false;
         }
         return true;
     }
@@ -143,6 +146,12 @@ export class ElementManager {
         let callFunc = async () => {
             let isHave = await this._startCheck();
             //满足消除条件则返回，否则还原
+            if (isHave) {
+                this._isMoving = false;
+                return;
+            }
+            //若是因为消除列表中包含了正在掉落的滑块，则只检测以这两个为中心点展开搜索
+            isHave = await this._checkElementAround([item1, item2]);
             if (isHave) {
                 this._isMoving = false;
                 return;
@@ -177,11 +186,53 @@ export class ElementManager {
     }
 
     /**
+     *   检测指定滑块是否有满足消除条件的存在
+     * @param itemlist 
+     * @returns 
+     */
+    private async _checkElementAround(itemlist: Element[]): Promise<boolean> {
+        return new Promise(async resolve => {
+            let bool: boolean = true;
+            let samelist = [];
+            for (let i = 0; i < itemlist.length; i++) {
+                let item = itemlist[i];
+                //优先查找基于该滑块的特殊排列阵型
+                let hor: Element[] = this._checkHorizontal(item);
+                let ver: Element[] = this._checkVertical(item);
+                if (hor.length >= 3 && ver.length >= 3) {
+                    hor = hor.slice(1, hor.length);//将自己去掉一个（重复）
+                    hor = hor.concat(ver);
+                    samelist.push(hor);
+                }
+            }
+            for (let i = 0; i < itemlist.length; i++) {
+                let item = itemlist[i];
+                //普通单排，同行/同列
+                if (this._checkExist(item, samelist)) continue;
+                let hor: Element[] = this._checkHorizontal(item);
+                let ver: Element[] = this._checkVertical(item);
+                hor = hor.concat(ver);
+                if (hor.length >= 3) {
+                    samelist.push(hor);
+                }
+            }
+            let isDown = await this._checkMovingDown(samelist);
+            if (isDown) {
+                resolve(false);
+                return;
+            }
+            this._handleSamelist(samelist);
+            bool = !!samelist.length;
+            resolve(bool);
+        });
+    }
+
+    /**
      * 开始检测是否有满足消除条件的存在
      * @returns bool
      */
     private async _startCheck(): Promise<boolean> {
-        return new Promise(resolve => {
+        return new Promise(async resolve => {
             let samelist = [];//满足条件的列表
             let bool: boolean = true;
 
@@ -215,7 +266,11 @@ export class ElementManager {
                     }
                 }
             }
-
+            let isDown = await this._checkMovingDown(samelist);
+            if (isDown) {
+                resolve(false);
+                return;
+            }
             this._handleSamelist(samelist);
             bool = !!samelist.length;
             resolve(bool);
@@ -308,6 +363,32 @@ export class ElementManager {
         }
         if (arr.length < 3) return [];
         return arr;
+    }
+
+    /**
+     * 消除列表中是否有正在下落的滑块，若有则本次交换无效
+     * @param samelist 
+     */
+    private async _checkMovingDown(samelist: any[]) {
+        return new Promise(resolve => {
+            let bool: boolean = false;
+            for (let i = 0; i < samelist.length; i++) {
+                let item = samelist[i];
+                let downCount: number = 0;
+                //查找是否有正在下落的
+                for (let j = 0; j < item.length; j++) {
+                    let ele: Element = item[j];
+                    if (ele.getMoveState()) {
+                        downCount++;
+                    }
+                }
+                if (downCount > 0) {
+                    bool = true;
+                    break;
+                }
+            }
+            resolve(bool);
+        });
     }
 
     /**
@@ -585,6 +666,7 @@ export class ElementManager {
         for (let i = ele.data.x - 1; i >= 0; i--) {
             if (i < 0) break;
             let item = this.elements[i][ele.data.y];
+            if (!item) continue;
             if (horArr.length < 1) {
                 if (ele.type != item.type) {
                     horArr.push(item);
@@ -606,6 +688,7 @@ export class ElementManager {
         for (let j = ele.data.x + 1; j < this._hor; j++) {
             if (j > this._hor - 1) break;
             let item = this.elements[j][ele.data.y];
+            if (!item) continue;
             if (horArr.length < 1) {
                 break;
             }
@@ -637,6 +720,7 @@ export class ElementManager {
         for (let i = ele.data.y - 1; i >= 0; i--) {
             if (i < 0) break;
             let item = this.elements[ele.data.x][i];
+            if (!item) continue;
             if (verArr.length < 1) {
                 if (ele.type != item.type) {
                     verArr.push(item);
@@ -658,6 +742,7 @@ export class ElementManager {
         for (let j = ele.data.y + 1; j < this._ver; j++) {
             if (j > this._ver - 1) break;
             let item = this.elements[ele.data.x][j];
+            if (!item) continue;
             if (verArr.length < 1) {
                 break;
             }

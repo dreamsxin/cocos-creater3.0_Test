@@ -21,7 +21,7 @@ export class Main extends Component {
         //加载CSV相关配置
         localConfig.instance.loadConfig(() => {
             this._loadFinish();
-        })
+        });
     }
 
     private _loadFinish() {
