@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Label, UITransformComponent, Vec3, tween, Sprite, Color, color, } from 'cc';
+import { _decorator, Component, Node, Label, UITransformComponent, Vec3, tween, Sprite, Color } from 'cc';
 import { clientEvent } from '../../framework/clientEvent';
 import { Constant } from '../../framework/constant';
 import { PoolManager } from '../../framework/poolManager';
@@ -28,6 +28,9 @@ export class Element extends Component {
             Color.RED,
             Color.BLUE,
             Color.MAGENTA,
+            Color.YELLOW,
+            Color.GREEN,
+            Color.TRANSPARENT
         ]
         this.node.getChildByName('bg').getComponent(Sprite).color = color[this.type];
     }
@@ -89,17 +92,20 @@ export class Element extends Component {
      * 向下移动重新排列
      * @param count 
      */
-    public moveDown(count: number, cb?: Function) {
+    public moveDown(count: number, cb?: Function, delayTime?: number) {
         this._isMovingDown = true;
+        let dt = delayTime ? delayTime : 0;
         this.data.y -= count;
         let pos = this.node.getPosition();
         // pos.y -= count * this._width;
         let ver = ElementManager.Inst.getVer();
         pos.y = this.data.y * this._width - ver * this._width / 2 + this._width / 2
         this._debugshow();
-        tween(this.node).to(Constant.downTime, { position: pos }, { easing: 'backOut' }).call(() => {
-            this._isMovingDown = false;
-            if (cb) cb();
+        tween(this.node).to(delayTime, {}).call(() => {
+            tween(this.node).to(Constant.downTime, { position: pos }, { easing: 'backOut' }).call(() => {
+                this._isMovingDown = false;
+                if (cb) cb();
+            }).start();
         }).start();
     }
 

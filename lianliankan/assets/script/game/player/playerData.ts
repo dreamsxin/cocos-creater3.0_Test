@@ -1,6 +1,7 @@
 
 import { _decorator, Component, Node } from 'cc';
 import { DataManager } from '../../data/dataManager';
+import { elementsData } from '../../data/elementsData';
 import { levelData } from '../../net/globalUtils';
 const { ccclass, property } = _decorator;
 
@@ -27,8 +28,14 @@ export class PlayerData {
     }
 
     getLevelData(): levelData {
+        let list = elementsData.data;
+        this.level = this.level < list.length ? this.level : list.length - 1;
         this._levelData = DataManager.getelementsDataById(this.level);
         return this._levelData;
+    }
+
+    nextNevel() {
+        this.level++;
     }
 }
 

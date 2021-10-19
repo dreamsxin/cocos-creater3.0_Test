@@ -10,6 +10,7 @@ export class Constant {
         AddElement: 'add_element',
         SelectedElement: 'selected_element',
         GetTips: 'get_tips',
+        NextLevel: 'next_level',
     }
 
     /**
@@ -26,7 +27,7 @@ export class Constant {
      * @static
      * @memberof Constant
      */
-    public static ElementKinds = 1;
+    public static ElementKinds = 4;
 
     /**
      * 交换时间

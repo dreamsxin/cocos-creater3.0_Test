@@ -30,6 +30,7 @@ export interface levelData {
     hor: number,
     ver: number,
     nd: number,
+    kinds: number,
 }
 
 

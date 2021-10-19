@@ -50,9 +50,7 @@ export class ElementManager {
         clientEvent.on(Constant.EVENT_TYPE.SelectedElement, this._evtSelectedElement, this);
         clientEvent.on(Constant.EVENT_TYPE.GetTips, this._evtGetTips, this);
         Constant.startGame = true;
-        this._levelData = PlayerData.Inst.getLevelData();
-        this._hor = this._levelData.hor;
-        this._ver = this._levelData.ver;
+
         this._layoutElement();
     }
 
@@ -84,13 +82,16 @@ export class ElementManager {
         });
     }
 
-
-
     /**
      * 初始化，排列
      * @param {Prefab} element 
      */
     private async _layoutElement() {
+        this._levelData = PlayerData.Inst.getLevelData();
+        this._hor = this._levelData.hor;
+        this._ver = this._levelData.ver;
+        Constant.ElementKinds = this._levelData.kinds;
+
         for (let i = 0; i < this._hor; i++) {
             this.elements.push([]);
             for (let j = 0; j < this._ver; j++) {
@@ -109,7 +110,7 @@ export class ElementManager {
                     this._countIdx--;
                     if (this._countIdx == 0) {
                     }
-                });
+                }, i / 10);
             }
         }
     }
@@ -390,6 +391,13 @@ export class ElementManager {
             }
         }
         await this._layoutElement()
+    }
+
+    /**
+     * 下一关
+     */
+    public nextLevel() {
+        this._relayoutElement();
     }
 
     public getVer() {

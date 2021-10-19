@@ -3,6 +3,7 @@ import { _decorator, Component, Node, tween } from 'cc';
 import { clientEvent } from '../../framework/clientEvent';
 import { Constant } from '../../framework/constant';
 import { ElementManager } from '../element/elementManager';
+import { PlayerData } from '../player/playerData';
 const { ccclass, property } = _decorator;
 
 @ccclass('UiLayer')
@@ -27,5 +28,10 @@ export class UiLayer extends Component {
      */
     _handleTips() {
         clientEvent.dispatchEvent(Constant.EVENT_TYPE.GetTips, true);
+    }
+
+    nextLevel() {
+        PlayerData.Inst.nextNevel();
+        ElementManager.Inst.nextLevel();
     }
 }
