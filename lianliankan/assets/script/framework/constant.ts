@@ -11,8 +11,9 @@ export class Constant {
         SelectedElement: 'selected_element',
         GetTips: 'get_tips',
         NextLevel: 'next_level',
-        LevelLayerBack:'level_layer_back',
-        StartBtnEvent:'start_btn_event',
+        LevelLayerBack: 'level_layer_back',
+        StartBtnEvent: 'start_btn_event',
+        StartGame: 'start_game',
     }
 
     /**
@@ -62,4 +63,12 @@ export class Constant {
      * @memberof Constant
      */
     public static startGame: boolean = false;
+
+    /**
+     * 用户数据字段，便于通用
+     *
+     * @static
+     * @memberof Constant
+     */
+    public static UserData = { gold: 'gold', level: 'level', sign: "sign" };
 }

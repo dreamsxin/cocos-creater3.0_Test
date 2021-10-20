@@ -80,3 +80,16 @@ export function checkSameArray(arr1: any[], arr2: any[]) {
     return false;
 }
 
+/**
+ * 数组乱序
+ * @param arr 
+ */
+export function shuffle(arr: any[]) {
+    for (let i = 1; i < arr.length; i++) {
+        var rand = Math.floor(Math.random() * (i + 1));
+        let t = arr[rand];
+        arr[rand] = arr[i];
+        arr[i] = t;
+    }
+    return arr;
+}

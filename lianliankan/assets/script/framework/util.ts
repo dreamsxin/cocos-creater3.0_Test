@@ -540,6 +540,7 @@ export class util {
     }
 
     /**
+     * 数组乱序
      * 将数组内容进行随机排列
      * @param {Array}arr 需要被随机的数组 
      * @returns 

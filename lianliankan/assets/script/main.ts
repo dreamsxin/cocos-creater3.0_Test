@@ -2,7 +2,9 @@
 import { _decorator, Component, Node, view } from 'cc';
 import { Constant } from './framework/constant';
 import { localConfig } from './framework/localConfig';
+import { StorageManager1 } from './framework/storageManager';
 import { ElementManager } from './game/element/elementManager';
+import { PlayerData } from './game/player/playerData';
 import { TouchManager } from './game/touchManager';
 const { ccclass, property } = _decorator;
 
@@ -12,9 +14,10 @@ export class Main extends Component {
         let viewSize = view.getCanvasSize();
         console.log(viewSize);
         Constant.screenScale = viewSize.width / 750;
+        StorageManager1.Inst;
         ElementManager.Inst;
         TouchManager.Inst;
-
+        PlayerData.Inst;
     }
 
     private _loadCSV() {

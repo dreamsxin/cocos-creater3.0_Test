@@ -2,7 +2,7 @@
   "ver": "1.0.21",
   "importer": "image",
   "imported": true,
-  "uuid": "f78c133e-f57c-47a2-a5c2-cf2fb77c5fec",
+  "uuid": "e8dacc49-9a57-4e4b-97cb-6bed485fe2a4",
   "files": [
     ".png",
     ".json"
@@ -10,8 +10,8 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "f78c133e-f57c-47a2-a5c2-cf2fb77c5fec@6c48a",
-      "displayName": "8",
+      "uuid": "e8dacc49-9a57-4e4b-97cb-6bed485fe2a4@6c48a",
+      "displayName": "banana",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "f78c133e-f57c-47a2-a5c2-cf2fb77c5fec"
+        "imageUuidOrDatabaseUri": "e8dacc49-9a57-4e4b-97cb-6bed485fe2a4"
       },
       "ver": "1.0.21",
       "imported": true,
@@ -33,8 +33,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "f78c133e-f57c-47a2-a5c2-cf2fb77c5fec@f9941",
-      "displayName": "8",
+      "uuid": "e8dacc49-9a57-4e4b-97cb-6bed485fe2a4@f9941",
+      "displayName": "banana",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,17 +45,17 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 20,
-        "height": 20,
-        "rawWidth": 20,
-        "rawHeight": 20,
+        "width": 150,
+        "height": 125,
+        "rawWidth": 150,
+        "rawHeight": 125,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "f78c133e-f57c-47a2-a5c2-cf2fb77c5fec@6c48a",
+        "imageUuidOrDatabaseUri": "e8dacc49-9a57-4e4b-97cb-6bed485fe2a4@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.9",
@@ -69,6 +69,6 @@
   "userData": {
     "hasAlpha": true,
     "type": "sprite-frame",
-    "redirect": "f78c133e-f57c-47a2-a5c2-cf2fb77c5fec@f9941"
+    "redirect": "e8dacc49-9a57-4e4b-97cb-6bed485fe2a4@f9941"
   }
 }

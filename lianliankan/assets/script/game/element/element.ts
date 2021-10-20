@@ -1,9 +1,10 @@
 
-import { _decorator, Component, Node, Label, UITransformComponent, Vec3, tween, Sprite, Color } from 'cc';
+import { _decorator, Component, Node, Label, UITransformComponent, Vec3, tween, Sprite, Color, Size, size } from 'cc';
 import { clientEvent } from '../../framework/clientEvent';
 import { Constant } from '../../framework/constant';
 import { PoolManager } from '../../framework/poolManager';
 import { elementData } from '../../net/globalUtils';
+import { PlayerData } from '../player/playerData';
 import { ElementManager } from './elementManager';
 const { ccclass, property } = _decorator;
 
@@ -16,9 +17,15 @@ export class Element extends Component {
     private _isMoving: boolean = false;
 
     onLoad() {
-        let trans = this.node.getComponent(UITransformComponent);
-        this._width = trans.width;
+        this._setSize();
         this.node.on(Node.EventType.TOUCH_END, this._evtTouchElement, this);
+    }
+
+    private _setSize() {
+        let trans = this.node.getComponent(UITransformComponent);
+        let w = ElementManager.Inst.getSizeWidth();
+        trans.setContentSize(size(w, w));
+        this._width = trans.width;
     }
 
     start() {
@@ -51,6 +58,7 @@ export class Element extends Component {
     _evtTouchElement() {
         if (this._isMoving) return;
         if (this._isMovingDown) return;
+        console.log(this.type);
         //选中将自己发送出去
         clientEvent.dispatchEvent(Constant.EVENT_TYPE.SelectedElement, this);
     }
@@ -99,9 +107,9 @@ export class Element extends Component {
         let pos = this.node.getPosition();
         // pos.y -= count * this._width;
         let ver = ElementManager.Inst.getVer();
-        pos.y = this.data.y * this._width - ver * this._width / 2 + this._width / 2
+        pos.y = this.data.y * this._width - ver * this._width / 2 + this._width / 2 - this._width / 1.5;
         this._debugshow();
-        tween(this.node).to(delayTime, {}).call(() => {
+        tween(this.node).to(dt, {}).call(() => {
             tween(this.node).to(Constant.downTime, { position: pos }, { easing: 'backOut' }).call(() => {
                 this._isMovingDown = false;
                 if (cb) cb();
@@ -114,11 +122,12 @@ export class Element extends Component {
     }
 
     private _debugshow() {
-        this.node.getChildByName('lbtp').getComponent(Label).string = this.data.x + `-${this.type}-` + this.data.y;
+        // this.node.getChildByName('lbtp').getComponent(Label).string = this.data.x + `-${this.type}-` + this.data.y;
+        this.node.getChildByName('lbtp').getComponent(Label).string = `${this.type}`;
     }
 
     public showDebug() {
-        let bg = this.node.getChildByName('bg');
+        let bg = this.node;
         tween(bg).to(0.2, { scale: new Vec3(0.5, 0.5, 0.5) }).call(() => {
             tween(bg).to(0.2, { scale: new Vec3(1, 1, 1) }).start();
         }).start();

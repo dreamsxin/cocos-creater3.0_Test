@@ -38,8 +38,15 @@ export interface levelData {
 /**
  * 签到数据接口
  */
-export interface signData{
-    idx:number,
-    day:number,
-    gold:number,
+export interface signData {
+    id: number,
+    day: number,
+    gold: number,
+}
+
+
+export interface userData {
+    gold: number,//金币
+    level: number,//关卡
+    sign: number,//签到天数
 }

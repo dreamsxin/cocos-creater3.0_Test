@@ -6,6 +6,7 @@ import { Constant } from '../../framework/constant';
 import { PoolManager } from '../../framework/poolManager';
 import { resourceUtil } from '../../framework/resourceUtil';
 import { elementData, levelData } from '../../net/globalUtils';
+import { shuffle } from '../../net/util';
 import { Ppath } from '../astar/pPath';
 import { PlayerData } from '../player/playerData';
 import { Element } from './element';
@@ -35,6 +36,8 @@ export class ElementManager {
     private _fillCount: number = 0;//当前关卡可以掉落的新滑块个数
 
     private _levelData: levelData = null;
+    private _kindsArr: number[] = [];//类型数组，必须两两出现，才能实现完全消除掉
+    private _downKindsArr: number[] = [];//类型数组(额外掉落)，必须两两出现，才能实现完全消除掉
 
     public static get Inst() {
         if (this._instance) {
@@ -50,7 +53,13 @@ export class ElementManager {
         clientEvent.on(Constant.EVENT_TYPE.SelectedElement, this._evtSelectedElement, this);
         clientEvent.on(Constant.EVENT_TYPE.GetTips, this._evtGetTips, this);
         Constant.startGame = true;
+    }
 
+    /**
+     * 开始排列水果矩阵
+     */
+    public startLayout() {
+        this.clearList();
         this._layoutElement();
     }
 
@@ -82,6 +91,31 @@ export class ElementManager {
         });
     }
 
+    private _setNormalKinds() {
+        this._kindsArr.splice(0);
+        this._downKindsArr.splice(0);
+        let len = this._hor * this._ver;
+        let count = 0;
+        for (let i = 0; i < this._levelData.nd; i += 2) {
+            let kind = Math.floor(Math.random() * Constant.ElementKinds);
+            this._downKindsArr.push(kind);
+            this._downKindsArr.push(kind);
+        }
+
+        for (let i = 0; i < len; i += 2) {
+            let kind = Math.floor(Math.random() * Constant.ElementKinds);
+            if (count < Constant.ElementKinds) {
+                kind = count;
+            }
+            this._kindsArr.push(kind);
+            this._kindsArr.push(kind);
+            count++;
+        }
+        //乱序
+        this._kindsArr = shuffle(this._kindsArr);
+        this._downKindsArr = shuffle(this._downKindsArr);
+    }
+
     /**
      * 初始化，排列
      * @param {Prefab} element 
@@ -91,21 +125,23 @@ export class ElementManager {
         this._hor = this._levelData.hor;
         this._ver = this._levelData.ver;
         Constant.ElementKinds = this._levelData.kinds;
-
+        this._setNormalKinds();
+        let index = 0;
         for (let i = 0; i < this._hor; i++) {
             this.elements.push([]);
             for (let j = 0; j < this._ver; j++) {
                 this._countIdx++;
                 let ele = await this.getNewElement();
-                let w = ele.getComponent(UITransformComponent).width;
-                let pos = new Vec3(-this._hor * w / 2 + w / 2 + i * w, -this._ver * w / 2 + j * w + (this._ver - 1) * w);
+                let w = this.getSizeWidth();//ele.getComponent(UITransformComponent).width;
+                let pos = new Vec3(-this._hor * w / 2 + w / 2 + i * w, -this._ver * w / 2 + j * w + (this._ver - 1) * w + 400);
                 ele.setPosition(pos);
                 clientEvent.dispatchEvent(Constant.EVENT_TYPE.AddElement, ele);
                 let dt = this._getData(i, j + this._ver - 1);
                 let script = ele.getComponent(Element);
-                let type: number = Math.floor(Math.random() * Constant.ElementKinds);
+                let type: number = this._kindsArr[index];
                 script.init(dt, type);
                 this.elements[i][j] = script;
+                index++;
                 script.moveDown(this._ver - 1, async () => {
                     this._countIdx--;
                     if (this._countIdx == 0) {
@@ -148,8 +184,18 @@ export class ElementManager {
     /**
      * 清楚当前的选择的两个滑块
      */
-    public cleartwoChange() {
+    public clearList() {
+        if (this.elements.length < 2) return;
+        this._fillCount = 0;
+        this.tipsCount = 0;
         this.twoChange.splice(0);
+        for (let i = 0; i < this._hor; i++) {
+            for (let j = 0; j < this._ver; j++) {
+                let item = this.elements[i][j];
+                if (item) item.destoryElement();
+            }
+        }
+        this.elements.splice(0);
     }
 
     /**
@@ -164,7 +210,8 @@ export class ElementManager {
         if (bool1 && bool2) {
             if (item1.type == item2.type) {
                 //画线
-                Ppath.Inst.findWay(item1, item2);
+                let w = item1.node.getComponent(UITransformComponent).width;
+                // Ppath.Inst.findWay(item1, item2, w);
                 //消除
                 item1.destoryElement();
                 item2.destoryElement();
@@ -252,7 +299,9 @@ export class ElementManager {
                     count++;
                 }
             }
-            await this._fillVacancies(i, count);
+            if (count > 0) {
+                await this._fillVacancies(i, count);
+            }
         }
     }
 
@@ -301,14 +350,14 @@ export class ElementManager {
                     return;
                 }
                 let ele = await this.getNewElement();
-                let w = ele.getComponent(UITransformComponent).width;
+                let w = this.getSizeWidth();//ele.getComponent(UITransformComponent).width;
                 let j = this._ver + i;
-                let pos = new Vec3(-this._hor * w / 2 + w / 2 + hor * w, -this._ver * w / 2 + j * w);
+                let pos = new Vec3(-this._hor * w / 2 + w / 2 + hor * w, -this._ver * w / 2 + j * w + 400);
                 ele.setPosition(pos);
                 clientEvent.dispatchEvent(Constant.EVENT_TYPE.AddElement, ele);
                 let dt = this._getData(hor, j);
                 let script = ele.getComponent(Element);
-                let type: number = Math.floor(Math.random() * Constant.ElementKinds);
+                let type: number = this._downKindsArr[this._fillCount];
                 script.init(dt, type);
                 this.elements[hor][sub + i] = script;
                 this._countIdx++;
@@ -370,26 +419,21 @@ export class ElementManager {
                 for (let j = 0; j < lt.length; j++) {
                     lt[j].showDebug();
                 }
-                Ppath.Inst.findWay(lt[0], lt[1]);
+                let w = lt[0].node.getComponent(UITransformComponent).width;
+                // Ppath.Inst.findWay(lt[0], lt[1], w);
             }
         }
         else {
             //没有可以消除的组合了
-            this._relayoutElement();
+            this.relayoutElement();
         }
     }
 
     /**
      * 没有可消除的对象了，重新向排列
      */
-    private async _relayoutElement() {
-        this.tipsCount = 0;
-        for (let i = 0; i < this._hor; i++) {
-            for (let j = 0; j < this._ver; j++) {
-                let item = this.elements[i][j];
-                if (item) item.destoryElement();
-            }
-        }
+    public async relayoutElement() {
+        this.clearList();
         await this._layoutElement()
     }
 
@@ -397,10 +441,26 @@ export class ElementManager {
      * 下一关
      */
     public nextLevel() {
-        this._relayoutElement();
+        this.relayoutElement();
     }
 
     public getVer() {
         return this._ver;
+    }
+
+    /**
+     * 根据关卡矩阵大小设置对于的水果大小
+     * @returns 
+     */
+    public getSizeWidth(): number {
+        let levelData = this._levelData;
+        let w = 110;
+        //以最多的那个边为准
+        let hor = levelData.hor > levelData.ver ? levelData.hor : levelData.ver;
+        if (hor == 4) w = 120;
+        if (hor == 6 || hor == 5) w = 110;
+        if (hor == 7) w = 100;
+        if (hor == 8) w = 90;
+        return w;
     }
 }

@@ -1,6 +1,7 @@
 
 import { _decorator, Component, Node } from 'cc';
 import { elementsData, inelements } from './elementsData';
+import { insigns, signsData } from './signsData';
 const { ccclass, property } = _decorator;
 
 @ccclass('DataManager')
@@ -23,9 +24,12 @@ export class DataManager extends Component {
      * 获取随机一条鱼的数据,用于测试使用
      * @returns 
      */
-    public static getRandomelementsData(): inelements {
-        let idx = Math.floor(Math.random() * (elementsData.data.length - 9));
-        return elementsData.data[idx];
+    public static getSignDataById(id: number): insigns {
+        return signsData.data[id];
+    }
+
+    public static getSignData(): insigns[] {
+        return signsData.data;
     }
 }
 

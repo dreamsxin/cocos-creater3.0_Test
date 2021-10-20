@@ -33,7 +33,10 @@ export class Ppath {
 
     private _count = 0;
 
-    public findWay(start: Element, end: Element) {
+    private _w: number = 0;
+
+    public findWay(start: Element, end: Element, width: number) {
+        this._w = width;
         this._count = 0;
         this._openlist.splice(0);
         this._closelist.splice(0);
@@ -126,7 +129,7 @@ export class Ppath {
                         let pathArr: pitem[] = [];
                         /* 最终路径 */
                         this.getPath(item, pathArr);
-                        let end = new pitem();
+                        let end = this.getPitem();
                         end.x = this._distination.x;
                         end.y = this._distination.y;
                         pathArr.push(end)//把终点放进去
@@ -250,6 +253,8 @@ export class Ppath {
      */
     getPitem(): pitem {
         let item: pitem = new pitem();
+        item.width = this._w;
+        item.height = this._w;
         return item;
     }
 }
