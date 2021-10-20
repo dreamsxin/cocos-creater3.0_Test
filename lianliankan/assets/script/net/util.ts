@@ -80,11 +80,3 @@ export function checkSameArray(arr1: any[], arr2: any[]) {
     return false;
 }
 
-
-/**
- * 将节点添加到elementLayer层
- * @param node 
- */
-export function addNodeToElementLayer(node: Node) {
-    director.getScene().getChildByPath('Canvas/elementLayer').addChild(node);
-}

@@ -8,8 +8,43 @@ const { ccclass, property } = _decorator;
 
 @ccclass('UiLayer')
 export class UiLayer extends Component {
+    @property(Node)
+    startLayer:Node = undefined;
+
+    @property(Node)
+    levelLayer:Node = undefined;
+
+    @property(Node)
+    topLayer:Node = undefined;
+
+    onLoad(){
+        this.startLayer.active = true;
+        this.levelLayer.active = false;
+        this.topLayer.active = false;
+        clientEvent.on(Constant.EVENT_TYPE.LevelLayerBack,this._evtLevelLayerBack,this);
+        clientEvent.on(Constant.EVENT_TYPE.StartBtnEvent,this._evtStartBtnEvent,this);
+    }
+
     start() {
         this.schedule(this._tipsCounts, 1);
+    }
+
+    /**
+     * 关卡界面返回开始界面 
+     */
+    private _evtLevelLayerBack(){
+        this.levelLayer.active = false;
+        this.topLayer.active = false;
+        this.startLayer.active = true;
+    }
+
+    /**
+     * 开始界面到关卡界面
+     */
+    private _evtStartBtnEvent(){
+        this.levelLayer.active = true;
+        this.topLayer.active = true;
+        this.startLayer.active = false;
     }
 
     /**

@@ -24,7 +24,9 @@ export interface elementData {
     y: number,//行
 }
 
-
+/**
+ * 关卡数据接口
+ */
 export interface levelData {
     id: number,
     hor: number,
@@ -33,4 +35,11 @@ export interface levelData {
     kinds: number,
 }
 
-
+/**
+ * 签到数据接口
+ */
+export interface signData{
+    idx:number,
+    day:number,
+    gold:number,
+}

@@ -11,6 +11,8 @@ export class Constant {
         SelectedElement: 'selected_element',
         GetTips: 'get_tips',
         NextLevel: 'next_level',
+        LevelLayerBack:'level_layer_back',
+        StartBtnEvent:'start_btn_event',
     }
 
     /**
