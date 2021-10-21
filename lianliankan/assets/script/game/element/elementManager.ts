@@ -39,6 +39,8 @@ export class ElementManager {
     private _kindsArr: number[] = [];//类型数组，必须两两出现，才能实现完全消除掉
     private _downKindsArr: number[] = [];//类型数组(额外掉落)，必须两两出现，才能实现完全消除掉
 
+    private _isTimeOut: boolean = false;//超时
+
     public static get Inst() {
         if (this._instance) {
             return this._instance;
@@ -121,6 +123,7 @@ export class ElementManager {
      * @param {Prefab} element 
      */
     private async _layoutElement() {
+        this._isTimeOut = false;
         this._levelData = PlayerData.Inst.getLevelData();
         this._hor = this._levelData.hor;
         this._ver = this._levelData.ver;
@@ -175,6 +178,10 @@ export class ElementManager {
         }
         let bool = this.twoChange.find((item: Element) => { return (element.getData().x == item.getData().x && element.getData().y == item.getData().y) });
         if (bool) return;
+        if (this._isTimeOut) {
+            console.log('超时了');
+            return;
+        }
         this.twoChange.push(element);
         if (this.twoChange.length == 2) {
             this._startCheck();
@@ -217,7 +224,8 @@ export class ElementManager {
                 item2.destoryElement();
                 this.elements[item1.data.x][item1.data.y] = null;
                 this.elements[item2.data.x][item2.data.y] = null;
-                this._checkDownAndFill();
+                await this._checkDownAndFill();
+                this._checkOverLevel();
                 this.tipsCount = 0;
             }
             else {
@@ -275,36 +283,51 @@ export class ElementManager {
         return false;
     }
 
-
     /**
      * 向下掉落，不差
      * @returns 
      */
     private async _checkDownAndFill() {
-        //1:向下掉落,只需要检测竖直方向，计算出每个每个滑块的下面有多少个空位子，空位子的个数极为下落的位置
-        for (let i = 0; i < this._hor; i++) {
-            for (let j = 0; j < this._ver; j++) {
-                let item = this.elements[i][j];
-                if (item) {
-                    this._checkVerticalEmpty(item);
+        return new Promise(async resove => {
+            //1:向下掉落,只需要检测竖直方向，计算出每个每个滑块的下面有多少个空位子，空位子的个数极为下落的位置
+            for (let i = 0; i < this._hor; i++) {
+                for (let j = 0; j < this._ver; j++) {
+                    let item = this.elements[i][j];
+                    if (item) {
+                        this._checkVerticalEmpty(item);
+                    }
                 }
             }
-        }
-        //2:补差,每一列空多少个位置就不多少个滑块
-        for (let i = 0; i < this._hor; i++) {
-            let count: number = 0;//每一列的空位子
-            for (let j = 0; j < this._ver; j++) {
-                let item = this.elements[i][j];
-                if (!item) {
-                    count++;
+            //2:补差,每一列空多少个位置就不多少个滑块
+            for (let i = 0; i < this._hor; i++) {
+                let count: number = 0;//每一列的空位子
+                for (let j = 0; j < this._ver; j++) {
+                    let item = this.elements[i][j];
+                    if (!item) {
+                        count++;
+                    }
+                }
+                if (count > 0) {
+                    await this._fillVacancies(i, count);
                 }
             }
-            if (count > 0) {
-                await this._fillVacancies(i, count);
-            }
-        }
+            resove(null);
+        });
     }
 
+    /**
+     * 是否通关检测
+     */
+    private _checkOverLevel() {
+        for (let i = 0; i < this._hor; i++) {
+            for (let j = 0; j < this._ver; j++) {
+                let item = this.elements[i][j];
+                if (item) return;
+            }
+        }
+        //通关，直接下一关
+        this._nextLevel();
+    }
 
     /**
      * 检测滑块竖直方向下面的空滑块个数
@@ -435,17 +458,24 @@ export class ElementManager {
     public async relayoutElement() {
         this.clearList();
         await this._layoutElement()
+        clientEvent.dispatchEvent(Constant.EVENT_TYPE.UpdateTime);
     }
 
     /**
      * 下一关
      */
-    public nextLevel() {
+    private _nextLevel() {
+        console.log('------恭喜通关------');
+        PlayerData.Inst.nextNevel();
         this.relayoutElement();
     }
 
     public getVer() {
         return this._ver;
+    }
+
+    public setTOut(bool: boolean) {
+        this._isTimeOut = bool;
     }
 
     /**

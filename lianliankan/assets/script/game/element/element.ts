@@ -17,29 +17,16 @@ export class Element extends Component {
     private _isMoving: boolean = false;
 
     onLoad() {
-        this._setSize();
         this.node.on(Node.EventType.TOUCH_END, this._evtTouchElement, this);
-    }
-
-    private _setSize() {
-        let trans = this.node.getComponent(UITransformComponent);
-        let w = ElementManager.Inst.getSizeWidth();
-        trans.setContentSize(size(w, w));
-        this._width = trans.width;
+        this._setSize();
+        for (let i = 0; i < 9; i++) {
+            this.node.getChildByName(i + "").active = false;
+        }
     }
 
     start() {
         this._debugshow();
-        let color = [
-            Color.CYAN,
-            Color.RED,
-            Color.BLUE,
-            Color.MAGENTA,
-            Color.YELLOW,
-            Color.GREEN,
-            Color.TRANSPARENT
-        ]
-        this.node.getChildByName('bg').getComponent(Sprite).color = color[this.type];
+        this.node.getChildByName(this.type + "").active = true;
     }
 
     /**
@@ -61,6 +48,13 @@ export class Element extends Component {
         console.log(this.type);
         //选中将自己发送出去
         clientEvent.dispatchEvent(Constant.EVENT_TYPE.SelectedElement, this);
+    }
+
+    private _setSize() {
+        let trans = this.node.getComponent(UITransformComponent);
+        let w = ElementManager.Inst.getSizeWidth();
+        trans.setContentSize(size(w, w));
+        this._width = trans.width;
     }
 
     public getData() {
@@ -105,7 +99,6 @@ export class Element extends Component {
         let dt = delayTime ? delayTime : 0;
         this.data.y -= count;
         let pos = this.node.getPosition();
-        // pos.y -= count * this._width;
         let ver = ElementManager.Inst.getVer();
         pos.y = this.data.y * this._width - ver * this._width / 2 + this._width / 2 - this._width / 1.5;
         this._debugshow();
@@ -122,8 +115,19 @@ export class Element extends Component {
     }
 
     private _debugshow() {
+        return;
         // this.node.getChildByName('lbtp').getComponent(Label).string = this.data.x + `-${this.type}-` + this.data.y;
         this.node.getChildByName('lbtp').getComponent(Label).string = `${this.type}`;
+        let color = [
+            Color.CYAN,
+            Color.RED,
+            Color.BLUE,
+            Color.MAGENTA,
+            Color.YELLOW,
+            Color.GREEN,
+            Color.TRANSPARENT
+        ]
+        this.node.getChildByName('bg').getComponent(Sprite).color = color[this.type];
     }
 
     public showDebug() {

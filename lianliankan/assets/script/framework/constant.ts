@@ -10,7 +10,7 @@ export class Constant {
         AddElement: 'add_element',
         SelectedElement: 'selected_element',
         GetTips: 'get_tips',
-        NextLevel: 'next_level',
+        UpdateTime: 'update_time',
         LevelLayerBack: 'level_layer_back',
         StartBtnEvent: 'start_btn_event',
         StartGame: 'start_game',

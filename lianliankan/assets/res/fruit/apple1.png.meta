@@ -2,7 +2,7 @@
   "ver": "1.0.21",
   "importer": "image",
   "imported": true,
-  "uuid": "c5d2b126-94cd-4c5f-ba68-e6eaa6557a6a",
+  "uuid": "dbf827d4-135b-4eaa-8f9d-2910d93e6797",
   "files": [
     ".png",
     ".json"
@@ -10,8 +10,8 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "c5d2b126-94cd-4c5f-ba68-e6eaa6557a6a@6c48a",
-      "displayName": "watermelon",
+      "uuid": "dbf827d4-135b-4eaa-8f9d-2910d93e6797@6c48a",
+      "displayName": "apple1",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "c5d2b126-94cd-4c5f-ba68-e6eaa6557a6a"
+        "imageUuidOrDatabaseUri": "dbf827d4-135b-4eaa-8f9d-2910d93e6797"
       },
       "ver": "1.0.21",
       "imported": true,
@@ -33,8 +33,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "c5d2b126-94cd-4c5f-ba68-e6eaa6557a6a@f9941",
-      "displayName": "watermelon",
+      "uuid": "dbf827d4-135b-4eaa-8f9d-2910d93e6797@f9941",
+      "displayName": "apple1",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,17 +45,17 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 110,
-        "height": 110,
-        "rawWidth": 110,
-        "rawHeight": 110,
+        "width": 136,
+        "height": 137,
+        "rawWidth": 136,
+        "rawHeight": 137,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "c5d2b126-94cd-4c5f-ba68-e6eaa6557a6a@6c48a",
+        "imageUuidOrDatabaseUri": "dbf827d4-135b-4eaa-8f9d-2910d93e6797@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.9",
@@ -69,6 +69,6 @@
   "userData": {
     "hasAlpha": true,
     "type": "sprite-frame",
-    "redirect": "c5d2b126-94cd-4c5f-ba68-e6eaa6557a6a@f9941"
+    "redirect": "dbf827d4-135b-4eaa-8f9d-2910d93e6797@f9941"
   }
 }

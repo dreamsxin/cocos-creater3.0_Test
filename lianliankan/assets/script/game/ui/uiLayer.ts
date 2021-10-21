@@ -79,9 +79,4 @@ export class UiLayer extends Component {
     _handleTips() {
         clientEvent.dispatchEvent(Constant.EVENT_TYPE.GetTips, true);
     }
-
-    nextLevel() {
-        PlayerData.Inst.nextNevel();
-        ElementManager.Inst.nextLevel();
-    }
 }

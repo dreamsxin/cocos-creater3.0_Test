@@ -1,51 +1,51 @@
 
 import { _decorator, Component, Node, Label } from 'cc';
-import { signData } from '../../net/globalUtils';
+import { insigns } from '../../data/signsData';
 const { ccclass, property } = _decorator;
 
 
- 
+
 @ccclass('SignItem')
 export class SignItem extends Component {
     @property(Label)
-    titleLb:Label = undefined;
+    titleLb: Label = undefined;
 
     @property(Label)
-    goldLb:Label = undefined;
+    goldLb: Label = undefined;
 
     @property(Node)
-    signTag:Node = undefined;
+    signTag: Node = undefined;
 
-    private _data:signData = null;
-    init(dt:signData){
+    private _data: insigns = null;
+    init(dt: insigns) {
         this._data = dt;
     }
 
-    start(){
+    start() {
         this.signTag.active = false;
-        if(this._data){
+        if (this._data) {
             this._setInfo();
         }
     }
 
-    private _setInfo(){
+    private _setInfo() {
         this.titleLb.string = `第${this._getDay(this._data.day)}天`;
         this.goldLb.string = `金币X${this._data.gold}`;
     }
 
-    handleClickEvent(){
+    handleClickEvent() {
         console.log("click");
     }
 
-    private _getDay(num:number){
-        switch(num){
-            case 1:return "一"
-            case 2:return "二"
-            case 3:return "三"
-            case 4:return "四"
-            case 5:return "五"
-            case 6:return "六"
-            case 7:return "七"
+    private _getDay(num: number) {
+        switch (num) {
+            case 1: return "一"
+            case 2: return "二"
+            case 3: return "三"
+            case 4: return "四"
+            case 5: return "五"
+            case 6: return "六"
+            case 7: return "七"
         }
     }
 }

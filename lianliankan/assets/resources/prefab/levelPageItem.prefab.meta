@@ -1,0 +1,13 @@
+{
+  "ver": "1.1.30",
+  "importer": "prefab",
+  "imported": true,
+  "uuid": "5eda0de3-b73d-486b-86bc-975750253817",
+  "files": [
+    ".json"
+  ],
+  "subMetas": {},
+  "userData": {
+    "syncNodeName": "levelPageItem"
+  }
+}

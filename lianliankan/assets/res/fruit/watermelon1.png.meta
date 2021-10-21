@@ -2,7 +2,7 @@
   "ver": "1.0.21",
   "importer": "image",
   "imported": true,
-  "uuid": "f5836254-baed-4e2d-af14-cdef09c6fcb6",
+  "uuid": "2784d2cd-89e6-401e-a3e3-ea06d1c87534",
   "files": [
     ".png",
     ".json"
@@ -10,8 +10,8 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "f5836254-baed-4e2d-af14-cdef09c6fcb6@6c48a",
-      "displayName": "5",
+      "uuid": "2784d2cd-89e6-401e-a3e3-ea06d1c87534@6c48a",
+      "displayName": "watermelon1",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -22,7 +22,7 @@
         "mipfilter": "none",
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "f5836254-baed-4e2d-af14-cdef09c6fcb6"
+        "imageUuidOrDatabaseUri": "2784d2cd-89e6-401e-a3e3-ea06d1c87534"
       },
       "ver": "1.0.21",
       "imported": true,
@@ -33,8 +33,8 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "f5836254-baed-4e2d-af14-cdef09c6fcb6@f9941",
-      "displayName": "5",
+      "uuid": "2784d2cd-89e6-401e-a3e3-ea06d1c87534@f9941",
+      "displayName": "watermelon1",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
@@ -45,17 +45,17 @@
         "offsetY": 0,
         "trimX": 0,
         "trimY": 0,
-        "width": 18,
-        "height": 20,
-        "rawWidth": 18,
-        "rawHeight": 20,
+        "width": 147,
+        "height": 149,
+        "rawWidth": 147,
+        "rawHeight": 149,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
         "borderRight": 0,
         "packable": true,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "f5836254-baed-4e2d-af14-cdef09c6fcb6@6c48a",
+        "imageUuidOrDatabaseUri": "2784d2cd-89e6-401e-a3e3-ea06d1c87534@6c48a",
         "atlasUuid": ""
       },
       "ver": "1.0.9",
@@ -69,6 +69,6 @@
   "userData": {
     "hasAlpha": true,
     "type": "sprite-frame",
-    "redirect": "f5836254-baed-4e2d-af14-cdef09c6fcb6@f9941"
+    "redirect": "2784d2cd-89e6-401e-a3e3-ea06d1c87534@f9941"
   }
 }

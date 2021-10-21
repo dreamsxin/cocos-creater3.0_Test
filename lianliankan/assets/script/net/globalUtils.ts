@@ -33,17 +33,8 @@ export interface levelData {
     ver: number,
     nd: number,
     kinds: number,
+    time: number,
 }
-
-/**
- * 签到数据接口
- */
-export interface signData {
-    id: number,
-    day: number,
-    gold: number,
-}
-
 
 export interface userData {
     gold: number,//金币
