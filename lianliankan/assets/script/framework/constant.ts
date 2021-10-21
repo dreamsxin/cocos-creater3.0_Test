@@ -70,5 +70,5 @@ export class Constant {
      * @static
      * @memberof Constant
      */
-    public static UserData = { gold: 'gold', level: 'level', sign: "sign" };
+    public static UserData = { gold: 'gold', level: 'level', sign: "sign", signDay: 'signDay' };
 }

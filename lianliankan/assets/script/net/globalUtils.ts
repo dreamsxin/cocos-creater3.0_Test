@@ -40,4 +40,5 @@ export interface userData {
     gold: number,//金币
     level: number,//关卡
     sign: number,//签到天数
+    signDay: number,//签到当天
 }

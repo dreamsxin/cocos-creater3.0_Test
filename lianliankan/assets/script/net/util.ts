@@ -93,3 +93,16 @@ export function shuffle(arr: any[]) {
     }
     return arr;
 }
+
+/**
+ * 获取当天是一年中的第几天
+ */
+export function getDay(): number {
+    const currentYear = new Date().getFullYear().toString();
+    // 今天减今年的第一天（xxxx年01月01日）
+    const hasTimestamp = new Date().getTime() - new Date(currentYear).getTime();
+    // 86400000 = 24 * 60 * 60 * 1000
+    const hasDays = Math.ceil(hasTimestamp / 86400000) + 1;
+    console.log('今天是%s年中的第%s天', currentYear, hasDays);
+    return hasDays;
+}

@@ -25,7 +25,13 @@ export class DataManager extends Component {
      * @returns 
      */
     public static getSignDataById(id: number): insigns {
-        return signsData.data[id];
+        let list = signsData.data;
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].id == id) {
+                return list[i];
+            }
+        }
+        return list[0];
     }
 
     public static getSignData(): insigns[] {

@@ -32,6 +32,7 @@ export class PlayerData {
             gold: StorageManager1.Inst.getData('gold'),
             level: StorageManager1.Inst.getData('level'),
             sign: StorageManager1.Inst.getData('sign'),
+            signDay: StorageManager1.Inst.getData('signDay'),
         }
         this.level = this._data.level;
     }

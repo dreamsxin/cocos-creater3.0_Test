@@ -24,7 +24,8 @@ export class StorageManager1 {
     public jsonData: userData = {
         gold: 100,
         level: 1,
-        sign: 0
+        sign: 0,
+        signDay: 0,
     };
 
     init() {

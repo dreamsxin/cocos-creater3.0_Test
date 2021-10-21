@@ -14,6 +14,9 @@ export class TopLayer extends Component {
     backNode: Node = undefined;
 
     @property(Node)
+    goldNode: Node = undefined;
+
+    @property(Node)
     gameNode: Node = undefined;
 
     @property(Label)
@@ -33,6 +36,7 @@ export class TopLayer extends Component {
 
     onLoad() {
         this.backNode.active = true;
+        this.goldNode.active = true;
         this.gameNode.active = false;
         clientEvent.on(Constant.EVENT_TYPE.StartGame, this._evtStartGame, this);
         clientEvent.on(Constant.EVENT_TYPE.UpdateTime, this._evtUpdateTime, this);
@@ -49,6 +53,7 @@ export class TopLayer extends Component {
      */
     private _evtStartGame() {
         this.backNode.active = false;
+        this.goldNode.active = false;
         this.gameNode.active = true;
         this._refreshDownTime();
     }
@@ -76,6 +81,7 @@ export class TopLayer extends Component {
     handleMoreEvent() {
         clientEvent.dispatchEvent(Constant.EVENT_TYPE.StartBtnEvent);
         this.backNode.active = true;
+        this.goldNode.active = true;
         this.gameNode.active = false;
     }
 

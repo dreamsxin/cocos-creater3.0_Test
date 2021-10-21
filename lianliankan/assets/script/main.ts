@@ -6,6 +6,7 @@ import { StorageManager1 } from './framework/storageManager';
 import { ElementManager } from './game/element/elementManager';
 import { PlayerData } from './game/player/playerData';
 import { TouchManager } from './game/touchManager';
+import { getDay } from './net/util';
 const { ccclass, property } = _decorator;
 
 @ccclass('Main')
